@@ -17,7 +17,7 @@ export default class Block {
      * @param data The block data
      */
     constructor(index: number, previousHash: string, data: string) {
-        this.index = index
+        this.index = index;
         this.timestamp = Date.now();
         this.previousHash = previousHash;
         this.data = data;
@@ -25,19 +25,21 @@ export default class Block {
     }
 
     getHash(): string {
-        return sha256(this.index + this.data + this.timestamp + this.previousHash).toString();
+        return sha256(
+            this.index + this.data + this.timestamp + this.previousHash,
+        ).toString();
     }
 
     /**
      * Validates the block
      * @returns Returns true if the block is valid
      */
-    isValid(): boolean {
-        if (this.index <= 0) return false;
-        if (!this.hash) return false;
+    isValid(previousHash: string, previousIndex: number): boolean {
+        if (previousIndex !== this.index - 1) return false;
+        if (this.hash !== this.getHash()) return false;
         if (!this.data) return false;
         if (this.timestamp < 1) return false;
-        if (!this.previousHash) return false;
+        if (this.previousHash != previousHash) return false;
         return true;
     }
 }
