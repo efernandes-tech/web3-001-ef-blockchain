@@ -41,6 +41,32 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "/blocks",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"hash\": \"\",\r\n    \"index\": 1,\r\n    \"data\": \"Block 2\",\r\n    \"previousHash\": \"e8324fb264da82204f03b8bc961150dec34ea17bfe744819e40ce554fe598df9\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BLOCKCHAIN_SERVER_URL}}/blocks",
+					"host": [
+						"{{BLOCKCHAIN_SERVER_URL}}"
+					],
+					"path": [
+						"blocks"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
