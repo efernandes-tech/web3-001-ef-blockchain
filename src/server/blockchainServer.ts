@@ -47,10 +47,9 @@ app.post('/blocks', (req: any, res: any, next: any) => {
     else res.status(400).json(validation);
 });
 
-if (process.argv.includes('--run')) {
-    app.listen(PORT, () => {
-        console.log(`Blockchain server is running at ${PORT}`);
-    });
-}
+if (process.argv.includes('--run'))
+    app.listen(PORT, () =>
+        console.log(`Blockchain server is running at ${PORT}`),
+    );
 
 export { app };
