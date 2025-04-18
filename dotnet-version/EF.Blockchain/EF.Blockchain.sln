@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.Blockchain.Domain", "src\EF.Blockchain.Domain\EF.Blockchain.Domain.csproj", "{47893706-A658-4EE7-A036-BDB29EB52A8C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DA448FDA-B59F-4177-9575-B3916C80B037}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4AD8E232-7634-499E-9AEE-E3935ED9B15E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.Blockchain.UnitTest", "tests\EF.Blockchain.UnitTest\EF.Blockchain.UnitTest.csproj", "{DD2F8E1E-0F1A-4CB1-839C-602AFB2BCF28}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47893706-A658-4EE7-A036-BDB29EB52A8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47893706-A658-4EE7-A036-BDB29EB52A8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47893706-A658-4EE7-A036-BDB29EB52A8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47893706-A658-4EE7-A036-BDB29EB52A8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD2F8E1E-0F1A-4CB1-839C-602AFB2BCF28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD2F8E1E-0F1A-4CB1-839C-602AFB2BCF28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD2F8E1E-0F1A-4CB1-839C-602AFB2BCF28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD2F8E1E-0F1A-4CB1-839C-602AFB2BCF28}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{47893706-A658-4EE7-A036-BDB29EB52A8C} = {DA448FDA-B59F-4177-9575-B3916C80B037}
+		{DD2F8E1E-0F1A-4CB1-839C-602AFB2BCF28} = {4AD8E232-7634-499E-9AEE-E3935ED9B15E}
+	EndGlobalSection
+EndGlobal
