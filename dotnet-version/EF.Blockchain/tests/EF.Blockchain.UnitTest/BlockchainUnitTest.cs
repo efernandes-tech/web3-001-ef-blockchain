@@ -71,6 +71,19 @@ public class BlockchainUnitTest
     }
 
     [Fact]
+    public void BlockchainTests_Constructor_ShouldGetBlock()
+    {
+        // Arrange
+        var blockchain = new Domain.Blockchain();
+
+        // Act
+        var block = blockchain.GetBlock(blockchain.GetLastBlock().Hash);
+
+        // Assert
+        Assert.NotNull(block);
+    }
+
+    [Fact]
     public void BlockchainTests_Constructor_ShouldNotAddBlock()
     {
         // Arrange

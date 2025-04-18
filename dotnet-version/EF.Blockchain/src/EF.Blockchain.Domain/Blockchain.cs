@@ -36,6 +36,11 @@ public class Blockchain
         return new Validation();
     }
 
+    public Block? GetBlock(string hash)
+    {
+        return Blocks.FirstOrDefault(b => b.Hash == hash);
+    }
+
     public Validation IsValid()
     {
         for (int i = Blocks.Count - 1; i > 0; i--)
