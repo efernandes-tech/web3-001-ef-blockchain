@@ -47,30 +47,30 @@ public class Block
     /// </summary>
     /// /// <param name="previousHash">The previous block hash</param>
     /// /// <param name="previousIndex">The previous block index</param>
-    /// <returns><c>true</c> if the block is valid</returns>
-    public bool IsValid(string previousHash, int previousIndex)
+    /// <returns><c>Validation</c> if the block is valid</returns>
+    public Validation IsValid(string previousHash, int previousIndex)
     {
         if (previousIndex != Index - 1)
         {
-            return false;
+            return new Validation(false, "Invalid index");
         }
         if (Hash != GetHash())
         {
-            return false;
+            return new Validation(false, "Invalid hash");
         }
         if (string.IsNullOrEmpty(Data))
         {
-            return false;
+            return new Validation(false, "Invalid data");
         }
         if (Timestamp <= 0)
         {
-            return false;
+            return new Validation(false, "Invalid timestamp");
         }
         if (previousHash != PreviousHash)
         {
-            return false;
+            return new Validation(false, "Invalid previous hash");
         }
-        return true;
+        return new Validation();
     }
 
     public void SetTimestamp(long timestamp)

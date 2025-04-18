@@ -22,30 +22,31 @@ public class Blockchain
         return Blocks.Last();
     }
 
-    public bool AddBlock(Block block)
+    public Validation AddBlock(Block block)
     {
         var lastBlock = GetLastBlock();
 
-        if (!block.IsValid(lastBlock.Hash, lastBlock.Index))
-            return false;
+        var validation = block.IsValid(lastBlock.Hash, lastBlock.Index);
+        if (!validation.Success)
+            return new Validation(false, $"Invalid block: {validation.Message}");
 
         Blocks.Add(block);
         NextIndex++;
 
-        return true;
+        return new Validation();
     }
 
-    public bool IsValid()
+    public Validation IsValid()
     {
         for (int i = Blocks.Count - 1; i > 0; i--)
         {
             var currentBlock = Blocks[i];
             var previousBlock = Blocks[i - 1];
-            var isValid = currentBlock.IsValid(previousBlock.Hash, previousBlock.Index);
-            if (!isValid)
-                return false;
+            var validation = currentBlock.IsValid(previousBlock.Hash, previousBlock.Index);
+            if (!validation.Success)
+                return new Validation(false, $"Invalid block #{currentBlock.Index}: {validation.Message}");
         }
 
-        return true;
+        return new Validation();
     }
 }

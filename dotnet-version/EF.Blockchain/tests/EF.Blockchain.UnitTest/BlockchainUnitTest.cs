@@ -22,10 +22,10 @@ public class BlockchainUnitTest
         var blockchain = new Domain.Blockchain();
 
         // Act
-        var isValid = blockchain.IsValid();
+        var valid = blockchain.IsValid();
 
         // Assert
-        Assert.True(isValid);
+        Assert.True(valid.Success);
     }
 
     [Fact]
@@ -36,10 +36,10 @@ public class BlockchainUnitTest
         blockchain.AddBlock(new Domain.Block(1, blockchain.GetLastBlock().Hash, "block 2"));
 
         // Act
-        var isValid = blockchain.IsValid();
+        var valid = blockchain.IsValid();
 
         // Assert
-        Assert.True(isValid);
+        Assert.True(valid.Success);
     }
 
     [Fact]
@@ -51,10 +51,10 @@ public class BlockchainUnitTest
         blockchain.Blocks[1].SetData("A transfer 2 for B");
 
         // Act
-        var isValid = blockchain.IsValid();
+        var valid = blockchain.IsValid();
 
         // Assert
-        Assert.False(isValid);
+        Assert.False(valid.Success);
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public class BlockchainUnitTest
         var result = blockchain.AddBlock(new Domain.Block(1, blockchain.GetLastBlock().Hash, "block 2"));
 
         // Assert
-        Assert.True(result);
+        Assert.True(result.Success);
     }
 
     [Fact]
@@ -81,6 +81,6 @@ public class BlockchainUnitTest
         var result = blockchain.AddBlock(block);
 
         // Assert
-        Assert.False(result);
+        Assert.False(result.Success);
     }
 }

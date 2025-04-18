@@ -18,10 +18,10 @@ public class BlockUnitTest
         var block = new Block(1, Genesis.Hash, "block 2");
 
         // Act
-        var isValid = block.IsValid(Genesis.Hash, Genesis.Index);
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index);
 
         // Assert
-        Assert.True(isValid);
+        Assert.True(valid.Success);
     }
 
     [Fact]
@@ -31,10 +31,10 @@ public class BlockUnitTest
         var block = new Block(1, "abc", "block 2");
 
         // Act
-        var isValid = block.IsValid(Genesis.Hash, Genesis.Index);
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index);
 
         // Assert
-        Assert.False(isValid);
+        Assert.False(valid.Success);
     }
 
     [Fact]
@@ -46,10 +46,10 @@ public class BlockUnitTest
         block.SetHash(block.GetHash());
 
         // Act
-        var isValid = block.IsValid(Genesis.Hash, Genesis.Index);
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index);
 
         // Assert
-        Assert.False(isValid);
+        Assert.False(valid.Success);
     }
 
     [Fact]
@@ -60,10 +60,10 @@ public class BlockUnitTest
         block.SetHash("");
 
         // Act
-        var isValid = block.IsValid(Genesis.Hash, Genesis.Index);
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index);
 
         // Assert
-        Assert.False(isValid);
+        Assert.False(valid.Success);
     }
 
     [Fact]
@@ -73,10 +73,10 @@ public class BlockUnitTest
         var block = new Block(1, Genesis.Hash, "");
 
         // Act
-        var isValid = block.IsValid(Genesis.Hash, Genesis.Index);
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index);
 
         // Assert
-        Assert.False(isValid);
+        Assert.False(valid.Success);
     }
 
     [Fact]
@@ -86,9 +86,9 @@ public class BlockUnitTest
         var block = new Block(-1, Genesis.Hash, "block 2");
 
         // Act
-        var isValid = block.IsValid(Genesis.Hash, Genesis.Index);
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index);
 
         // Assert
-        Assert.False(isValid);
+        Assert.False(valid.Success);
     }
 }
