@@ -7,7 +7,7 @@ dotnet tool install --global dotnet-reportgenerator-globaltool
 ```cmd
 cd ./dotnet-version/EF.Blockchain
 
-dotnet test ./tests/EF.Blockchain.UnitTest/EF.Blockchain.UnitTest.csproj --collect:"XPlat Code Coverage"
+dotnet test ./tests/EF.Blockchain.Tests/EF.Blockchain.Tests.csproj --collect:"XPlat Code Coverage"
 
 reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coveragereport
 

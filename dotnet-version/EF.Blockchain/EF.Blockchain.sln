@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DA448FDA-B59
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4AD8E232-7634-499E-9AEE-E3935ED9B15E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.Blockchain.UnitTest", "tests\EF.Blockchain.UnitTest\EF.Blockchain.UnitTest.csproj", "{DD2F8E1E-0F1A-4CB1-839C-602AFB2BCF28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.Blockchain.Tests", "tests\EF.Blockchain.Tests\EF.Blockchain.Tests.csproj", "{DD2F8E1E-0F1A-4CB1-839C-602AFB2BCF28}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.Blockchain.Server", "src\EF.Blockchain.Server\EF.Blockchain.Server.csproj", "{2C74B940-6923-4F0F-AD44-BBC73C183EFF}"
 EndProject

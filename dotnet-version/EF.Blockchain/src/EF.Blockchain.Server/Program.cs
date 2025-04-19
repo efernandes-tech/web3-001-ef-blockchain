@@ -1,6 +1,5 @@
 using EF.Blockchain.Domain;
 using Microsoft.AspNetCore.Http.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -100,6 +99,9 @@ app.MapPost("/blocks", async (HttpContext context, Blockchain blockchain) =>
 });
 
 app.Run();
+
+public partial class Program
+{ }
 
 public class BlockDto
 {

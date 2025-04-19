@@ -1,6 +1,6 @@
 using EF.Blockchain.Domain;
 
-namespace EF.Blockchain.UnitTest;
+namespace EF.Blockchain.Tests.UnitTest;
 
 public class BlockUnitTest
 {

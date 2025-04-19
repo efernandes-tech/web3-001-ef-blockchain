@@ -16,6 +16,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="8.2.0" />
+    <PackageReference Include="Flurl.Http" Version="4.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.15" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="ReportGenerator" Version="5.4.5" />
     <PackageReference Include="xunit" Version="2.5.3" />
@@ -24,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\EF.Blockchain.Domain\EF.Blockchain.Domain.csproj" />
+    <ProjectReference Include="..\..\src\EF.Blockchain.Server\EF.Blockchain.Server.csproj" />
   </ItemGroup>
 
   <ItemGroup>

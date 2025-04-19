@@ -1,6 +1,6 @@
-using EF.Blockchain.UnitTest.Mocks;
+using EF.Blockchain.Tests.Mocks;
 
-namespace EF.Blockchain.UnitTest;
+namespace EF.Blockchain.Tests.UnitTest;
 
 public class BlockchainUnitTest
 {
@@ -36,7 +36,9 @@ public class BlockchainUnitTest
         // Arrange
         var blockchain = new Domain.Blockchain();
         blockchain.AddBlock(
-            BlockMockFactory.Create(index: 1, previousHash: blockchain.GetLastBlock().Hash, data: "block 2")
+            BlockMockFactory.Create(index: 1,
+                previousHash: blockchain.GetLastBlock().Hash,
+                data: "block 2")
         );
 
         // Act
@@ -51,7 +53,9 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
-        blockchain.AddBlock(BlockMockFactory.Create(index: 1, previousHash: blockchain.GetLastBlock().Hash, data: "block 2"));
+        blockchain.AddBlock(BlockMockFactory.Create(index: 1,
+            previousHash: blockchain.GetLastBlock().Hash,
+            data: "block 2"));
         blockchain.Blocks[1].SetData("A transfer 2 for B");
 
         // Act
@@ -68,7 +72,9 @@ public class BlockchainUnitTest
         var blockchain = new Domain.Blockchain();
 
         // Act
-        var result = blockchain.AddBlock(BlockMockFactory.Create(index: 1, previousHash: blockchain.GetLastBlock().Hash, data: "block 2"));
+        var result = blockchain.AddBlock(BlockMockFactory.Create(index: 1,
+            previousHash: blockchain.GetLastBlock().Hash,
+            data: "block 2"));
 
         // Assert
         Assert.True(result.Success);
@@ -92,7 +98,9 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
-        var block = BlockMockFactory.Create(index: -1, previousHash: blockchain.GetLastBlock().Hash, data: "block 2");
+        var block = BlockMockFactory.Create(index: -1,
+            previousHash: blockchain.GetLastBlock().Hash,
+            data: "block 2");
 
         // Act
         var result = blockchain.AddBlock(block);

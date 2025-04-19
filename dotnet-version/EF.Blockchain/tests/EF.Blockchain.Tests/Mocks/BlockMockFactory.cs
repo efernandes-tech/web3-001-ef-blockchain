@@ -1,6 +1,6 @@
 using EF.Blockchain.Domain;
 
-namespace EF.Blockchain.UnitTest.Mocks;
+namespace EF.Blockchain.Tests.Mocks;
 
 public static class BlockMockFactory
 {

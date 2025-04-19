@@ -13,7 +13,8 @@ public class Blockchain
     /// </summary>
     public Blockchain()
     {
-        Blocks = new List<Block> { new Block(index: NextIndex, previousHash: "", data: "Genesis Block") };
+        Blocks = new List<Block> {
+            new Block(index: NextIndex, previousHash: "", data: "Genesis Block") };
         NextIndex++;
     }
 
@@ -49,7 +50,8 @@ public class Blockchain
             var previousBlock = Blocks[i - 1];
             var validation = currentBlock.IsValid(previousBlock.Hash, previousBlock.Index);
             if (!validation.Success)
-                return new Validation(false, $"Invalid block #{currentBlock.Index}: {validation.Message}");
+                return new Validation(false,
+                    $"Invalid block #{currentBlock.Index}: {validation.Message}");
         }
 
         return new Validation();
