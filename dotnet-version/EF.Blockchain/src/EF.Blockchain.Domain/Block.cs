@@ -20,13 +20,19 @@ public class Block
     /// <param name="index">The block index in blockchain</param>
     /// <param name="previousHash">The previous block hash</param>
     /// <param name="data">The block data</param>
-    public Block(int index, string previousHash, string data)
+    /// <param name="timestamp">The block timestamp</param>
+    /// <param name="hash">The block hash</param>
+    public Block(int? index = null,
+        string? previousHash = null,
+        string? data = null,
+        long? timestamp = null,
+        string? hash = null)
     {
-        Index = index;
-        Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        PreviousHash = previousHash;
-        Data = data;
-        Hash = GetHash();
+        Index = index ?? 0;
+        Timestamp = timestamp ?? DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        PreviousHash = previousHash ?? string.Empty;
+        Data = data ?? string.Empty;
+        Hash = string.IsNullOrEmpty(hash) ? GetHash() : hash;
     }
 
     /// <summary>

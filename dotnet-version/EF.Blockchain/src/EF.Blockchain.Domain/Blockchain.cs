@@ -13,7 +13,7 @@ public class Blockchain
     /// </summary>
     public Blockchain()
     {
-        Blocks = new List<Block> { new Block(NextIndex, "", "Genesis Block") };
+        Blocks = new List<Block> { new Block(index: NextIndex, previousHash: "", data: "Genesis Block") };
         NextIndex++;
     }
 

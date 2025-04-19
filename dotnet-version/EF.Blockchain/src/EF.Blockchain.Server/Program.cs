@@ -1,5 +1,6 @@
 using EF.Blockchain.Domain;
 using Microsoft.AspNetCore.Http.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,4 +83,34 @@ app.MapGet("/blocks/{indexOrHash}", (string indexOrHash) =>
     return block is null ? Results.NotFound() : Results.Ok(block);
 });
 
+app.MapPost("/blocks", async (HttpContext context, Blockchain blockchain) =>
+{
+    var blockDto = await context.Request.ReadFromJsonAsync<BlockDto>();
+
+    if (blockDto is null || blockDto.Hash is null)
+        return Results.UnprocessableEntity("Missing or invalid hash");
+
+    var block = blockDto.ToDomain();
+
+    var result = blockchain.AddBlock(block);
+
+    return result.Success
+        ? Results.Created($"/blocks/{block.Index}", block)
+        : Results.BadRequest(result);
+});
+
 app.Run();
+
+public class BlockDto
+{
+    public int Index { get; set; }
+    public string PreviousHash { get; set; } = string.Empty;
+    public string Data { get; set; } = string.Empty;
+    public long? Timestamp { get; set; } = null;
+    public string? Hash { get; set; } = null;
+
+    public Block ToDomain()
+    {
+        return new Block(Index, PreviousHash, Data, Timestamp, Hash);
+    }
+}

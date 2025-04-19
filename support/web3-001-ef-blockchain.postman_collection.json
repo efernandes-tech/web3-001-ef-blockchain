@@ -49,7 +49,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"hash\": \"\",\r\n    \"index\": 1,\r\n    \"data\": \"Block 2\",\r\n    \"previousHash\": \"e8324fb264da82204f03b8bc961150dec34ea17bfe744819e40ce554fe598df9\"\r\n}",
+					"raw": "{\r\n    \"hash\": \"\",\r\n    \"index\": 2,\r\n    \"data\": \"Block 3\",\r\n    \"previousHash\": \"A487A78FB9F9251C7E83E99FDE97818813C87D8C48AB58B424DE9D9BE59B9C25\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

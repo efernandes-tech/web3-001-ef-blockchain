@@ -8,14 +8,14 @@ public class BlockUnitTest
 
     public BlockUnitTest()
     {
-        Genesis = new Block(0, "", "Genesis Block");
+        Genesis = new Block(data: "Genesis Block");
     }
 
     [Fact]
     public void BlockTests_IsValid_ShouldBeValid()
     {
         // Arrange
-        var block = new Block(1, Genesis.Hash, "block 2");
+        var block = new Block(index: 1, previousHash: Genesis.Hash, data: "block 2");
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index);
@@ -25,10 +25,23 @@ public class BlockUnitTest
     }
 
     [Fact]
+    public void BlockTests_IsValid_ShouldNotBeValidFallbacks()
+    {
+        // Arrange
+        var block = new Block();
+
+        // Act
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index);
+
+        // Assert
+        Assert.False(valid.Success);
+    }
+
+    [Fact]
     public void BlockTests_IsValid_ShouldNotBeValidPreviousHash()
     {
         // Arrange
-        var block = new Block(1, "abc", "block 2");
+        var block = new Block(index: 1, previousHash: "abc", data: "block 2");
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index);
@@ -41,7 +54,7 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidTimestamp()
     {
         // Arrange
-        var block = new Block(1, Genesis.Hash, "block 2");
+        var block = new Block(index: 1, previousHash: Genesis.Hash, data: "block 2");
         block.SetTimestamp(-1);
         block.SetHash(block.GetHash());
 
@@ -56,7 +69,7 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidHash()
     {
         // Arrange
-        var block = new Block(1, Genesis.Hash, "block 2");
+        var block = new Block(index: 1, previousHash: Genesis.Hash, data: "block 2");
         block.SetHash("");
 
         // Act
@@ -70,7 +83,7 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidData()
     {
         // Arrange
-        var block = new Block(1, Genesis.Hash, "");
+        var block = new Block(index: 1, previousHash: Genesis.Hash, data: "");
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index);
@@ -83,7 +96,7 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidIndex()
     {
         // Arrange
-        var block = new Block(-1, Genesis.Hash, "block 2");
+        var block = new Block(index: -1, previousHash: Genesis.Hash, data: "block 2");
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index);
