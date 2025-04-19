@@ -33,6 +33,8 @@ public static class BlockchainMockFactory
             chain.AddBlock(block);
         }
 
+        //chain.Blocks[chain.Blocks.Count - 1].SetHash("abc");
+
         return chain;
     }
 }

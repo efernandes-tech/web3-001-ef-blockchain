@@ -1,3 +1,4 @@
+using EF.Blockchain.Domain;
 using EF.Blockchain.Tests.Mocks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -9,9 +10,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly Domain.Blockchain _mockBlockchain;
 
-    public CustomWebApplicationFactory()
+    public CustomWebApplicationFactory(Domain.Blockchain? blockchain = null)
     {
-        _mockBlockchain = BlockchainMockFactory.CreateWithBlocks(3);
+        _mockBlockchain = blockchain ?? BlockchainMockFactory.CreateWithBlocks(3);
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -20,6 +21,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         {
             var descriptor = services
                 .SingleOrDefault(d => d.ServiceType == typeof(Domain.Blockchain));
+
             if (descriptor != null)
                 services.Remove(descriptor);
 
