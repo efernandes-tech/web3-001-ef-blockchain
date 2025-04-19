@@ -17,13 +17,13 @@ export default class Block {
     constructor(block?: Block) {
         this.index = block?.index || 0;
         this.timestamp = block?.timestamp || Date.now();
-        this.previousHash = block?.previousHash || '';
-        this.data = block?.data || '';
+        this.previousHash = block?.previousHash || "";
+        this.data = block?.data || "";
         this.hash = block?.hash || this.getHash();
     }
 
     getHash(): string {
-        return this.hash || 'abc';
+        return this.hash || "abc";
     }
 
     /**
@@ -32,7 +32,7 @@ export default class Block {
      */
     isValid(previousHash: string, previousIndex: number): Validation {
         if (!previousHash || previousIndex < 0 || this.index < 0)
-            return new Validation(false, 'Invalid mock block.');
+            return new Validation(false, "Invalid mock block.");
 
         return new Validation();
     }

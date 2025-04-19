@@ -1,0 +1,69 @@
+### YamlMime:ManagedReference
+items:
+- uid: EF.Blockchain.Domain
+  commentId: N:EF.Blockchain.Domain
+  id: EF.Blockchain.Domain
+  children:
+  - EF.Blockchain.Domain.Block
+  - EF.Blockchain.Domain.Blockchain
+  - EF.Blockchain.Domain.Validation
+  langs:
+  - csharp
+  - vb
+  name: EF.Blockchain.Domain
+  nameWithType: EF.Blockchain.Domain
+  fullName: EF.Blockchain.Domain
+  type: Namespace
+  assemblies:
+  - EF.Blockchain.Domain
+references:
+- uid: EF.Blockchain.Domain.Block
+  commentId: T:EF.Blockchain.Domain.Block
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.Block.html
+  name: Block
+  nameWithType: Block
+  fullName: EF.Blockchain.Domain.Block
+- uid: EF.Blockchain.Domain.Blockchain
+  commentId: T:EF.Blockchain.Domain.Blockchain
+  href: EF.Blockchain.Domain.Blockchain.html
+  name: Blockchain
+  nameWithType: Blockchain
+  fullName: EF.Blockchain.Domain.Blockchain
+- uid: EF.Blockchain.Domain.Validation
+  commentId: T:EF.Blockchain.Domain.Validation
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.Validation.html
+  name: Validation
+  nameWithType: Validation
+  fullName: EF.Blockchain.Domain.Validation
+- uid: EF.Blockchain.Domain
+  commentId: N:EF.Blockchain.Domain
+  href: EF.html
+  name: EF.Blockchain.Domain
+  nameWithType: EF.Blockchain.Domain
+  fullName: EF.Blockchain.Domain
+  spec.csharp:
+  - uid: EF
+    name: EF
+    href: EF.html
+  - name: .
+  - uid: EF.Blockchain
+    name: Blockchain
+    href: EF.Blockchain.html
+  - name: .
+  - uid: EF.Blockchain.Domain
+    name: Domain
+    href: EF.Blockchain.Domain.html
+  spec.vb:
+  - uid: EF
+    name: EF
+    href: EF.html
+  - name: .
+  - uid: EF.Blockchain
+    name: Blockchain
+    href: EF.Blockchain.html
+  - name: .
+  - uid: EF.Blockchain.Domain
+    name: Domain
+    href: EF.Blockchain.Domain.html

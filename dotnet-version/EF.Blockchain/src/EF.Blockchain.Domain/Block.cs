@@ -13,6 +13,8 @@ public class Block
     public string Hash { get; private set; }
     public string PreviousHash { get; private set; }
     public string Data { get; private set; }
+    public int Nonce { get; private set; }
+    public string Miner { get; private set; }
 
     /// <summary>
     /// Creates a new Block
@@ -22,17 +24,23 @@ public class Block
     /// <param name="data">The block data</param>
     /// <param name="timestamp">The block timestamp</param>
     /// <param name="hash">The block hash</param>
+    /// <param name="nonce">The block nonce</param>
+    /// <param name="miner">The block miner</param>
     public Block(int? index = null,
         string? previousHash = null,
         string? data = null,
         long? timestamp = null,
-        string? hash = null)
+        string? hash = null,
+        int? nonce = null,
+        string? miner = null)
     {
         Index = index ?? 0;
         Timestamp = timestamp ?? DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         PreviousHash = previousHash ?? string.Empty;
         Data = data ?? string.Empty;
         Hash = string.IsNullOrEmpty(hash) ? GetHash() : hash;
+        Nonce = nonce ?? 0;
+        Miner = miner ?? string.Empty;
     }
 
     /// <summary>
@@ -41,7 +49,7 @@ public class Block
     /// <returns>The SHA-256 hash string.</returns>
     public string GetHash()
     {
-        var rawData = $"{Index}{Data}{Timestamp}{PreviousHash}";
+        var rawData = $"{Index}{Data}{Timestamp}{PreviousHash}{Nonce}{Miner}";
         using var sha256 = SHA256.Create();
         var bytes = Encoding.UTF8.GetBytes(rawData);
         var hashBytes = sha256.ComputeHash(bytes);
@@ -49,21 +57,40 @@ public class Block
     }
 
     /// <summary>
+    /// Generates a new valid hash for this block with the specified difficulty
+    /// </summary>
+    /// <param name="difficulty">The blockchain current difficulty</param>
+    /// <param name="miner">The miner wallet address</param>
+    public void Mine(int difficulty, string miner)
+    {
+        Miner = miner;
+        var prefix = new string('0', difficulty);
+
+        do
+        {
+            Nonce++;
+            Hash = GetHash();
+        }
+        while (!Hash.StartsWith(prefix));
+    }
+
+    /// <summary>
     /// Validates the block
     /// </summary>
     /// /// <param name="previousHash">The previous block hash</param>
     /// /// <param name="previousIndex">The previous block index</param>
+    /// /// <param name="difficulty">The blockchain current difficulty</param>
     /// <returns><c>Validation</c> if the block is valid</returns>
-    public Validation IsValid(string previousHash, int previousIndex)
+    public Validation IsValid(string previousHash, int previousIndex, int difficulty)
     {
         if (previousIndex != Index - 1)
         {
             return new Validation(false, "Invalid index");
         }
-        if (Hash != GetHash())
-        {
-            return new Validation(false, "Invalid hash");
-        }
+        //if (Hash != GetHash())
+        //{
+        //    return new Validation(false, "Invalid hash");
+        //}
         if (string.IsNullOrEmpty(Data))
         {
             return new Validation(false, "Invalid data");
@@ -76,6 +103,15 @@ public class Block
         {
             return new Validation(false, "Invalid previous hash");
         }
+        if (Nonce <= 0 || string.IsNullOrEmpty(Miner))
+        {
+            return new Validation(false, "No mined");
+        }
+
+        var prefix = new string('0', difficulty);
+        if (Hash != GetHash() || !Hash.StartsWith(prefix))
+            return new Validation(false, "Invalid hash");
+
         return new Validation();
     }
 

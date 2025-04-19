@@ -1,16 +1,16 @@
 /**
- * Validation class to represent the result of a validation process.
+ * Validation class
  */
 export default class Validation {
     success: boolean;
     message: string;
 
     /**
-     * Creates a new instance of Validation.
-     * @param success If the validation was successful or not
-     * @param message The message associated with the validation result
+     * Creates a new validation object
+     * @param success If the validation was successful
+     * @param message The validation message, if validation failed
      */
-    constructor(success: boolean = true, message: string = '') {
+    constructor(success: boolean = true, message: string = "") {
         this.success = success;
         this.message = message;
     }

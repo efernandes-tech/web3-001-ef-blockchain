@@ -12,13 +12,11 @@ export default class Blockchain {
      * Creates a new blockchain
      */
     constructor() {
-        this.blocks = [
-            new Block({
-                index: this.nextIndex,
-                previousHash: '',
-                data: 'Genesis Block',
-            } as Block),
-        ];
+        this.blocks = [new Block({
+            index: this.nextIndex,
+            previousHash: "",
+            data: "Genesis Block"
+        } as Block)];
         this.nextIndex++;
     }
 
@@ -31,15 +29,12 @@ export default class Blockchain {
 
         const validation = block.isValid(lastBlock.hash, lastBlock.index);
         if (!validation.success)
-            return new Validation(
-                false,
-                `Invalid block: ${validation.message}`,
-            );
+            return new Validation(false, `Invalid block: ${validation.message}`);
 
         this.blocks.push(block);
         this.nextIndex++;
 
-        return new Validation(true, 'Block added');
+        return new Validation();
     }
 
     getBlock(hash: string): Block | undefined {
@@ -50,18 +45,10 @@ export default class Blockchain {
         for (let i = this.blocks.length - 1; i > 0; i--) {
             const currentBlock = this.blocks[i];
             const previousBlock = this.blocks[i - 1];
-
-            const validation = currentBlock.isValid(
-                previousBlock.hash,
-                previousBlock.index,
-            );
-
+            const validation = currentBlock.isValid(previousBlock.hash, previousBlock.index);
             if (!validation.success)
-                return new Validation(
-                    false,
-                    `Invalid blockchain, block: #${currentBlock.index}: ${validation.message}`,
-                );
+                return new Validation(false, `Invalid block #${currentBlock.index}: ${validation.message}`);
         }
-        return new Validation(true, 'Valid blockchain');
+        return new Validation();
     }
 }
