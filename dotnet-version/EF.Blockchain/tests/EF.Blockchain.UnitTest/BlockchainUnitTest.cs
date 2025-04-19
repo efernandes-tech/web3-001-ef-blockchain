@@ -1,3 +1,5 @@
+using EF.Blockchain.UnitTest.Mocks;
+
 namespace EF.Blockchain.UnitTest;
 
 public class BlockchainUnitTest
@@ -33,7 +35,9 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
-        blockchain.AddBlock(new Domain.Block(index: 1, previousHash: blockchain.GetLastBlock().Hash, data: "block 2"));
+        blockchain.AddBlock(
+            BlockMockFactory.Create(index: 1, previousHash: blockchain.GetLastBlock().Hash, data: "block 2")
+        );
 
         // Act
         var valid = blockchain.IsValid();
@@ -47,7 +51,7 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
-        blockchain.AddBlock(new Domain.Block(index: 1, previousHash: blockchain.GetLastBlock().Hash, data: "block 2"));
+        blockchain.AddBlock(BlockMockFactory.Create(index: 1, previousHash: blockchain.GetLastBlock().Hash, data: "block 2"));
         blockchain.Blocks[1].SetData("A transfer 2 for B");
 
         // Act
@@ -64,7 +68,7 @@ public class BlockchainUnitTest
         var blockchain = new Domain.Blockchain();
 
         // Act
-        var result = blockchain.AddBlock(new Domain.Block(index: 1, previousHash: blockchain.GetLastBlock().Hash, data: "block 2"));
+        var result = blockchain.AddBlock(BlockMockFactory.Create(index: 1, previousHash: blockchain.GetLastBlock().Hash, data: "block 2"));
 
         // Assert
         Assert.True(result.Success);
@@ -88,7 +92,7 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
-        var block = new Domain.Block(index: -1, previousHash: blockchain.GetLastBlock().Hash, data: "block 2");
+        var block = BlockMockFactory.Create(index: -1, previousHash: blockchain.GetLastBlock().Hash, data: "block 2");
 
         // Act
         var result = blockchain.AddBlock(block);
