@@ -4,6 +4,8 @@ namespace EF.Blockchain.Tests.UnitTest;
 
 public class BlockUnitTest
 {
+    private readonly int ExampleDifficulty = 0;
+    private readonly string ExampleMiner = "ef";
     private Block Genesis;
 
     public BlockUnitTest()
@@ -16,9 +18,10 @@ public class BlockUnitTest
     {
         // Arrange
         var block = new Block(index: 1, previousHash: Genesis.Hash, data: "block 2");
+        block.Mine(ExampleDifficulty, ExampleMiner);
 
         // Act
-        var valid = block.IsValid(Genesis.Hash, Genesis.Index);
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
 
         // Assert
         Assert.True(valid.Success);
@@ -31,7 +34,7 @@ public class BlockUnitTest
         var block = new Block();
 
         // Act
-        var valid = block.IsValid(Genesis.Hash, Genesis.Index);
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
 
         // Assert
         Assert.False(valid.Success);
@@ -44,7 +47,7 @@ public class BlockUnitTest
         var block = new Block(index: 1, previousHash: "abc", data: "block 2");
 
         // Act
-        var valid = block.IsValid(Genesis.Hash, Genesis.Index);
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
 
         // Assert
         Assert.False(valid.Success);
@@ -59,21 +62,35 @@ public class BlockUnitTest
         block.SetHash(block.GetHash());
 
         // Act
-        var valid = block.IsValid(Genesis.Hash, Genesis.Index);
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
 
         // Assert
         Assert.False(valid.Success);
     }
 
     [Fact]
-    public void BlockTests_IsValid_ShouldNotBeValidHash()
+    public void BlockTests_IsValid_ShouldNotBeValidEmptyHash()
     {
         // Arrange
         var block = new Block(index: 1, previousHash: Genesis.Hash, data: "block 2");
+        block.Mine(ExampleDifficulty, ExampleMiner);
         block.SetHash("");
 
         // Act
-        var valid = block.IsValid(Genesis.Hash, Genesis.Index);
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
+
+        // Assert
+        Assert.False(valid.Success);
+    }
+
+    [Fact]
+    public void BlockTests_IsValid_ShouldNotBeValidNoMined()
+    {
+        // Arrange
+        var block = new Block(index: 1, previousHash: Genesis.Hash, data: "block 2");
+
+        // Act
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
 
         // Assert
         Assert.False(valid.Success);
@@ -86,7 +103,7 @@ public class BlockUnitTest
         var block = new Block(index: 1, previousHash: Genesis.Hash, data: "");
 
         // Act
-        var valid = block.IsValid(Genesis.Hash, Genesis.Index);
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
 
         // Assert
         Assert.False(valid.Success);
@@ -99,7 +116,7 @@ public class BlockUnitTest
         var block = new Block(index: -1, previousHash: Genesis.Hash, data: "block 2");
 
         // Act
-        var valid = block.IsValid(Genesis.Hash, Genesis.Index);
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
 
         // Assert
         Assert.False(valid.Success);

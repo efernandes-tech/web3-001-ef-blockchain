@@ -53,10 +53,14 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
-        blockchain.AddBlock(BlockMockFactory.Create(index: 1,
+        var block = BlockMockFactory.Create(index: 1,
             previousHash: blockchain.GetLastBlock().Hash,
-            data: "block 2"));
-        blockchain.Blocks[1].SetData("A transfer 2 for B");
+            data: "block 2");
+        block.Mine(difficulty: 1, miner: "ef");
+
+        blockchain.AddBlock(block);
+
+        blockchain.Blocks[1].SetData("A transfer X to B");
 
         // Act
         var valid = blockchain.IsValid();
@@ -70,11 +74,13 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
+        var block = BlockMockFactory.Create(index: 1,
+            previousHash: blockchain.GetLastBlock().Hash,
+            data: "block 2");
+        block.Mine(difficulty: 1, miner: "ef");
 
         // Act
-        var result = blockchain.AddBlock(BlockMockFactory.Create(index: 1,
-            previousHash: blockchain.GetLastBlock().Hash,
-            data: "block 2"));
+        var result = blockchain.AddBlock(block);
 
         // Assert
         Assert.True(result.Success);

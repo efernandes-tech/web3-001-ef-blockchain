@@ -7,6 +7,7 @@ public class Blockchain
 {
     public List<Block> Blocks { get; private set; }
     public int NextIndex { get; private set; } = 0;
+    public static readonly int DIFFICULTY_FACTOR = 5;
 
     /// <summary>
     /// Creates a new blockchain
@@ -23,11 +24,16 @@ public class Blockchain
         return Blocks.Last();
     }
 
+    public int GetDifficulty()
+    {
+        return (int)Math.Ceiling((double)Blocks.Count / DIFFICULTY_FACTOR);
+    }
+
     public Validation AddBlock(Block block)
     {
         var lastBlock = GetLastBlock();
 
-        var validation = block.IsValid(lastBlock.Hash, lastBlock.Index);
+        var validation = block.IsValid(lastBlock.Hash, lastBlock.Index, GetDifficulty());
         if (!validation.Success)
             return new Validation(false, $"Invalid block: {validation.Message}");
 
@@ -48,7 +54,8 @@ public class Blockchain
         {
             var currentBlock = Blocks[i];
             var previousBlock = Blocks[i - 1];
-            var validation = currentBlock.IsValid(previousBlock.Hash, previousBlock.Index);
+            var validation = currentBlock.IsValid(
+                previousBlock.Hash, previousBlock.Index, GetDifficulty());
             if (!validation.Success)
                 return new Validation(false,
                     $"Invalid block #{currentBlock.Index}: {validation.Message}");

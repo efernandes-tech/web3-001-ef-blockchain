@@ -1,3 +1,4 @@
+using EF.Blockchain.Domain;
 using EF.Blockchain.Tests.IntegrationTest.Commons;
 using EF.Blockchain.Tests.Mocks;
 using FluentAssertions;
@@ -73,13 +74,23 @@ public class ServerIntegrationTest
         // Arrange
         var flurl = CreateFlurlClientWithBlockHash("abc");
 
-        var block = new
+        var index = 3;
+        var previousHash = "abc";
+        var data = "test";
+        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+        var block = new Block(index, previousHash, data, timestamp);
+        block.Mine(difficulty: 1, miner: "ef");
+
+        var postBlock = new
         {
-            index = 3,
-            previousHash = "abc",
-            data = "test",
-            timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-            hash = ""
+            block.Index,
+            block.PreviousHash,
+            block.Data,
+            block.Timestamp,
+            block.Nonce,
+            block.Miner,
+            block.Hash
         };
 
         // Act

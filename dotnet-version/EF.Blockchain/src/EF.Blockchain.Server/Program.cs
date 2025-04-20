@@ -110,9 +110,11 @@ public class BlockDto
     public string Data { get; set; } = string.Empty;
     public long? Timestamp { get; set; } = null;
     public string? Hash { get; set; } = null;
+    public int? Nonce { get; set; } = null;
+    public string? Miner { get; set; } = null;
 
     public Block ToDomain()
     {
-        return new Block(Index, PreviousHash, Data, Timestamp, Hash);
+        return new Block(Index, PreviousHash, Data, Timestamp, Hash, Nonce, Miner);
     }
 }

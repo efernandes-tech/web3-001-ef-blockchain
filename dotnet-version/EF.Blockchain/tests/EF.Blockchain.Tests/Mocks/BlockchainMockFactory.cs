@@ -29,11 +29,13 @@ public static class BlockchainMockFactory
                 timestamp,
                 hash: null
             );
+            block.Mine(
+                chain.GetDifficulty(),
+                miner: "ef"
+            );
 
             chain.AddBlock(block);
         }
-
-        //chain.Blocks[chain.Blocks.Count - 1].SetHash("abc");
 
         return chain;
     }

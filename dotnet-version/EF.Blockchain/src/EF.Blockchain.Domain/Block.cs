@@ -38,9 +38,9 @@ public class Block
         Timestamp = timestamp ?? DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         PreviousHash = previousHash ?? string.Empty;
         Data = data ?? string.Empty;
-        Hash = string.IsNullOrEmpty(hash) ? GetHash() : hash;
         Nonce = nonce ?? 0;
         Miner = miner ?? string.Empty;
+        Hash = string.IsNullOrEmpty(hash) ? GetHash() : hash;
     }
 
     /// <summary>
@@ -49,11 +49,20 @@ public class Block
     /// <returns>The SHA-256 hash string.</returns>
     public string GetHash()
     {
-        var rawData = $"{Index}{Data}{Timestamp}{PreviousHash}{Nonce}{Miner}";
+        return ComputeHash(Index, Timestamp, Data, PreviousHash, Nonce, Miner);
+    }
+
+    public static string ComputeHash(int index,
+        long timestamp,
+        string data,
+        string previousHash,
+        int nonce = 0,
+        string? miner = null)
+    {
+        var rawData = $"{index}{data}{timestamp}{previousHash}{nonce}{miner}";
         using var sha256 = SHA256.Create();
         var bytes = Encoding.UTF8.GetBytes(rawData);
-        var hashBytes = sha256.ComputeHash(bytes);
-        return Convert.ToHexString(hashBytes); // Uppercase hex string
+        return Convert.ToHexString(sha256.ComputeHash(bytes));
     }
 
     /// <summary>
@@ -87,10 +96,6 @@ public class Block
         {
             return new Validation(false, "Invalid index");
         }
-        //if (Hash != GetHash())
-        //{
-        //    return new Validation(false, "Invalid hash");
-        //}
         if (string.IsNullOrEmpty(Data))
         {
             return new Validation(false, "Invalid data");
