@@ -18,7 +18,7 @@ public class BlockchainUnitTest
     }
 
     [Fact]
-    public void BlockchainTests_Constructor_ShouldBeValidGenesis()
+    public void BlockchainTests_IsValid_ShouldBeValidGenesis()
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
@@ -31,7 +31,7 @@ public class BlockchainUnitTest
     }
 
     [Fact]
-    public void BlockchainTests_Constructor_ShouldBeValidTwoBlocks()
+    public void BlockchainTests_IsValid_ShouldBeValidTwoBlocks()
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
@@ -49,7 +49,7 @@ public class BlockchainUnitTest
     }
 
     [Fact]
-    public void BlockchainTests_Constructor_ShouldNotBeValid()
+    public void BlockchainTests_IsValid_ShouldNotBeValid()
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
@@ -70,7 +70,7 @@ public class BlockchainUnitTest
     }
 
     [Fact]
-    public void BlockchainTests_Constructor_ShouldAddBlock()
+    public void BlockchainTests_AddBlock_ShouldAddBlock()
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
@@ -87,7 +87,7 @@ public class BlockchainUnitTest
     }
 
     [Fact]
-    public void BlockchainTests_Constructor_ShouldGetBlock()
+    public void BlockchainTests_GetBlock_ShouldGetBlock()
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
@@ -100,7 +100,7 @@ public class BlockchainUnitTest
     }
 
     [Fact]
-    public void BlockchainTests_Constructor_ShouldNotAddBlock()
+    public void BlockchainTests_AddBlock_ShouldNotAddBlock()
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
@@ -113,5 +113,18 @@ public class BlockchainUnitTest
 
         // Assert
         Assert.False(result.Success);
+    }
+
+    [Fact]
+    public void BlockchainTests_GetNextBlock_ShouldGetNextBlockInfo()
+    {
+        // Arrange
+        var blockchain = new Domain.Blockchain();
+
+        // Act
+        var info = blockchain.GetNextBlock();
+
+        // Assert
+        Assert.Equal(1, info.Index);
     }
 }
