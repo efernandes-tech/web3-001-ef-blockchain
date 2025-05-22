@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import morgan from 'morgan';
 import Block from '../lib/block';
 import Blockchain from '../lib/blockchain';
@@ -14,7 +14,7 @@ app.use(express.json());
 
 const blockchain = new Blockchain();
 
-app.get('/status', (req: any, res: any, next) => {
+app.get('/status', (req, res, next) => {
     res.json({
         numberOfBlocks: blockchain.blocks.length,
         isValid: blockchain.isValid(),
@@ -22,7 +22,11 @@ app.get('/status', (req: any, res: any, next) => {
     })
 })
 
-app.get('/blocks/:indexOrHash', (req: any, res: any, next) => {
+app.get('/blocks/next', (req: Request, res: Response, next: NextFunction) => {
+    res.json(blockchain.getNextBlock());
+})
+
+app.get('/blocks/:indexOrHash', (req: Request, res: Response, next: NextFunction) => {
     let block;
     if (/^[0-9]+$/.test(req.params.indexOrHash))
         block = blockchain.blocks[parseInt(req.params.indexOrHash)];
@@ -35,7 +39,7 @@ app.get('/blocks/:indexOrHash', (req: any, res: any, next) => {
         return res.json(block);
 })
 
-app.post('/blocks', (req: any, res: any, next) => {
+app.post('/blocks', (req: Request, res: Response, next: NextFunction) => {
     if (req.body.hash === undefined) return res.sendStatus(422);
 
     const block = new Block(req.body as Block);

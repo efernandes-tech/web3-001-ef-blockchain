@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.Blockchain.Tests", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.Blockchain.Server", "src\EF.Blockchain.Server\EF.Blockchain.Server.csproj", "{2C74B940-6923-4F0F-AD44-BBC73C183EFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.Blockchain.Client", "src\EF.Blockchain.Client\EF.Blockchain.Client.csproj", "{D4E3E81B-9DF7-4A7B-8F6F-51F5E62AA72A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{2C74B940-6923-4F0F-AD44-BBC73C183EFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C74B940-6923-4F0F-AD44-BBC73C183EFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C74B940-6923-4F0F-AD44-BBC73C183EFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4E3E81B-9DF7-4A7B-8F6F-51F5E62AA72A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4E3E81B-9DF7-4A7B-8F6F-51F5E62AA72A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4E3E81B-9DF7-4A7B-8F6F-51F5E62AA72A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4E3E81B-9DF7-4A7B-8F6F-51F5E62AA72A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,5 +45,6 @@ Global
 		{47893706-A658-4EE7-A036-BDB29EB52A8C} = {DA448FDA-B59F-4177-9575-B3916C80B037}
 		{DD2F8E1E-0F1A-4CB1-839C-602AFB2BCF28} = {4AD8E232-7634-499E-9AEE-E3935ED9B15E}
 		{2C74B940-6923-4F0F-AD44-BBC73C183EFF} = {DA448FDA-B59F-4177-9575-B3916C80B037}
+		{D4E3E81B-9DF7-4A7B-8F6F-51F5E62AA72A} = {DA448FDA-B59F-4177-9575-B3916C80B037}
 	EndGlobalSection
 EndGlobal

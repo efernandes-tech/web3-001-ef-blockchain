@@ -73,6 +73,12 @@ app.MapGet("/status", () => new
     lastBlock = blockchain.Blocks.LastOrDefault()
 });
 
+app.MapGet("/blocks/next", (Blockchain blockchain) =>
+{
+    var info = blockchain.GetNextBlock();
+    return Results.Json(info);
+});
+
 app.MapGet("/blocks/{indexOrHash}", (string indexOrHash) =>
 {
     Block? block = int.TryParse(indexOrHash, out var index)

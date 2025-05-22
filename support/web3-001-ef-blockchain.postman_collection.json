@@ -25,6 +25,24 @@
 			"response": []
 		},
 		{
+			"name": "/blocks/next",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BLOCKCHAIN_SERVER_URL}}/blocks/next",
+					"host": [
+						"{{BLOCKCHAIN_SERVER_URL}}"
+					],
+					"path": [
+						"blocks",
+						"next"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/blocks/:indexOrHash",
 			"request": {
 				"method": "GET",

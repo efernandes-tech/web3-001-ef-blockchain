@@ -44,6 +44,20 @@ public class ServerIntegrationTest
     }
 
     [Fact]
+    public async Task ServerTests_GetNextBlock_ShouldReturnNextBlockInfo()
+    {
+        // Arrange
+
+        // Act
+        var response = await _flurl
+            .Request("/blocks/next")
+            .GetJsonAsync<BlockInfo>();
+
+        // Assert
+        Assert.Equal(3, response.Index);
+    }
+
+    [Fact]
     public async Task ServerTests_GetBlocksByHash_ShouldGetBlock()
     {
         // Arrange
@@ -74,7 +88,7 @@ public class ServerIntegrationTest
         // Arrange
         var flurl = CreateFlurlClientWithBlockHash("abc");
 
-        var index = 3;
+        var index = 5;
         var previousHash = "abc";
         var data = "test";
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -99,7 +113,7 @@ public class ServerIntegrationTest
             .ReceiveJson<BlockResponse>();
 
         // Assert
-        response.Index.Should().Be(3);
+        response.Index.Should().Be(5);
     }
 
     [Fact]
@@ -159,7 +173,7 @@ public class ServerIntegrationTest
 
     private IFlurlClient CreateFlurlClientWithBlockHash(string hash)
     {
-        var blockchain = BlockchainMockFactory.CreateWithBlocks(3);
+        var blockchain = BlockchainMockFactory.CreateWithBlocks(5);
         blockchain.Blocks[blockchain.Blocks.Count - 1].SetHash(hash);
 
         var factory = new CustomWebApplicationFactory(blockchain);
