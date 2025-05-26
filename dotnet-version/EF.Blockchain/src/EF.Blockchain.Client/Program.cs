@@ -1,12 +1,22 @@
 using EF.Blockchain.Domain;
 using Flurl.Http;
+using Microsoft.Extensions.Configuration;
 
-const string BLOCKCHAIN_SERVER = "http://localhost:3000";
-const string MinerPublicKey = "efernandes";
-const string MinerPrivateKey = "123456";
+// Load configuration from appsettings.json
+var config = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
+
+// Access values from configuration
+var blockchainServer = config["Blockchain:Server"];
+var minerWalletPublicKey = config["Blockchain:MinerWallet:PublicKey"];
+var minerWalletPrivateKey = config["Blockchain:MinerWallet:PrivateKey"];
+
 int totalMined = 0;
 
 Console.WriteLine("Starting miner...");
+
+Console.WriteLine("Logged as " + minerWalletPublicKey);
 
 while (true)
 {
@@ -15,7 +25,7 @@ while (true)
         Console.WriteLine("Getting next block info...");
 
         // Uses Flurl.Http to send an HTTP GET request
-        var blockInfo = await $"{BLOCKCHAIN_SERVER}/blocks/next"
+        var blockInfo = await $"{blockchainServer}/blocks/next"
             .GetJsonAsync<BlockInfo>();
 
         var newBlock = Block.FromBlockInfo(blockInfo);
@@ -23,11 +33,11 @@ while (true)
         // TODO: Add reward transaction here if needed
 
         Console.WriteLine($"Start mining block #{blockInfo.Index}...");
-        newBlock.Mine(blockInfo.Difficulty, MinerPublicKey);
+        newBlock.Mine(blockInfo.Difficulty, minerWalletPublicKey);
 
         Console.WriteLine("Block mined! Sending to blockchain...");
 
-        await $"{BLOCKCHAIN_SERVER}/blocks/"
+        await $"{blockchainServer}/blocks/"
             .PostJsonAsync(newBlock);
 
         Console.WriteLine("Block sent and accepted!");

@@ -28,6 +28,31 @@ public class BlockUnitTest
     }
 
     [Fact]
+    public void BlockTests_FromBlockInfo_ShouldCreateFromBlockInfo()
+    {
+        // Arrange
+        var exampleDifficulty = 0;
+        var exampleMiner = "efernandes";
+        var blockInfo = new BlockInfo
+        {
+            Data = "Block 2",
+            Difficulty = exampleDifficulty,
+            FeePerTx = 1,
+            Index = 1,
+            MaxDifficulty = 62,
+            PreviousHash = Genesis.GetHash()
+        };
+
+        // Act
+        var block = Block.FromBlockInfo(blockInfo);
+        block.Mine(exampleDifficulty, exampleMiner);
+        var validation = block.IsValid(Genesis.Hash, Genesis.Index, exampleDifficulty);
+
+        // Assert
+        Assert.True(validation.Success);
+    }
+
+    [Fact]
     public void BlockTests_IsValid_ShouldNotBeValidFallbacks()
     {
         // Arrange
