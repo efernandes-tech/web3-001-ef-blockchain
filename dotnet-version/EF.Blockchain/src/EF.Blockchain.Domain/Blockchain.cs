@@ -15,8 +15,19 @@ public class Blockchain
     /// </summary>
     public Blockchain()
     {
-        Blocks = new List<Block> {
-            new Block(index: NextIndex, previousHash: "", data: "Genesis Block") };
+        var genesisTx = new Transaction(
+            type: TransactionType.FEE,
+            data: DateTime.UtcNow.ToString()
+        );
+
+        var genesisBlock = new Block(
+            index: NextIndex,
+            previousHash: "",
+            transactions: new List<Transaction> { genesisTx }
+        );
+
+        Blocks = new List<Block> { genesisBlock };
+
         NextIndex++;
     }
 
@@ -72,7 +83,13 @@ public class Blockchain
 
     public BlockInfo GetNextBlock()
     {
-        var data = DateTime.UtcNow.ToString();
+        var transactions = new List<Transaction>
+        {
+            new Transaction(
+                type: TransactionType.REGULAR,
+                data: DateTime.UtcNow.ToString()
+            )
+        };
         var difficulty = GetDifficulty();
         var previousHash = GetLastBlock().Hash;
         var index = Blocks.Count;
@@ -81,7 +98,7 @@ public class Blockchain
 
         return new BlockInfo
         {
-            Data = data,
+            Transactions = transactions,
             Difficulty = difficulty,
             PreviousHash = previousHash,
             Index = index,

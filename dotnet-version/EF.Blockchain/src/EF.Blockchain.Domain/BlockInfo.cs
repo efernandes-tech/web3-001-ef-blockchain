@@ -13,5 +13,5 @@ public class BlockInfo
     public int Difficulty { get; set; }
     public int MaxDifficulty { get; set; }
     public int FeePerTx { get; set; }
-    public string Data { get; set; } = string.Empty;
+    public List<Transaction> Transactions { get; set; } = new();
 }

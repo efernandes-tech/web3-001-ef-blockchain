@@ -12,7 +12,7 @@ public class Block
     public long Timestamp { get; private set; }
     public string Hash { get; private set; }
     public string PreviousHash { get; private set; }
-    public string Data { get; private set; }
+    public List<Transaction> Transactions { get; private set; } = new();
     public int Nonce { get; private set; }
     public string Miner { get; private set; }
 
@@ -21,14 +21,14 @@ public class Block
     /// </summary>
     /// <param name="index">The block index in blockchain</param>
     /// <param name="previousHash">The previous block hash</param>
-    /// <param name="data">The block data</param>
+    /// <param name="transactions">The block transactions</param>
     /// <param name="timestamp">The block timestamp</param>
     /// <param name="hash">The block hash</param>
     /// <param name="nonce">The block nonce</param>
     /// <param name="miner">The block miner</param>
     public Block(int? index = null,
         string? previousHash = null,
-        string? data = null,
+        List<Transaction>? transactions = null,
         long? timestamp = null,
         string? hash = null,
         int? nonce = null,
@@ -37,7 +37,7 @@ public class Block
         Index = index ?? 0;
         Timestamp = timestamp ?? DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         PreviousHash = previousHash ?? string.Empty;
-        Data = data ?? string.Empty;
+        Transactions = transactions ?? new();
         Nonce = nonce ?? 0;
         Miner = miner ?? string.Empty;
         Hash = string.IsNullOrEmpty(hash) ? GetHash() : hash;
@@ -49,17 +49,21 @@ public class Block
     /// <returns>The SHA-256 hash string.</returns>
     public string GetHash()
     {
-        return ComputeHash(Index, Timestamp, Data, PreviousHash, Nonce, Miner);
+        var txs = Transactions.Any()
+            ? string.Join("", Transactions.Select(tx => tx.Hash))
+            : "";
+
+        return ComputeHash(Index, Timestamp, txs, PreviousHash, Nonce, Miner);
     }
 
     public static string ComputeHash(int index,
         long timestamp,
-        string data,
+        string txs,
         string previousHash,
         int nonce = 0,
         string? miner = null)
     {
-        var rawData = $"{index}{data}{timestamp}{previousHash}{nonce}{miner}";
+        var rawData = $"{index}{txs}{timestamp}{previousHash}{nonce}{miner}";
         using var sha256 = SHA256.Create();
         var bytes = Encoding.UTF8.GetBytes(rawData);
         return Convert.ToHexString(sha256.ComputeHash(bytes));
@@ -92,15 +96,30 @@ public class Block
     /// <returns><c>Validation</c> if the block is valid</returns>
     public Validation IsValid(string previousHash, int previousIndex, int difficulty)
     {
+        // Transaction rules
+        if (Transactions.Count > 0)
+        {
+            var feeTxCount = Transactions.Count(tx => tx.Type == TransactionType.FEE);
+            if (feeTxCount > 1)
+                return new Validation(false, "Too many fees.");
+
+            var invalidTx = Transactions
+                .Select(tx => tx.IsValid())
+                .Where(v => !v.Success)
+                .ToList();
+
+            if (invalidTx.Any())
+            {
+                var errorMsg = string.Join(" | ", invalidTx.Select(v => v.Message));
+                return new Validation(false, "Invalid block due to invalid tx: " + errorMsg);
+            }
+        }
+
         if (previousIndex != Index - 1)
         {
             return new Validation(false, "Invalid index");
         }
-        if (string.IsNullOrEmpty(Data))
-        {
-            return new Validation(false, "Invalid data");
-        }
-        if (Timestamp <= 0)
+        if (Timestamp < 1)
         {
             return new Validation(false, "Invalid timestamp");
         }
@@ -126,7 +145,7 @@ public class Block
         {
             Index = blockInfo.Index,
             PreviousHash = blockInfo.PreviousHash,
-            Data = blockInfo.Data
+            Transactions = blockInfo.Transactions
         };
     }
 
@@ -140,8 +159,8 @@ public class Block
         Hash = hash;
     }
 
-    public void SetData(string data)
+    public void SetTransactions(List<Transaction> transactions)
     {
-        Data = data;
+        Transactions = transactions;
     }
 }
