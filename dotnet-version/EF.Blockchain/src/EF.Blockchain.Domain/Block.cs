@@ -120,6 +120,16 @@ public class Block
         return new Validation();
     }
 
+    public static Block FromBlockInfo(BlockInfo blockInfo)
+    {
+        return new Block
+        {
+            Index = blockInfo.Index,
+            PreviousHash = blockInfo.PreviousHash,
+            Data = blockInfo.Data
+        };
+    }
+
     public void SetTimestamp(long timestamp)
     {
         Timestamp = timestamp;

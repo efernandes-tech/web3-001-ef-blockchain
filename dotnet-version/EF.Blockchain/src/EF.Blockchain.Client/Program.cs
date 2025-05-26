@@ -1,27 +1,47 @@
 using EF.Blockchain.Domain;
 using Flurl.Http;
 
-// Base URL of your blockchain server
 const string BLOCKCHAIN_SERVER = "http://localhost:3000";
+const string MinerPublicKey = "efernandes";
+const string MinerPrivateKey = "123456";
+int totalMined = 0;
 
-// Uses Flurl.Http to send an HTTP GET request to /blocks/next and prints the response.
-try
-{
-    // Sends a GET request to /blocks/next and automatically parses the JSON response
-    var blockInfo = await $"{BLOCKCHAIN_SERVER}/blocks/next"
-        .GetJsonAsync<BlockInfo>();
+Console.WriteLine("Starting miner...");
 
-    Console.WriteLine("Next Block Info:");
-    Console.WriteLine($"Index: {blockInfo.Index}");
-    Console.WriteLine($"PreviousHash: {blockInfo.PreviousHash}");
-    Console.WriteLine($"Difficulty: {blockInfo.Difficulty}");
-    Console.WriteLine($"MaxDifficulty: {blockInfo.MaxDifficulty}");
-    Console.WriteLine($"FeePerTx: {blockInfo.FeePerTx}");
-    Console.WriteLine($"Data: {blockInfo.Data}");
-}
-catch (FlurlHttpException ex)
+while (true)
 {
-    Console.WriteLine($"Request failed: {ex.Message}");
-    if (ex.Call.Response != null)
-        Console.WriteLine(await ex.GetResponseStringAsync());
+    try
+    {
+        Console.WriteLine("Getting next block info...");
+
+        // Uses Flurl.Http to send an HTTP GET request
+        var blockInfo = await $"{BLOCKCHAIN_SERVER}/blocks/next"
+            .GetJsonAsync<BlockInfo>();
+
+        var newBlock = Block.FromBlockInfo(blockInfo);
+
+        // TODO: Add reward transaction here if needed
+
+        Console.WriteLine($"Start mining block #{blockInfo.Index}...");
+        newBlock.Mine(blockInfo.Difficulty, MinerPublicKey);
+
+        Console.WriteLine("Block mined! Sending to blockchain...");
+
+        await $"{BLOCKCHAIN_SERVER}/blocks/"
+            .PostJsonAsync(newBlock);
+
+        Console.WriteLine("Block sent and accepted!");
+        totalMined++;
+        Console.WriteLine($"Total mined blocks: {totalMined}");
+    }
+    catch (FlurlHttpException ex)
+    {
+        var message = ex.Call?.Response != null
+            ? await ex.GetResponseStringAsync()
+            : ex.Message;
+
+        Console.WriteLine("Error: " + message);
+    }
+
+    await Task.Delay(1000);
 }
