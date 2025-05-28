@@ -1,4 +1,5 @@
 using EF.Blockchain.Domain;
+using EF.Blockchain.Tests.Mocks;
 
 namespace EF.Blockchain.Tests.UnitTest;
 
@@ -10,14 +11,25 @@ public class BlockUnitTest
 
     public BlockUnitTest()
     {
-        Genesis = new Block(data: "Genesis Block");
+        var genesisTx = TransactionMockFactory.Create(
+            type: TransactionType.FEE,
+            data: "Genesis Block"
+        );
+
+        Genesis = new Block(
+            transactions: new List<Transaction> { genesisTx });
     }
 
     [Fact]
     public void BlockTests_IsValid_ShouldBeValid()
     {
         // Arrange
-        var block = new Block(index: 1, previousHash: Genesis.Hash, data: "block 2");
+        var transaction = TransactionMockFactory.Create(
+           type: TransactionType.FEE,
+           data: "Block 2"
+        );
+        var block = new Block(index: 1, previousHash: Genesis.Hash,
+            transactions: new List<Transaction> { transaction });
         block.Mine(ExampleDifficulty, ExampleMiner);
 
         // Act
@@ -33,9 +45,13 @@ public class BlockUnitTest
         // Arrange
         var exampleDifficulty = 0;
         var exampleMiner = "efernandes";
+        var transaction = TransactionMockFactory.Create(
+           type: TransactionType.FEE,
+           data: "Block 2"
+        );
         var blockInfo = new BlockInfo
         {
-            Data = "Block 2",
+            Transactions = new List<Transaction> { transaction },
             Difficulty = exampleDifficulty,
             FeePerTx = 1,
             Index = 1,
@@ -50,6 +66,54 @@ public class BlockUnitTest
 
         // Assert
         Assert.True(validation.Success);
+    }
+
+    [Fact]
+    public void BlockTests_IsValid_ShouldNotBeValid2Fee()
+    {
+        // Arrange
+        var tx1 = TransactionMockFactory.Create(
+            type: TransactionType.FEE,
+            data: "fee1"
+        );
+        var tx2 = TransactionMockFactory.Create(
+            type: TransactionType.FEE,
+            data: "fee2"
+        );
+
+        var block = new Block(
+            index: 1,
+            previousHash: Genesis.Hash,
+            transactions: new List<Transaction> { tx1, tx2 }
+        );
+        block.Mine(ExampleDifficulty, ExampleMiner);
+
+        // Act
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
+
+        // Assert
+        Assert.False(valid.Success);
+        Assert.Equal("Too many fees.", valid.Message);
+    }
+
+    [Fact]
+    public void BlockTests_IsValid_ShouldNotBeValidInvalidTx()
+    {
+        // Arrange
+        var invalidTx = TransactionMockFactory.CreateInvalidData();
+        var block = new Block(
+            index: 1,
+            previousHash: Genesis.Hash,
+            transactions: new List<Transaction> { invalidTx }
+        );
+        block.Mine(ExampleDifficulty, ExampleMiner);
+
+        // Act
+        var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
+
+        // Assert
+        Assert.False(valid.Success);
+        Assert.Contains("Invalid block due to invalid tx", valid.Message);
     }
 
     [Fact]
@@ -69,7 +133,12 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidPreviousHash()
     {
         // Arrange
-        var block = new Block(index: 1, previousHash: "abc", data: "block 2");
+        var transaction = TransactionMockFactory.Create(
+           type: TransactionType.FEE,
+           data: "Block 2"
+        );
+        var block = new Block(index: 1, previousHash: "abc",
+            transactions: new List<Transaction> { transaction });
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
@@ -82,9 +151,19 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidTimestamp()
     {
         // Arrange
-        var block = new Block(index: 1, previousHash: Genesis.Hash, data: "block 2");
-        block.SetTimestamp(-1);
-        block.SetHash(block.GetHash());
+        var transaction = TransactionMockFactory.Create(
+           type: TransactionType.FEE,
+           data: "Block 2"
+        );
+        var block = new Block(index: 1, previousHash: Genesis.Hash,
+            transactions: new List<Transaction> { transaction });
+        // Use reflection to change private/internal state
+        typeof(Block)
+            .GetProperty(nameof(Block.Timestamp))!
+            .SetValue(block, -1);
+        typeof(Block)
+            .GetProperty(nameof(Block.Hash))!
+            .SetValue(block, block.GetHash());
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
@@ -97,9 +176,17 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidEmptyHash()
     {
         // Arrange
-        var block = new Block(index: 1, previousHash: Genesis.Hash, data: "block 2");
+        var transaction = TransactionMockFactory.Create(
+           type: TransactionType.FEE,
+           data: "Block 2"
+        );
+        var block = new Block(index: 1, previousHash: Genesis.Hash,
+            transactions: new List<Transaction> { transaction });
         block.Mine(ExampleDifficulty, ExampleMiner);
-        block.SetHash("");
+
+        typeof(Block)
+            .GetProperty(nameof(Block.Hash))!
+            .SetValue(block, "");
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
@@ -112,7 +199,12 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidNoMined()
     {
         // Arrange
-        var block = new Block(index: 1, previousHash: Genesis.Hash, data: "block 2");
+        var transaction = TransactionMockFactory.Create(
+           type: TransactionType.FEE,
+           data: "Block 2"
+        );
+        var block = new Block(index: 1, previousHash: Genesis.Hash,
+            transactions: new List<Transaction> { transaction });
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
@@ -125,7 +217,9 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidData()
     {
         // Arrange
-        var block = new Block(index: 1, previousHash: Genesis.Hash, data: "");
+        var transaction = TransactionMockFactory.CreateInvalidData();
+        var block = new Block(index: 1, previousHash: Genesis.Hash,
+            transactions: new List<Transaction> { transaction });
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
@@ -138,7 +232,12 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidIndex()
     {
         // Arrange
-        var block = new Block(index: -1, previousHash: Genesis.Hash, data: "block 2");
+        var transaction = TransactionMockFactory.Create(
+           type: TransactionType.FEE,
+           data: "Block 2"
+        );
+        var block = new Block(index: -1, previousHash: Genesis.Hash,
+            transactions: new List<Transaction> { transaction });
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);

@@ -21,11 +21,12 @@ public static class BlockchainMockFactory
             var last = chain.GetLastBlock();
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var index = chain.NextIndex;
+            var transaction = new Transaction(data: $"Block {i}", timestamp: timestamp);
 
             var block = new Block(
                 index,
                 last.Hash,
-                $"Block {i}",
+                new List<Transaction> { transaction },
                 timestamp,
                 hash: null
             );

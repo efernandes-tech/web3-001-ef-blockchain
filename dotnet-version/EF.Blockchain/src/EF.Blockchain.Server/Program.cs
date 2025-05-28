@@ -109,18 +109,32 @@ app.Run();
 public partial class Program
 { }
 
+public class TransactionDto
+{
+    public TransactionType? Type { get; set; } = TransactionType.REGULAR;
+    public long? Timestamp { get; set; } = null;
+    public string? Hash { get; set; } = string.Empty;
+    public string Data { get; set; } = string.Empty;
+}
+
 public class BlockDto
 {
     public int Index { get; set; }
-    public string PreviousHash { get; set; } = string.Empty;
-    public string Data { get; set; } = string.Empty;
     public long? Timestamp { get; set; } = null;
     public string? Hash { get; set; } = null;
+    public string PreviousHash { get; set; } = string.Empty;
+    public List<TransactionDto> Transactions { get; set; } = new();
     public int? Nonce { get; set; } = null;
     public string? Miner { get; set; } = null;
 
     public Block ToDomain()
     {
-        return new Block(Index, PreviousHash, Data, Timestamp, Hash, Nonce, Miner);
+        var transactions = Transactions
+            .Select(tx => new Transaction(
+                type: tx.Type,
+                timestamp: tx.Timestamp,
+                data: tx.Data))
+            .ToList();
+        return new Block(Index, PreviousHash, transactions, Timestamp, Hash, Nonce, Miner);
     }
 }

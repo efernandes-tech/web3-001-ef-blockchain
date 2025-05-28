@@ -90,17 +90,17 @@ public class ServerIntegrationTest
 
         var index = 5;
         var previousHash = "abc";
-        var data = "test";
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-        var block = new Block(index, previousHash, data, timestamp);
+        var transaction = new Transaction(timestamp: timestamp, data: "test");
+        var block = new Block(index, previousHash, new List<Transaction> { transaction }, timestamp);
         block.Mine(difficulty: 1, miner: "ef");
 
         var postBlock = new
         {
             block.Index,
             block.PreviousHash,
-            block.Data,
+            block.Transactions,
             block.Timestamp,
             block.Nonce,
             block.Miner,
@@ -174,7 +174,11 @@ public class ServerIntegrationTest
     private IFlurlClient CreateFlurlClientWithBlockHash(string hash)
     {
         var blockchain = BlockchainMockFactory.CreateWithBlocks(5);
-        blockchain.Blocks[blockchain.Blocks.Count - 1].SetHash(hash);
+
+        // Use reflection to change private/internal state
+        typeof(Block)
+            .GetProperty(nameof(Block.Hash))!
+            .SetValue(blockchain.Blocks[blockchain.Blocks.Count - 1], hash);
 
         var factory = new CustomWebApplicationFactory(blockchain);
         var client = factory.CreateClient();

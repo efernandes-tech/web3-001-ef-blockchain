@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace EF.Blockchain.Domain;
 
@@ -12,6 +13,15 @@ public class Transaction
     public long Timestamp { get; private set; }
     public string Hash { get; private set; }
     public string Data { get; private set; }
+
+    [JsonConstructor]
+    public Transaction(TransactionType type, long timestamp, string data, string hash)
+    {
+        Type = type;
+        Timestamp = timestamp;
+        Data = data;
+        Hash = hash;
+    }
 
     public Transaction(TransactionType? type = null, long? timestamp = null, string? data = null)
     {

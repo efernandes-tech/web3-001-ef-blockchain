@@ -148,19 +148,4 @@ public class Block
             Transactions = blockInfo.Transactions
         };
     }
-
-    public void SetTimestamp(long timestamp)
-    {
-        Timestamp = timestamp;
-    }
-
-    public void SetHash(string hash)
-    {
-        Hash = hash;
-    }
-
-    public void SetTransactions(List<Transaction> transactions)
-    {
-        Transactions = transactions;
-    }
 }
