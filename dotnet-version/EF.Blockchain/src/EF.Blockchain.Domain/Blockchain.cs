@@ -6,8 +6,10 @@ namespace EF.Blockchain.Domain;
 public class Blockchain
 {
     public List<Block> Blocks { get; private set; }
+    public List<Transaction> Mempool { get; private set; }
     public int NextIndex { get; private set; } = 0;
     public static readonly int DIFFICULTY_FACTOR = 5;
+    public static readonly int TX_PER_BLOCK = 2; // Max transactions per block
     public static readonly int MAX_DIFFICULTY = 62;
 
     /// <summary>
@@ -28,6 +30,8 @@ public class Blockchain
 
         Blocks = new List<Block> { genesisBlock };
 
+        Mempool = new List<Transaction>();
+
         NextIndex++;
     }
 
@@ -41,6 +45,22 @@ public class Blockchain
         return (int)Math.Ceiling((double)Blocks.Count / DIFFICULTY_FACTOR);
     }
 
+    public Validation AddTransaction(Transaction transaction)
+    {
+        var validation = transaction.IsValid();
+        if (!validation.Success)
+            return new Validation(false, "Invalid tx: " + validation.Message);
+
+        if (Blocks.Any(b => b.Transactions.Any(tx => tx.Hash == transaction.Hash)))
+            return new Validation(false, "Duplicated tx in blockchain.");
+
+        if (Mempool.Any(tx => tx.Hash == transaction.Hash))
+            return new Validation(false, "Duplicated tx in mempool.");
+
+        Mempool.Add(transaction);
+        return new Validation(true, transaction.Hash);
+    }
+
     public Validation AddBlock(Block block)
     {
         var lastBlock = GetLastBlock();
@@ -49,15 +69,64 @@ public class Blockchain
         if (!validation.Success)
             return new Validation(false, $"Invalid block: {validation.Message}");
 
+        // Filter out non-fee transactions from the block
+        var txHashes = block.Transactions
+            .Where(tx => tx.Type != TransactionType.FEE)
+            .Select(tx => tx.Hash)
+            .ToList();
+
+        // Remove block transactions from the mempool
+        var newMempool = Mempool
+            .Where(tx => !txHashes.Contains(tx.Hash))
+            .ToList();
+
+        // Validate that all block txs came from the mempool
+        if (newMempool.Count + txHashes.Count != Mempool.Count)
+            return new Validation(false, "Invalid tx in block: mempool");
+
+        // Update the mempool
+        Mempool = newMempool;
+
         Blocks.Add(block);
         NextIndex++;
 
-        return new Validation();
+        return new Validation(true, block.Hash);
     }
 
     public Block? GetBlock(string hash)
     {
         return Blocks.FirstOrDefault(b => b.Hash == hash);
+    }
+
+    public TransactionSearch GetTransaction(string hash)
+    {
+        var mempoolIndex = Mempool.FindIndex(tx => tx.Hash == hash);
+        if (mempoolIndex != -1)
+        {
+            return new TransactionSearch
+            {
+                MempoolIndex = mempoolIndex,
+                Transaction = Mempool[mempoolIndex]
+            };
+        }
+
+        var blockIndex = Blocks.FindIndex(b => b.Transactions.Any(tx => tx.Hash == hash));
+        if (blockIndex != -1)
+        {
+            var transaction = Blocks[blockIndex].Transactions.First(tx => tx.Hash == hash);
+            return new TransactionSearch
+            {
+                BlockIndex = blockIndex,
+                Transaction = transaction
+            };
+        }
+
+        return new TransactionSearch
+        {
+            BlockIndex = -1,
+            MempoolIndex = -1,
+            Transaction = null! // or handle null properly
+        };
     }
 
     public Validation IsValid()
@@ -81,15 +150,13 @@ public class Blockchain
         return 1;
     }
 
-    public BlockInfo GetNextBlock()
+    public BlockInfo? GetNextBlock()
     {
-        var transactions = new List<Transaction>
-        {
-            new Transaction(
-                type: TransactionType.REGULAR,
-                data: DateTime.UtcNow.ToString()
-            )
-        };
+        if (Mempool == null || Mempool.Count == 0)
+            return null;
+
+        var transactions = Mempool.Take(Blockchain.TX_PER_BLOCK).ToList();
+
         var difficulty = GetDifficulty();
         var previousHash = GetLastBlock().Hash;
         var index = Blocks.Count;

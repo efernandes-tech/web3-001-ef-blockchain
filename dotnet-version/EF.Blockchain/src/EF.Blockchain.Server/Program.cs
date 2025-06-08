@@ -104,6 +104,34 @@ app.MapPost("/blocks", async (HttpContext context, Blockchain blockchain) =>
         : Results.BadRequest(result);
 });
 
+app.MapGet("/transactions/{hash?}", (string? hash) =>
+{
+    if (!string.IsNullOrEmpty(hash))
+    {
+        var transaction = blockchain.GetTransaction(hash);
+        return Results.Json(transaction);
+    }
+
+    var next = blockchain.Mempool.Take(Blockchain.TX_PER_BLOCK).ToList();
+    var total = blockchain.Mempool.Count;
+
+    return Results.Json(new { next, total });
+});
+
+app.MapPost("/transactions", (TransactionDto transactionDto) =>
+{
+    if (string.IsNullOrEmpty(transactionDto.Hash))
+        return Results.StatusCode(422);
+
+    var tx = transactionDto.ToDomain();
+
+    var validation = blockchain.AddTransaction(tx);
+
+    return validation.Success
+        ? Results.Created("/transactions", tx)
+        : Results.BadRequest(validation);
+});
+
 app.Run();
 
 public partial class Program
@@ -114,7 +142,17 @@ public class TransactionDto
     public TransactionType? Type { get; set; } = TransactionType.REGULAR;
     public long? Timestamp { get; set; } = null;
     public string? Hash { get; set; } = string.Empty;
-    public string Data { get; set; } = string.Empty;
+    public string? Data { get; set; } = string.Empty;
+
+    public Transaction ToDomain()
+    {
+        return new Transaction(
+            type: Type ?? TransactionType.REGULAR,
+            timestamp: Timestamp ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+            data: Data ?? string.Empty
+        //hash: Hash ?? string.Empty
+        );
+    }
 }
 
 public class BlockDto
