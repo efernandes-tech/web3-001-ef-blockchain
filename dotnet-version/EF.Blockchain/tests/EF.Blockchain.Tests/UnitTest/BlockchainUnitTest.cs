@@ -1,5 +1,6 @@
 using EF.Blockchain.Domain;
 using EF.Blockchain.Tests.Mocks;
+using FluentAssertions;
 
 namespace EF.Blockchain.Tests.UnitTest;
 
@@ -56,9 +57,13 @@ public class BlockchainUnitTest
         // Arrange
         var blockchain = new Domain.Blockchain();
         var transaction = TransactionMockFactory.Create(data: "Block 2");
+
+        blockchain.Mempool.Add(transaction);
+
         var block = BlockMockFactory.Create(index: 1,
             previousHash: blockchain.GetLastBlock().Hash,
             transactions: new List<Transaction> { transaction });
+
         block.Mine(difficulty: 1, miner: "ef");
 
         blockchain.AddBlock(block);
@@ -78,14 +83,118 @@ public class BlockchainUnitTest
     }
 
     [Fact]
+    public void BlockchainTests_AddTransaction_ShouldAddTransaction()
+    {
+        // Arrange
+        var blockchain = new Domain.Blockchain();
+        var tx = TransactionMockFactory.Create(data: "tx1");
+
+        // Act
+        var validation = blockchain.AddTransaction(tx);
+
+        // Assert
+        validation.Success.Should().BeTrue();
+    }
+
+    [Fact]
+    public void BlockchainTests_AddTransaction_ShouldNotAddTransactionInvalidTx()
+    {
+        var blockchain = new Domain.Blockchain();
+
+        var tx = TransactionMockFactory.Create(data: "");
+
+        var validation = blockchain.AddTransaction(tx);
+        validation.Success.Should().BeFalse();
+    }
+
+    [Fact]
+    public void BlockchainTests_AddTransaction_ShouldNotAddTransactionDuplicatedInBlockchain()
+    {
+        var blockchain = new Domain.Blockchain();
+
+        var tx = TransactionMockFactory.Create(data: "tx1");
+
+        var block = BlockMockFactory.Create(
+            index: 1,
+            previousHash: blockchain.GetLastBlock().Hash,
+            transactions: new List<Transaction> { tx });
+
+        blockchain.Blocks.Add(block);
+
+        var validation = blockchain.AddTransaction(tx);
+        validation.Success.Should().BeFalse();
+    }
+
+    [Fact]
+    public void BlockchainTests_AddTransaction_ShouldNotAddTransactionDuplicatedInMempool()
+    {
+        var blockchain = new Domain.Blockchain();
+
+        var tx = TransactionMockFactory.Create(data: "tx1");
+
+        blockchain.Mempool.Add(tx);
+
+        var validation = blockchain.AddTransaction(tx);
+        validation.Success.Should().BeFalse();
+    }
+
+    [Fact]
+    public void BlockchainTests_GetTransaction_ShouldGetTransactionMempool()
+    {
+        var blockchain = new Domain.Blockchain();
+
+        var tx = TransactionMockFactory.Create(data: "tx1");
+
+        blockchain.Mempool.Add(tx);
+
+        var result = blockchain.GetTransaction(tx.Hash);
+        result.MempoolIndex.Should().Be(0);
+    }
+
+    [Fact]
+    public void BlockchainTests_GetTransaction_ShouldGetTransactionBlockchain()
+    {
+        var blockchain = new Domain.Blockchain();
+
+        var tx = TransactionMockFactory.Create(data: "tx1");
+
+        var block = BlockMockFactory.Create(
+            index: 1,
+            previousHash: blockchain.GetLastBlock().Hash,
+            transactions: new List<Transaction> { tx });
+
+        blockchain.Blocks.Add(block);
+
+        var result = blockchain.GetTransaction(tx.Hash);
+
+        result.BlockIndex.Should().Be(1);
+    }
+
+    [Fact]
+    public void BlockchainTests_GetTransaction_ShouldNotGetTransaction()
+    {
+        var blockchain = new Domain.Blockchain();
+
+        var result = blockchain.GetTransaction("xyz");
+
+        result.BlockIndex.Should().Be(-1);
+        result.MempoolIndex.Should().Be(-1);
+    }
+
+    [Fact]
     public void BlockchainTests_AddBlock_ShouldAddBlock()
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
         var transaction = TransactionMockFactory.Create(data: "Block 2");
-        var block = BlockMockFactory.Create(index: 1,
+
+        blockchain.Mempool.Add(transaction);
+
+        var block = BlockMockFactory.Create(
+            index: 1,
             previousHash: blockchain.GetLastBlock().Hash,
             transactions: new List<Transaction> { transaction });
+
         block.Mine(difficulty: 1, miner: "ef");
 
         // Act
@@ -130,11 +239,25 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
+        blockchain.Mempool.Add(new Transaction());
 
         // Act
         var info = blockchain.GetNextBlock();
 
         // Assert
-        Assert.Equal(1, info.Index);
+        Assert.Equal(1, info is not null ? info.Index : 0);
+    }
+
+    [Fact]
+    public void BlockchainTests_GetNextBlock_ShouldNotGetNextBlockInfo()
+    {
+        // Arrange
+        var blockchain = new Domain.Blockchain();
+
+        // Act
+        var info = blockchain.GetNextBlock();
+
+        // Assert
+        Assert.Null(info);
     }
 }

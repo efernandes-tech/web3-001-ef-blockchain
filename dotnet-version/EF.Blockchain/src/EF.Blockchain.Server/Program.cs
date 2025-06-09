@@ -68,7 +68,8 @@ var blockchain = app.Services.GetRequiredService<Blockchain>();
 
 app.MapGet("/status", () => new
 {
-    numberOfBlocks = blockchain.Blocks.Count,
+    mempool = blockchain.Mempool.Count,
+    blocks = blockchain.Blocks.Count,
     isValid = blockchain.IsValid(),
     lastBlock = blockchain.Blocks.LastOrDefault()
 });
@@ -147,10 +148,9 @@ public class TransactionDto
     public Transaction ToDomain()
     {
         return new Transaction(
-            type: Type ?? TransactionType.REGULAR,
-            timestamp: Timestamp ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-            data: Data ?? string.Empty
-        //hash: Hash ?? string.Empty
+            type: Type,
+            timestamp: Timestamp,
+            data: Data
         );
     }
 }

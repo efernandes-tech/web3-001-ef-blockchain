@@ -9,7 +9,7 @@ public static class BlockchainMockFactory
         return new Domain.Blockchain();
     }
 
-    public static Domain.Blockchain CreateWithBlocks(int count)
+    public static Domain.Blockchain CreateWithBlocks(int count, bool addExtraTx = true)
     {
         if (count < 1)
             throw new ArgumentException("Must create at least 1 block");
@@ -22,6 +22,8 @@ public static class BlockchainMockFactory
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var index = chain.NextIndex;
             var transaction = new Transaction(data: $"Block {i}", timestamp: timestamp);
+
+            chain.Mempool.Add(transaction);
 
             var block = new Block(
                 index,
@@ -36,6 +38,12 @@ public static class BlockchainMockFactory
             );
 
             chain.AddBlock(block);
+        }
+
+        if (addExtraTx)
+        {
+            var extraTransaction = new Transaction(data: $"Block X");
+            chain.Mempool.Add(extraTransaction);
         }
 
         return chain;

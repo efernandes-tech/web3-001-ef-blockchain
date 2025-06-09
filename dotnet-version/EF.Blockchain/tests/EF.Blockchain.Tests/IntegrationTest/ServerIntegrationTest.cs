@@ -27,7 +27,7 @@ public class ServerIntegrationTest
 
         // Assert
         result.Should().NotBeNull();
-        result.NumberOfBlocks.Should().Be(3);
+        result.blocks.Should().Be(3);
         result.IsValid.Success.Should().BeTrue();
     }
 
@@ -86,13 +86,14 @@ public class ServerIntegrationTest
     public async Task ServerTests_PostValidBlock_ShouldAddBlock()
     {
         // Arrange
-        var flurl = CreateFlurlClientWithBlockHash("abc");
+        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var transaction = new Transaction(timestamp: timestamp, data: "test");
+
+        var flurl = CreateFlurlClientWithBlockHash("abc", transaction);
 
         var index = 5;
         var previousHash = "abc";
-        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-        var transaction = new Transaction(timestamp: timestamp, data: "test");
         var block = new Block(index, previousHash, new List<Transaction> { transaction }, timestamp);
         block.Mine(difficulty: 1, miner: "ef");
 
@@ -152,8 +153,50 @@ public class ServerIntegrationTest
         response.StatusCode.Should().Be(400);
     }
 
+    [Fact]
+    public async Task ServerTests_GetTransaction_ShouldGetTransaction()
+    {
+        // Arrange
+        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var tx = new Transaction(timestamp: timestamp, data: "tx1");
+
+        var blockchain = BlockchainMockFactory.CreateWithBlocks(3, false);
+        blockchain.Mempool.Add(tx);
+
+        var factory = new CustomWebApplicationFactory(blockchain);
+        var client = factory.CreateClient();
+        var flurl = new FlurlClient(client);
+
+        // Act
+        var response = await flurl.Request("/transactions/" + tx.Hash).GetAsync();
+        var body = await response.GetJsonAsync<TransactionSearchResponse>();
+
+        // Assert
+        response.StatusCode.Should().Be(200);
+        body.MempoolIndex.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task ServerTests_PostTransaction_ShouldAddTx()
+    {
+        // Arrange
+        var tx = new Transaction(timestamp: DateTimeOffset.UtcNow.ToUnixTimeSeconds(), data: "tx1");
+
+        // Act
+        var response = await _flurl.Request("/transactions").PostJsonAsync(tx);
+
+        // Assert
+        response.StatusCode.Should().Be(201);
+    }
+
+    private record TransactionSearchResponse(
+        Transaction? Transaction,
+        int MempoolIndex,
+        int BlockIndex
+    );
+
     private record StatusResponse(
-        int NumberOfBlocks,
+        int blocks,
         ValidationResponse IsValid,
         object? LastBlock
     );
@@ -171,9 +214,18 @@ public class ServerIntegrationTest
         long Timestamp
     );
 
-    private IFlurlClient CreateFlurlClientWithBlockHash(string hash)
+    private record TransactionResponse(
+        Transaction Transaction
+    );
+
+    private IFlurlClient CreateFlurlClientWithBlockHash(string hash, Transaction? transaction = null)
     {
         var blockchain = BlockchainMockFactory.CreateWithBlocks(5);
+
+        if (transaction is not null)
+        {
+            blockchain.Mempool.Add(transaction);
+        }
 
         // Use reflection to change private/internal state
         typeof(Block)

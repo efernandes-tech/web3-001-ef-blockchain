@@ -28,6 +28,13 @@ while (true)
         var blockInfo = await $"{blockchainServer}/blocks/next"
             .GetJsonAsync<BlockInfo>();
 
+        if (blockInfo == null)
+        {
+            Console.WriteLine("No tx found. Waiting...");
+            await Task.Delay(5000);
+            continue;
+        }
+
         var newBlock = Block.FromBlockInfo(blockInfo);
 
         // TODO: Add reward transaction here if needed
