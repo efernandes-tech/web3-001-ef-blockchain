@@ -8,23 +8,6 @@
 	},
 	"item": [
 		{
-			"name": "/status",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{BLOCKCHAIN_SERVER_URL}}/status",
-					"host": [
-						"{{BLOCKCHAIN_SERVER_URL}}"
-					],
-					"path": [
-						"status"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "/blocks/next",
 			"request": {
 				"method": "GET",
@@ -43,18 +26,35 @@
 			"response": []
 		},
 		{
+			"name": "/status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BLOCKCHAIN_SERVER_URL}}/status",
+					"host": [
+						"{{BLOCKCHAIN_SERVER_URL}}"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/blocks/:indexOrHash",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BLOCKCHAIN_SERVER_URL}}/blocks/0",
+					"raw": "{{BLOCKCHAIN_SERVER_URL}}/blocks/4",
 					"host": [
 						"{{BLOCKCHAIN_SERVER_URL}}"
 					],
 					"path": [
 						"blocks",
-						"0"
+						"4"
 					]
 				}
 			},
@@ -81,6 +81,57 @@
 					],
 					"path": [
 						"blocks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/transactions",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"hash\": \" \",\r\n    \"data\": \"tx7\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BLOCKCHAIN_SERVER_URL}}/transactions",
+					"host": [
+						"{{BLOCKCHAIN_SERVER_URL}}"
+					],
+					"path": [
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/transactions/{hash?}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"hash\": \" \",\r\n    \"data\": \"tx1\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BLOCKCHAIN_SERVER_URL}}/transactions/",
+					"host": [
+						"{{BLOCKCHAIN_SERVER_URL}}"
+					],
+					"path": [
+						"transactions",
+						""
 					]
 				}
 			},
