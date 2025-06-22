@@ -1,9 +1,19 @@
+using EF.Blockchain.Domain;
+using Flurl.Http;
+
 namespace EF.Blockchain.Client.Wallet;
 
 public class WalletApp
 {
+    private readonly string _blockchainServer;
+
     private string? _myWalletPublicKey;
     private string? _myWalletPrivateKey;
+
+    public WalletApp(string blockchainServer)
+    {
+        _blockchainServer = blockchainServer;
+    }
 
     public async Task RunAsync()
     {
@@ -106,16 +116,73 @@ public class WalletApp
         Console.WriteLine("(TODO) Get balance via API");
     }
 
-    private void SendTransaction()
+    private async Task SendTransaction()
     {
         Console.Clear();
 
-        if (string.IsNullOrEmpty(_myWalletPublicKey))
+        if (string.IsNullOrEmpty(_myWalletPublicKey) || string.IsNullOrEmpty(_myWalletPrivateKey))
         {
             Console.WriteLine("You don't have a wallet yet.");
             return;
         }
 
-        Console.WriteLine("(TODO) Send transaction via API");
+        Console.WriteLine($"Your wallet is {_myWalletPublicKey}");
+
+        Console.Write("To Wallet: ");
+        var toWallet = Console.ReadLine() ?? string.Empty;
+
+        if (toWallet.Length < 66)
+        {
+            Console.WriteLine("Invalid wallet.");
+            return;
+        }
+
+        Console.Write("Amount: ");
+        if (!decimal.TryParse(Console.ReadLine(), out var amount) || amount <= 0)
+        {
+            Console.WriteLine("Invalid amount.");
+            return;
+        }
+
+        // TODO: balance validation
+
+        // Create TransactionInput
+        var txInput = new TransactionInput(
+            fromAddress: _myWalletPublicKey,
+            amount: amount
+        );
+
+        txInput.Sign(_myWalletPrivateKey);
+
+        // Create Transaction
+        var tx = new Transaction(
+            type: TransactionType.REGULAR,
+            timestamp: DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+            txInput: txInput,
+            to: toWallet
+        );
+
+        try
+        {
+            Console.WriteLine("Send a transaction...");
+
+            var response = await $"{_blockchainServer}/transactions/"
+                .PostJsonAsync(tx);
+
+            var result = await response.ResponseMessage.Content.ReadAsStringAsync();
+
+            Console.WriteLine("Transaction accepted. Waiting for miners!");
+            Console.WriteLine(result);
+        }
+        catch (FlurlHttpException ex)
+        {
+            var status = ex.Call?.Response?.StatusCode.ToString() ?? "No HTTP response";
+            var error = await ex.GetResponseStringAsync();
+
+            if (string.IsNullOrWhiteSpace(error))
+                error = ex.Message;
+
+            Console.WriteLine($"Error ({status}): {error}");
+        }
     }
 }
