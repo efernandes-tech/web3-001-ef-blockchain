@@ -21,7 +21,7 @@ public static class BlockchainMockFactory
             var last = chain.GetLastBlock();
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var index = chain.NextIndex;
-            var transaction = new Transaction(data: $"Block {i}", timestamp: timestamp);
+            var transaction = new Transaction(timestamp: timestamp, txInput: new TransactionInput());
 
             chain.Mempool.Add(transaction);
 
@@ -42,7 +42,7 @@ public static class BlockchainMockFactory
 
         if (addExtraTx)
         {
-            var extraTransaction = new Transaction(data: $"Block X");
+            var extraTransaction = new Transaction(txInput: new TransactionInput());
             chain.Mempool.Add(extraTransaction);
         }
 

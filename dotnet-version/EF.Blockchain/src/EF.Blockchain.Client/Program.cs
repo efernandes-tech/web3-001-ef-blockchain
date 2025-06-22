@@ -11,14 +11,14 @@ switch (option)
 {
     case "1":
         Console.WriteLine("Starting Miner...");
-        var miner = MinerAppFactory.Create();
-        await miner.RunAsync();
+        var minerApp = MinerAppFactory.Create();
+        await minerApp.RunAsync();
         break;
 
     case "2":
         Console.WriteLine("Starting Wallet...");
-        var wallet = WalletAppFactory.Create();
-        wallet.ShowInfo();
+        var walletApp = WalletAppFactory.Create();
+        await walletApp.RunAsync();
         break;
 
     default:

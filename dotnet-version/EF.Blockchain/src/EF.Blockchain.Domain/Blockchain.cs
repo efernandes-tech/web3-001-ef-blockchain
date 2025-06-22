@@ -19,7 +19,7 @@ public class Blockchain
     {
         var genesisTx = new Transaction(
             type: TransactionType.FEE,
-            data: DateTime.UtcNow.ToString()
+            txInput: new TransactionInput()
         );
 
         var genesisBlock = new Block(

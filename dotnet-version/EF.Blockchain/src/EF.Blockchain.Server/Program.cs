@@ -1,5 +1,6 @@
 using EF.Blockchain.Domain;
 using Microsoft.AspNetCore.Http.Json;
+using System.Diagnostics.CodeAnalysis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -135,26 +136,44 @@ app.MapPost("/transactions", (TransactionDto transactionDto) =>
 
 app.Run();
 
+[ExcludeFromCodeCoverage]
 public partial class Program
 { }
 
+[ExcludeFromCodeCoverage]
+public class TransactionInputDto
+{
+    public string? FromAddress { get; set; } = string.Empty;
+    public long? Amount { get; set; } = null;
+    public string? Signature { get; set; } = string.Empty;
+
+    public TransactionInput ToDomain()
+    {
+        return new TransactionInput(FromAddress, Amount, Signature);
+    }
+}
+
+[ExcludeFromCodeCoverage]
 public class TransactionDto
 {
     public TransactionType? Type { get; set; } = TransactionType.REGULAR;
     public long? Timestamp { get; set; } = null;
     public string? Hash { get; set; } = string.Empty;
-    public string? Data { get; set; } = string.Empty;
+    public TransactionInputDto? TxInput { get; set; } = null;
+    public string? To { get; set; } = string.Empty;
 
     public Transaction ToDomain()
     {
         return new Transaction(
             type: Type,
             timestamp: Timestamp,
-            data: Data
+            txInput: TxInput?.ToDomain(),
+            to: To
         );
     }
 }
 
+[ExcludeFromCodeCoverage]
 public class BlockDto
 {
     public int Index { get; set; }
@@ -171,7 +190,9 @@ public class BlockDto
             .Select(tx => new Transaction(
                 type: tx.Type,
                 timestamp: tx.Timestamp,
-                data: tx.Data))
+                txInput: tx.TxInput?.ToDomain(),
+                to: tx.To
+            ))
             .ToList();
         return new Block(Index, PreviousHash, transactions, Timestamp, Hash, Nonce, Miner);
     }

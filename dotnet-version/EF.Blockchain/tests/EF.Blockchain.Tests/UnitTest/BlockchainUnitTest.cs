@@ -37,7 +37,7 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
-        var transaction = TransactionMockFactory.Create(data: "Block 2");
+        var transaction = TransactionMockFactory.Create();
         blockchain.AddBlock(
             BlockMockFactory.Create(index: 1,
                 previousHash: blockchain.GetLastBlock().Hash,
@@ -56,7 +56,7 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
-        var transaction = TransactionMockFactory.Create(data: "Block 2");
+        var transaction = TransactionMockFactory.Create();
 
         blockchain.Mempool.Add(transaction);
 
@@ -68,7 +68,7 @@ public class BlockchainUnitTest
 
         blockchain.AddBlock(block);
 
-        var transaction2 = TransactionMockFactory.Create(data: "A transfer X to B");
+        var transaction2 = TransactionMockFactory.Create();
 
         // Use reflection to change private/internal state
         typeof(Block)
@@ -87,7 +87,7 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
-        var tx = TransactionMockFactory.Create(data: "tx1");
+        var tx = TransactionMockFactory.Create();
 
         // Act
         var validation = blockchain.AddTransaction(tx);
@@ -101,7 +101,7 @@ public class BlockchainUnitTest
     {
         var blockchain = new Domain.Blockchain();
 
-        var tx = TransactionMockFactory.Create(data: "");
+        var tx = TransactionMockFactory.CreateInvalidTxInput();
 
         var validation = blockchain.AddTransaction(tx);
         validation.Success.Should().BeFalse();
@@ -112,7 +112,7 @@ public class BlockchainUnitTest
     {
         var blockchain = new Domain.Blockchain();
 
-        var tx = TransactionMockFactory.Create(data: "tx1");
+        var tx = TransactionMockFactory.Create();
 
         var block = BlockMockFactory.Create(
             index: 1,
@@ -130,7 +130,7 @@ public class BlockchainUnitTest
     {
         var blockchain = new Domain.Blockchain();
 
-        var tx = TransactionMockFactory.Create(data: "tx1");
+        var tx = TransactionMockFactory.Create();
 
         blockchain.Mempool.Add(tx);
 
@@ -143,7 +143,7 @@ public class BlockchainUnitTest
     {
         var blockchain = new Domain.Blockchain();
 
-        var tx = TransactionMockFactory.Create(data: "tx1");
+        var tx = TransactionMockFactory.Create();
 
         blockchain.Mempool.Add(tx);
 
@@ -156,7 +156,7 @@ public class BlockchainUnitTest
     {
         var blockchain = new Domain.Blockchain();
 
-        var tx = TransactionMockFactory.Create(data: "tx1");
+        var tx = TransactionMockFactory.Create();
 
         var block = BlockMockFactory.Create(
             index: 1,
@@ -186,7 +186,7 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
-        var transaction = TransactionMockFactory.Create(data: "Block 2");
+        var transaction = TransactionMockFactory.Create();
 
         blockchain.Mempool.Add(transaction);
 
@@ -222,7 +222,7 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
-        var transaction = TransactionMockFactory.Create(data: "Block 2");
+        var transaction = TransactionMockFactory.Create();
         var block = BlockMockFactory.Create(index: -1,
             previousHash: blockchain.GetLastBlock().Hash,
             transactions: new List<Transaction> { transaction });

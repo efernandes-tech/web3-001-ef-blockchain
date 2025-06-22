@@ -1,43 +1,40 @@
-using NBitcoin;
-
 namespace EF.Blockchain.Client.Wallet;
 
 public class WalletApp
 {
-    public string PrivateKey { get; private set; }
-    public string PublicKey { get; private set; }
+    private readonly string _privateKey;
 
-    public WalletApp(string? wifOrPrivateKey = null)
+    public WalletApp(string privateKey)
     {
-        Key key;
-
-        if (!string.IsNullOrEmpty(wifOrPrivateKey))
-        {
-            if (wifOrPrivateKey.Length == 64)
-            {
-                // From raw private key hex
-                var bytes = Convert.FromHexString(wifOrPrivateKey);
-                key = new Key(bytes);
-            }
-            else
-            {
-                // From WIF
-                key = Key.Parse(wifOrPrivateKey, Network.Main);
-            }
-        }
-        else
-        {
-            // Random new key
-            key = new Key();
-        }
-
-        PrivateKey = key.ToHex();
-        PublicKey = key.PubKey.ToHex();
+        _privateKey = privateKey;
     }
 
-    public void ShowInfo()
+    public async Task RunAsync()
     {
-        Console.WriteLine("Private Key: " + PrivateKey);
-        Console.WriteLine("Public Key: " + PublicKey);
+        Console.WriteLine("Starting wallet...");
+
+        Console.WriteLine("Logged as " + _privateKey);
+
+        var wallet = new Domain.Wallet(_privateKey);
+
+        Console.WriteLine("Private Key: " + wallet.PrivateKey);
+        Console.WriteLine("Public Key: " + wallet.PublicKey);
+
+        var otherWallet = new Domain.Wallet();
+
+        Console.WriteLine("Private Key (otherWallet): " + otherWallet.PrivateKey);
+        Console.WriteLine("Public Key (otherWallet): " + otherWallet.PublicKey);
+
+        var transactionInput = new Domain.TransactionInput(
+            fromAddress: wallet.PublicKey,
+            amount: 10
+        );
+        transactionInput.Sign(wallet.PrivateKey);
+        Console.WriteLine("Signature (otherWallet): " + transactionInput.Signature);
+
+        while (true)
+        {
+            await Task.Delay(1000); // Simulate some work
+        }
     }
 }

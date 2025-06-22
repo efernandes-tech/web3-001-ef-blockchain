@@ -27,7 +27,7 @@ public class ServerIntegrationTest
 
         // Assert
         result.Should().NotBeNull();
-        result.blocks.Should().Be(3);
+        result.blocks.Should().Be(1);
         result.IsValid.Success.Should().BeTrue();
     }
 
@@ -54,7 +54,7 @@ public class ServerIntegrationTest
             .GetJsonAsync<BlockInfo>();
 
         // Assert
-        Assert.Equal(3, response.Index);
+        Assert.Equal(1, response.Index);
     }
 
     [Fact]
@@ -87,11 +87,15 @@ public class ServerIntegrationTest
     {
         // Arrange
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        var transaction = new Transaction(timestamp: timestamp, data: "test");
+        var txInput = new TransactionInput(
+            fromAddress: TransactionMockFactory.MockedPublicKey,
+            amount: 1000);
+        txInput.Sign(TransactionMockFactory.MockedPrivateKey);
+        var transaction = new Transaction(timestamp: timestamp, txInput: txInput, to: TransactionMockFactory.MockedPublicKeyTo);
 
         var flurl = CreateFlurlClientWithBlockHash("abc", transaction);
 
-        var index = 5;
+        var index = 1;
         var previousHash = "abc";
 
         var block = new Block(index, previousHash, new List<Transaction> { transaction }, timestamp);
@@ -114,7 +118,7 @@ public class ServerIntegrationTest
             .ReceiveJson<BlockResponse>();
 
         // Assert
-        response.Index.Should().Be(5);
+        response.Index.Should().Be(1);
     }
 
     [Fact]
@@ -158,7 +162,11 @@ public class ServerIntegrationTest
     {
         // Arrange
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        var tx = new Transaction(timestamp: timestamp, data: "tx1");
+        var txInput = new TransactionInput(
+            fromAddress: TransactionMockFactory.MockedPublicKey,
+            amount: 1000);
+        txInput.Sign(TransactionMockFactory.MockedPrivateKey);
+        var tx = new Transaction(timestamp: timestamp, txInput: txInput);
 
         var blockchain = BlockchainMockFactory.CreateWithBlocks(3, false);
         blockchain.Mempool.Add(tx);
@@ -173,14 +181,18 @@ public class ServerIntegrationTest
 
         // Assert
         response.StatusCode.Should().Be(200);
-        body.MempoolIndex.Should().Be(0);
+        body.MempoolIndex.Should().Be(2);
     }
 
     [Fact]
     public async Task ServerTests_PostTransaction_ShouldAddTx()
     {
         // Arrange
-        var tx = new Transaction(timestamp: DateTimeOffset.UtcNow.ToUnixTimeSeconds(), data: "tx1");
+        var txInput = new TransactionInput(
+            fromAddress: TransactionMockFactory.MockedPublicKey,
+            amount: 1000);
+        txInput.Sign(TransactionMockFactory.MockedPrivateKey);
+        var tx = new Transaction(timestamp: DateTimeOffset.UtcNow.ToUnixTimeSeconds(), txInput: txInput, to: TransactionMockFactory.MockedPublicKeyTo);
 
         // Act
         var response = await _flurl.Request("/transactions").PostJsonAsync(tx);

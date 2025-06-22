@@ -12,22 +12,25 @@ public class Transaction
     public TransactionType Type { get; private set; }
     public long Timestamp { get; private set; }
     public string Hash { get; private set; }
-    public string Data { get; private set; }
+    public TransactionInput? TxInput { get; private set; }
+    public string To { get; private set; }
 
     [JsonConstructor]
-    public Transaction(TransactionType type, long timestamp, string data, string hash)
+    public Transaction(TransactionType type, long timestamp, string hash, TransactionInput txInput, string to)
     {
         Type = type;
         Timestamp = timestamp;
-        Data = data;
         Hash = hash;
+        TxInput = txInput;
+        To = to;
     }
 
-    public Transaction(TransactionType? type = null, long? timestamp = null, string? data = null)
+    public Transaction(TransactionType? type = null, long? timestamp = null, TransactionInput? txInput = null, string? to = null)
     {
         Type = type ?? TransactionType.REGULAR;
         Timestamp = timestamp ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        Data = data ?? string.Empty;
+        TxInput = txInput ?? new TransactionInput();
+        To = to ?? string.Empty;
         Hash = GetHash();
     }
 
@@ -36,7 +39,8 @@ public class Transaction
     /// </summary>
     public string GetHash()
     {
-        var raw = $"{Type}{Data}{Timestamp}";
+        var fromHash = TxInput != null ? TxInput.GetHash() : "";
+        var raw = $"{Type}{fromHash}{To}{Timestamp}";
         using var sha256 = SHA256.Create();
         var bytes = Encoding.UTF8.GetBytes(raw);
         var hashBytes = sha256.ComputeHash(bytes);
@@ -51,9 +55,16 @@ public class Transaction
         if (Hash != GetHash())
             return new Validation(false, "Invalid hash.");
 
-        if (string.IsNullOrWhiteSpace(Data))
-            return new Validation(false, "Invalid data.");
+        if (string.IsNullOrWhiteSpace(To))
+            return new Validation(false, "Invalid 'to' address.");
 
-        return new Validation(); // success
+        if (TxInput != null)
+        {
+            var inputValidation = TxInput.IsValid();
+            if (!inputValidation.Success)
+                return new Validation(false, $"Invalid TxInput: {inputValidation.Message}");
+        }
+
+        return new Validation();
     }
 }

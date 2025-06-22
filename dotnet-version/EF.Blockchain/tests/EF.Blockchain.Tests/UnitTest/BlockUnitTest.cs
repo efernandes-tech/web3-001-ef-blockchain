@@ -13,7 +13,7 @@ public class BlockUnitTest
     {
         var genesisTx = TransactionMockFactory.Create(
             type: TransactionType.FEE,
-            data: "Genesis Block"
+            transactionInput: new TransactionInput()
         );
 
         Genesis = new Block(
@@ -25,8 +25,7 @@ public class BlockUnitTest
     {
         // Arrange
         var transaction = TransactionMockFactory.Create(
-           type: TransactionType.FEE,
-           data: "Block 2"
+           type: TransactionType.FEE
         );
         var block = new Block(index: 1, previousHash: Genesis.Hash,
             transactions: new List<Transaction> { transaction });
@@ -46,8 +45,7 @@ public class BlockUnitTest
         var exampleDifficulty = 0;
         var exampleMiner = "efernandes";
         var transaction = TransactionMockFactory.Create(
-           type: TransactionType.FEE,
-           data: "Block 2"
+           type: TransactionType.FEE
         );
         var blockInfo = new BlockInfo
         {
@@ -74,11 +72,11 @@ public class BlockUnitTest
         // Arrange
         var tx1 = TransactionMockFactory.Create(
             type: TransactionType.FEE,
-            data: "fee1"
+            transactionInput: new TransactionInput()
         );
         var tx2 = TransactionMockFactory.Create(
             type: TransactionType.FEE,
-            data: "fee2"
+            transactionInput: new TransactionInput()
         );
 
         var block = new Block(
@@ -100,13 +98,15 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidInvalidTx()
     {
         // Arrange
-        var invalidTx = TransactionMockFactory.CreateInvalidData();
+        var invalidTx = TransactionMockFactory.CreateInvalidTxInput();
         var block = new Block(
             index: 1,
             previousHash: Genesis.Hash,
             transactions: new List<Transaction> { invalidTx }
         );
         block.Mine(ExampleDifficulty, ExampleMiner);
+
+        //block.transactions[0].to = "";
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
@@ -135,7 +135,7 @@ public class BlockUnitTest
         // Arrange
         var transaction = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           data: "Block 2"
+           transactionInput: new TransactionInput()
         );
         var block = new Block(index: 1, previousHash: "abc",
             transactions: new List<Transaction> { transaction });
@@ -153,7 +153,7 @@ public class BlockUnitTest
         // Arrange
         var transaction = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           data: "Block 2"
+           transactionInput: new TransactionInput()
         );
         var block = new Block(index: 1, previousHash: Genesis.Hash,
             transactions: new List<Transaction> { transaction });
@@ -178,7 +178,7 @@ public class BlockUnitTest
         // Arrange
         var transaction = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           data: "Block 2"
+           transactionInput: new TransactionInput()
         );
         var block = new Block(index: 1, previousHash: Genesis.Hash,
             transactions: new List<Transaction> { transaction });
@@ -201,7 +201,7 @@ public class BlockUnitTest
         // Arrange
         var transaction = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           data: "Block 2"
+           transactionInput: new TransactionInput()
         );
         var block = new Block(index: 1, previousHash: Genesis.Hash,
             transactions: new List<Transaction> { transaction });
@@ -214,10 +214,10 @@ public class BlockUnitTest
     }
 
     [Fact]
-    public void BlockTests_IsValid_ShouldNotBeValidData()
+    public void BlockTests_IsValid_ShouldNotBeTxInput()
     {
         // Arrange
-        var transaction = TransactionMockFactory.CreateInvalidData();
+        var transaction = TransactionMockFactory.CreateInvalidTxInput();
         var block = new Block(index: 1, previousHash: Genesis.Hash,
             transactions: new List<Transaction> { transaction });
 
@@ -234,7 +234,7 @@ public class BlockUnitTest
         // Arrange
         var transaction = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           data: "Block 2"
+           transactionInput: new TransactionInput()
         );
         var block = new Block(index: -1, previousHash: Genesis.Hash,
             transactions: new List<Transaction> { transaction });
