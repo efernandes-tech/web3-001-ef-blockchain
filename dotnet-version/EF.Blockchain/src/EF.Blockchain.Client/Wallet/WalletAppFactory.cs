@@ -10,8 +10,8 @@ public static class WalletAppFactory
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .Build();
 
-        var privateKey = config["Blockchain:MinerWallet:PrivateKey"]!;
+        var blockchainServer = config["Blockchain:Server"]!;
 
-        return new WalletApp();
+        return new WalletApp(blockchainServer);
     }
 }

@@ -47,6 +47,20 @@ public class Blockchain
 
     public Validation AddTransaction(Transaction transaction)
     {
+        if (transaction.TxInput != null)
+        {
+            var from = transaction.TxInput.FromAddress;
+
+            var pendingTx = Mempool
+                .Where(tx => tx.TxInput != null && tx.TxInput.FromAddress == from)
+                .ToList();
+
+            if (pendingTx.Count > 0)
+                return new Validation(false, $"This wallet has a pending transaction.");
+
+            // TODO: Validate funds origin here if needed
+        }
+
         var validation = transaction.IsValid();
         if (!validation.Success)
             return new Validation(false, "Invalid tx: " + validation.Message);
