@@ -12,6 +12,6 @@ public static class WalletAppFactory
 
         var privateKey = config["Blockchain:MinerWallet:PrivateKey"]!;
 
-        return new WalletApp(privateKey);
+        return new WalletApp();
     }
 }
