@@ -11,8 +11,8 @@ public static class MinerAppFactory
             .Build();
 
         var server = config["Blockchain:Server"]!;
-        var publicKey = config["Blockchain:MinerWallet:PublicKey"]!;
+        var privateKey = config["Blockchain:MinerWallet:PrivateKey"]!;
 
-        return new MinerApp(server, publicKey);
+        return new MinerApp(server, privateKey);
     }
 }

@@ -6,19 +6,19 @@ namespace EF.Blockchain.Client.Miner;
 public class MinerApp
 {
     private readonly string _blockchainServer;
-    private readonly string _publicKey;
+    private readonly Domain.Wallet _minerWallet;
     private int _totalMined = 0;
 
-    public MinerApp(string blockchainServer, string publicKey)
+    public MinerApp(string blockchainServer, string privateKey)
     {
         _blockchainServer = blockchainServer;
-        _publicKey = publicKey;
+        _minerWallet = new Domain.Wallet(privateKey);
     }
 
     public async Task RunAsync()
     {
         Console.WriteLine("Starting miner...");
-        Console.WriteLine("Logged as " + _publicKey);
+        Console.WriteLine("Logged as " + _minerWallet.PublicKey);
 
         while (true)
         {
@@ -39,10 +39,15 @@ public class MinerApp
 
                 var newBlock = Block.FromBlockInfo(blockInfo);
 
-                // TODO: Add reward transaction here if needed
+                // Add reward transaction (FEE)
+                var rewardTransaction = new Transaction(
+                    type: TransactionType.FEE,
+                    to: _minerWallet.PublicKey
+                );
+                newBlock.Transactions.Add(rewardTransaction);
 
                 Console.WriteLine($"Start mining block #{blockInfo.Index}...");
-                newBlock.Mine(blockInfo.Difficulty, _publicKey);
+                newBlock.Mine(blockInfo.Difficulty, _minerWallet.PublicKey);
 
                 Console.WriteLine("Block mined! Sending to blockchain...");
 

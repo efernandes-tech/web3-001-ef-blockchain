@@ -13,19 +13,27 @@ public static class TransactionMockFactory
         TransactionType? type = null,
         long? timestamp = null,
         TransactionInput? transactionInput = null,
-        string? hash = null)
+        string? hash = null,
+        string? to = null)
     {
-        var txInput = transactionInput ?? new TransactionInput(
-            fromAddress: MockedPublicKey,
-            amount: 1000);
+        TransactionInput txInput = null;
 
-        txInput.Sign(MockedPrivateKey);
+        if (transactionInput != null)
+        {
+            txInput = transactionInput.Amount == 0
+                ? new TransactionInput(
+                    fromAddress: MockedPublicKey,
+                    amount: 1000)
+                : transactionInput;
+
+            txInput.Sign(MockedPrivateKey);
+        }
 
         var tx = new Transaction(
             type: type ?? TransactionType.REGULAR,
             timestamp: timestamp ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
             txInput: txInput,
-            to: MockedPublicKeyTo
+            to: to ?? MockedPublicKeyTo
         );
 
         if (hash != null)

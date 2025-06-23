@@ -42,7 +42,7 @@ public class Blockchain
 
     public int GetDifficulty()
     {
-        return (int)Math.Ceiling((double)Blocks.Count / DIFFICULTY_FACTOR);
+        return (int)Math.Ceiling((double)Blocks.Count / DIFFICULTY_FACTOR) + 1;
     }
 
     public Validation AddTransaction(Transaction transaction)
@@ -56,7 +56,7 @@ public class Blockchain
                 .ToList();
 
             if (pendingTx.Count > 0)
-                return new Validation(false, $"This wallet has a pending transaction.");
+                return new Validation(false, $"This wallet has a pending transaction");
 
             // TODO: Validate funds origin here if needed
         }
@@ -66,10 +66,10 @@ public class Blockchain
             return new Validation(false, "Invalid tx: " + validation.Message);
 
         if (Blocks.Any(b => b.Transactions.Any(tx => tx.Hash == transaction.Hash)))
-            return new Validation(false, "Duplicated tx in blockchain.");
+            return new Validation(false, "Duplicated tx in blockchain");
 
         if (Mempool.Any(tx => tx.Hash == transaction.Hash))
-            return new Validation(false, "Duplicated tx in mempool.");
+            return new Validation(false, "Duplicated tx in mempool");
 
         Mempool.Add(transaction);
         return new Validation(true, transaction.Hash);
@@ -120,7 +120,8 @@ public class Blockchain
             return new TransactionSearch
             {
                 MempoolIndex = mempoolIndex,
-                Transaction = Mempool[mempoolIndex]
+                Transaction = Mempool[mempoolIndex],
+                BlockIndex = -1,
             };
         }
 
@@ -131,7 +132,8 @@ public class Blockchain
             return new TransactionSearch
             {
                 BlockIndex = blockIndex,
-                Transaction = transaction
+                Transaction = transaction,
+                MempoolIndex = -1
             };
         }
 

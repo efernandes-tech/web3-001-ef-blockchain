@@ -32,6 +32,7 @@ public class WalletApp
             Console.WriteLine("2 - Recover Wallet");
             Console.WriteLine("3 - Balance");
             Console.WriteLine("4 - Send Tx");
+            Console.WriteLine("5 - Search Tx");
             Console.WriteLine("0 - Exit");
 
             Console.Write("Choose your option: ");
@@ -52,7 +53,11 @@ public class WalletApp
                     break;
 
                 case "4":
-                    SendTransaction();
+                    await SendTransaction();
+                    break;
+
+                case "5":
+                    await SearchTransaction();
                     break;
 
                 case "0":
@@ -172,6 +177,41 @@ public class WalletApp
             var result = await response.ResponseMessage.Content.ReadAsStringAsync();
 
             Console.WriteLine("Transaction accepted. Waiting for miners!");
+            Console.WriteLine(result);
+        }
+        catch (FlurlHttpException ex)
+        {
+            var status = ex.Call?.Response?.StatusCode.ToString() ?? "No HTTP response";
+            var error = await ex.GetResponseStringAsync();
+
+            if (string.IsNullOrWhiteSpace(error))
+                error = ex.Message;
+
+            Console.WriteLine($"Error ({status}): {error}");
+        }
+    }
+
+    private async Task SearchTransaction()
+    {
+        Console.Clear();
+
+        Console.Write("Your tx hash: ");
+        var hash = Console.ReadLine() ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(hash))
+        {
+            Console.WriteLine("Invalid hash.");
+            return;
+        }
+
+        try
+        {
+            var response = await $"{_blockchainServer}/transactions/{hash}"
+                .GetAsync();
+
+            var result = await response.ResponseMessage.Content.ReadAsStringAsync();
+
+            Console.WriteLine("Transaction found:");
             Console.WriteLine(result);
         }
         catch (FlurlHttpException ex)

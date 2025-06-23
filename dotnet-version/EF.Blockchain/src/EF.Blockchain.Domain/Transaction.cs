@@ -29,7 +29,7 @@ public class Transaction
     {
         Type = type ?? TransactionType.REGULAR;
         Timestamp = timestamp ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        TxInput = txInput ?? new TransactionInput();
+        TxInput = txInput ?? null;
         To = to ?? string.Empty;
         Hash = GetHash();
     }

@@ -96,21 +96,28 @@ public class Block
     /// <returns><c>Validation</c> if the block is valid</returns>
     public Validation IsValid(string previousHash, int previousIndex, int difficulty)
     {
-        // Transaction rules
+        // Validate transactions
         if (Transactions.Count > 0)
         {
-            var feeTxCount = Transactions.Count(tx => tx.Type == TransactionType.FEE);
-            if (feeTxCount > 1)
-                return new Validation(false, "Too many fees.");
+            var feeTxs = Transactions.Where(tx => tx.Type == TransactionType.FEE).ToList();
 
-            var invalidTx = Transactions
+            if (feeTxs.Count == 0)
+                return new Validation(false, "No fee tx");
+
+            if (feeTxs.Count > 1)
+                return new Validation(false, "Too many fees");
+
+            if (feeTxs[0].To != Miner)
+                return new Validation(false, "Invalid fee tx: different from miner");
+
+            var invalidTxs = Transactions
                 .Select(tx => tx.IsValid())
                 .Where(v => !v.Success)
                 .ToList();
 
-            if (invalidTx.Any())
+            if (invalidTxs.Any())
             {
-                var errorMsg = string.Join(" | ", invalidTx.Select(v => v.Message));
+                var errorMsg = string.Join(" | ", invalidTxs.Select(v => v.Message));
                 return new Validation(false, "Invalid block due to invalid tx: " + errorMsg);
             }
         }

@@ -56,30 +56,38 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
-        var transaction = TransactionMockFactory.Create();
+
+        var transaction = TransactionMockFactory.Create(type: TransactionType.REGULAR, transactionInput: new TransactionInput());
+        var transactionFee = TransactionMockFactory.Create(
+           type: TransactionType.FEE,
+           to: TransactionMockFactory.MockedPublicKey
+        );
 
         blockchain.Mempool.Add(transaction);
 
-        var block = BlockMockFactory.Create(index: 1,
+        var block = BlockMockFactory.Create(
+            index: 1,
             previousHash: blockchain.GetLastBlock().Hash,
-            transactions: new List<Transaction> { transaction });
+            transactions: new List<Transaction> { transaction, transactionFee });
 
-        block.Mine(difficulty: 1, miner: "ef");
+        block.Mine(difficulty: 2, miner: TransactionMockFactory.MockedPublicKey);
 
-        blockchain.AddBlock(block);
+        var validBlock = blockchain.AddBlock(block);
 
-        var transaction2 = TransactionMockFactory.Create();
+        var transaction2 = TransactionMockFactory.Create(type: TransactionType.REGULAR, transactionInput: new TransactionInput());
 
         // Use reflection to change private/internal state
         typeof(Block)
             .GetProperty(nameof(Block.Transactions))!
-            .SetValue(blockchain.Blocks[1], new List<Transaction> { transaction2 });
+            .SetValue(blockchain.Blocks[1], new List<Transaction> { transaction, transactionFee, transaction2 });
 
         // Act
         var valid = blockchain.IsValid();
 
         // Assert
         Assert.False(valid.Success);
+        Assert.Contains("Invalid block", valid.Message);
+        Assert.Contains("Invalid hash", valid.Message);
     }
 
     [Fact]
@@ -94,6 +102,32 @@ public class BlockchainUnitTest
 
         // Assert
         validation.Success.Should().BeTrue();
+    }
+
+    [Fact]
+    public void BlockchainTests_AddTransaction_ShouldNotAddTransactionPendingTx()
+    {
+        var blockchain = new Domain.Blockchain();
+
+        var tx1 = TransactionMockFactory.Create(
+            type: TransactionType.REGULAR,
+            transactionInput: new TransactionInput());
+
+        blockchain.AddTransaction(tx1); // First tx added
+
+        var tx2 = TransactionMockFactory.Create(
+            type: TransactionType.REGULAR,
+            transactionInput: new TransactionInput());
+
+        // Simulate same sender (force same fromAddress)
+        typeof(TransactionInput)
+            .GetProperty(nameof(TransactionInput.FromAddress))!
+            .SetValue(tx2.TxInput, tx1.TxInput.FromAddress);
+
+        var validation = blockchain.AddTransaction(tx2);
+
+        validation.Success.Should().BeFalse();
+        validation.Message.Should().Be("This wallet has a pending transaction");
     }
 
     [Fact]
@@ -186,16 +220,24 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain();
-        var transaction = TransactionMockFactory.Create();
+
+        var transaction = TransactionMockFactory.Create(
+            type: TransactionType.REGULAR,
+            transactionInput: new TransactionInput());
+
+        var transactionFee = TransactionMockFactory.Create(
+           type: TransactionType.FEE,
+           to: TransactionMockFactory.MockedPublicKey
+        );
 
         blockchain.Mempool.Add(transaction);
 
         var block = BlockMockFactory.Create(
             index: 1,
             previousHash: blockchain.GetLastBlock().Hash,
-            transactions: new List<Transaction> { transaction });
+            transactions: new List<Transaction> { transaction, transactionFee });
 
-        block.Mine(difficulty: 1, miner: "ef");
+        block.Mine(difficulty: 2, miner: TransactionMockFactory.MockedPublicKey);
 
         // Act
         var result = blockchain.AddBlock(block);

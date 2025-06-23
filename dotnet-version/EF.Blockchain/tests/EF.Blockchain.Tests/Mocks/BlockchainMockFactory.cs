@@ -21,20 +21,30 @@ public static class BlockchainMockFactory
             var last = chain.GetLastBlock();
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var index = chain.NextIndex;
-            var transaction = new Transaction(timestamp: timestamp, txInput: new TransactionInput());
+            var transactionInput = new TransactionInput(
+                fromAddress: TransactionMockFactory.MockedPublicKey,
+                amount: 10
+            );
+            transactionInput.Sign(TransactionMockFactory.MockedPrivateKey);
+            var transaction = new Transaction(
+                timestamp: timestamp,
+                txInput: transactionInput,
+                to: TransactionMockFactory.MockedPublicKeyTo
+            );
+            var transactionFee = new Transaction(type: TransactionType.FEE, to: TransactionMockFactory.MockedPublicKey);
 
             chain.Mempool.Add(transaction);
 
             var block = new Block(
                 index,
                 last.Hash,
-                new List<Transaction> { transaction },
+                new List<Transaction> { transaction, transactionFee },
                 timestamp,
                 hash: null
             );
             block.Mine(
                 chain.GetDifficulty(),
-                miner: "ef"
+                miner: TransactionMockFactory.MockedPublicKey
             );
 
             chain.AddBlock(block);
