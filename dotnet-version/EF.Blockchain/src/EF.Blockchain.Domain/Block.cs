@@ -49,8 +49,8 @@ public class Block
     /// <returns>The SHA-256 hash string.</returns>
     public string GetHash()
     {
-        var txs = Transactions.Any()
-            ? string.Join("", Transactions.Select(tx => tx.Hash))
+        var txs = Transactions != null && Transactions.Any()
+            ? Transactions.Select(tx => tx.Hash).Aggregate((a, b) => a + b)
             : "";
 
         return ComputeHash(Index, Timestamp, txs, PreviousHash, Nonce, Miner);
@@ -96,48 +96,45 @@ public class Block
     /// <returns><c>Validation</c> if the block is valid</returns>
     public Validation IsValid(string previousHash, int previousIndex, int difficulty)
     {
-        // Validate transactions
-        if (Transactions.Count > 0)
+        if (Transactions != null && Transactions.Any())
         {
-            var feeTxs = Transactions.Where(tx => tx.Type == TransactionType.FEE).ToList();
+            var feeTxs = Transactions
+                .Where(tx => tx.Type == TransactionType.FEE)
+                .ToList();
 
-            if (feeTxs.Count == 0)
+            if (!feeTxs.Any())
                 return new Validation(false, "No fee tx");
 
             if (feeTxs.Count > 1)
                 return new Validation(false, "Too many fees");
 
-            if (feeTxs[0].To != Miner)
+            if (!feeTxs[0].TxOutputs.Any(txo => txo.ToAddress == Miner))
                 return new Validation(false, "Invalid fee tx: different from miner");
 
-            var invalidTxs = Transactions
+            var validations = Transactions
                 .Select(tx => tx.IsValid())
                 .Where(v => !v.Success)
+                .Select(v => v.Message)
                 .ToList();
 
-            if (invalidTxs.Any())
+            if (validations.Any())
             {
-                var errorMsg = string.Join(" | ", invalidTxs.Select(v => v.Message));
+                var errorMsg = string.Join(" ", validations);
                 return new Validation(false, "Invalid block due to invalid tx: " + errorMsg);
             }
         }
 
         if (previousIndex != Index - 1)
-        {
             return new Validation(false, "Invalid index");
-        }
+
         if (Timestamp < 1)
-        {
             return new Validation(false, "Invalid timestamp");
-        }
-        if (previousHash != PreviousHash)
-        {
+
+        if (PreviousHash != previousHash)
             return new Validation(false, "Invalid previous hash");
-        }
-        if (Nonce <= 0 || string.IsNullOrEmpty(Miner))
-        {
+
+        if (Nonce < 1 || string.IsNullOrEmpty(Miner))
             return new Validation(false, "No mined");
-        }
 
         var prefix = new string('0', difficulty);
         if (Hash != GetHash() || !Hash.StartsWith(prefix))

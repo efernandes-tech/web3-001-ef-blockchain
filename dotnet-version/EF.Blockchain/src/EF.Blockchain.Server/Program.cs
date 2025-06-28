@@ -1,11 +1,17 @@
 using EF.Blockchain.Domain;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<Blockchain>();
+var miner = builder.Configuration["Blockchain:MinerWallet:PrivateKey"]
+    ?? Environment.GetEnvironmentVariable("BLOCKCHAIN_MINER")
+    ?? "default-miner";
+
+var minerWallet = new Wallet(miner);
+
+builder.Services.AddSingleton<Blockchain>(_ => new Blockchain(minerWallet.PublicKey));
 
 builder.Services.AddLogging();
 
@@ -155,22 +161,37 @@ public class TransactionInputDto
 }
 
 [ExcludeFromCodeCoverage]
+public class TransactionOutputDto
+{
+    public string? ToAddress { get; set; } = string.Empty;
+    public long? Amount { get; set; } = 0;
+    public string? Tx { get; set; } = string.Empty;
+
+    public TransactionOutput ToDomain()
+    {
+        return new TransactionOutput(ToAddress, (int)(Amount ?? 0), Tx);
+    }
+}
+
+[ExcludeFromCodeCoverage]
 public class TransactionDto
 {
     public TransactionType? Type { get; set; } = TransactionType.REGULAR;
     public long? Timestamp { get; set; } = null;
     public string? Hash { get; set; } = string.Empty;
-    public TransactionInputDto? TxInput { get; set; } = null;
-    public string? To { get; set; } = string.Empty;
+    public List<TransactionInputDto>? TxInputs { get; set; } = null;
+    public List<TransactionOutputDto> TxOutputs { get; set; } = new();
 
     public Transaction ToDomain()
     {
+        var txInputs = TxInputs?.Select(i => i.ToDomain()).ToList();
+        var txOutputs = TxOutputs.Select(o => o.ToDomain()).ToList();
+
         return new Transaction(
             type: Type,
             timestamp: Timestamp,
-            txInput: TxInput?.ToDomain(),
-            to: To
-        );
+            txInputs: txInputs,
+            txOutputs: txOutputs);
     }
 }
 
@@ -188,13 +209,9 @@ public class BlockDto
     public Block ToDomain()
     {
         var transactions = Transactions
-            .Select(tx => new Transaction(
-                type: tx.Type,
-                timestamp: tx.Timestamp,
-                txInput: tx.TxInput?.ToDomain(),
-                to: tx.To
-            ))
+            .Select(tx => tx.ToDomain())
             .ToList();
+
         return new Block(Index, PreviousHash, transactions, Timestamp, Hash, Nonce, Miner);
     }
 }

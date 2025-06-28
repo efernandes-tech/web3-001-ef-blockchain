@@ -35,6 +35,7 @@ public class TransactionInputUnitTest
     public void TransactionInputTests_IsValid_ShouldNotBeValidDefaults()
     {
         var txInput = new TransactionInput();
+
         txInput.Sign(_loki.PrivateKey);
 
         var valid = txInput.IsValid();

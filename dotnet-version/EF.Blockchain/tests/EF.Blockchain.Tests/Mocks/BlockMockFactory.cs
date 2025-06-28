@@ -16,7 +16,7 @@ public static class BlockMockFactory
         var prevHash = previousHash ?? "abc";
         var trans = transactions ?? new List<Transaction>
         {
-            new Transaction(txInput: new TransactionInput())
+            new Transaction(txInputs: new List<TransactionInput> { new TransactionInput() })
         };
         var transHash = string.Join("", trans.Select(t => t.Hash));
         var ts = timestamp ?? DateTimeOffset.UtcNow.ToUnixTimeSeconds();

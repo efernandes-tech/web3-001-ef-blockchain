@@ -6,7 +6,7 @@ public static class BlockchainMockFactory
 {
     public static Domain.Blockchain CreateWithGenesis()
     {
-        return new Domain.Blockchain();
+        return new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
     }
 
     public static Domain.Blockchain CreateWithBlocks(int count, bool addExtraTx = true)
@@ -14,7 +14,7 @@ public static class BlockchainMockFactory
         if (count < 1)
             throw new ArgumentException("Must create at least 1 block");
 
-        var chain = new Domain.Blockchain();
+        var chain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
 
         for (int i = 1; i < count; i++)
         {
@@ -26,12 +26,18 @@ public static class BlockchainMockFactory
                 amount: 10
             );
             transactionInput.Sign(TransactionMockFactory.MockedPrivateKey);
+            var transactionOutput = new TransactionOutput(
+                toAddress: TransactionMockFactory.MockedPublicKeyTo,
+                amount: 10
+            );
             var transaction = new Transaction(
                 timestamp: timestamp,
-                txInput: transactionInput,
-                to: TransactionMockFactory.MockedPublicKeyTo
+                txInputs: new List<TransactionInput> { transactionInput },
+                txOutputs: new List<TransactionOutput> { transactionOutput }
             );
-            var transactionFee = new Transaction(type: TransactionType.FEE, to: TransactionMockFactory.MockedPublicKey);
+            var transactionFee = new Transaction(
+                type: TransactionType.FEE,
+                txOutputs: new List<TransactionOutput> { transactionOutput });
 
             chain.Mempool.Add(transaction);
 
@@ -52,7 +58,7 @@ public static class BlockchainMockFactory
 
         if (addExtraTx)
         {
-            var extraTransaction = new Transaction(txInput: new TransactionInput());
+            var extraTransaction = new Transaction(txInputs: new List<TransactionInput> { new TransactionInput() });
             chain.Mempool.Add(extraTransaction);
         }
 

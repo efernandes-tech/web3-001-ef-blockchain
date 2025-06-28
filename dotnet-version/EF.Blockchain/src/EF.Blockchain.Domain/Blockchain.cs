@@ -12,27 +12,37 @@ public class Blockchain
     public static readonly int TX_PER_BLOCK = 2; // Max transactions per block
     public static readonly int MAX_DIFFICULTY = 62;
 
-    /// <summary>
-    /// Creates a new blockchain
-    /// </summary>
-    public Blockchain()
+    public Blockchain(string miner)
     {
-        var genesisTx = new Transaction(
-            type: TransactionType.FEE,
-            txInput: new TransactionInput()
-        );
-
-        var genesisBlock = new Block(
-            index: NextIndex,
-            previousHash: "",
-            transactions: new List<Transaction> { genesisTx }
-        );
-
-        Blocks = new List<Block> { genesisBlock };
-
+        Blocks = new List<Block>();
         Mempool = new List<Transaction>();
 
+        var genesisBlock = CreateGenesis(miner);
+        Blocks.Add(genesisBlock);
         NextIndex++;
+    }
+
+    private Block CreateGenesis(string miner)
+    {
+        var amount = 10; // TODO: calculate reward
+
+        var txOutput = new TransactionOutput(toAddress: miner, amount: amount);
+
+        var feeTx = new Transaction(
+            type: TransactionType.FEE,
+            txInputs: null,
+            txOutputs: new List<TransactionOutput> { txOutput }
+        );
+
+        var blockGenesis = new Block(
+            index: NextIndex,
+            previousHash: "",
+            transactions: new List<Transaction> { feeTx }
+        );
+
+        blockGenesis.Mine(GetDifficulty(), miner);
+
+        return blockGenesis;
     }
 
     public Block GetLastBlock()
@@ -47,18 +57,20 @@ public class Blockchain
 
     public Validation AddTransaction(Transaction transaction)
     {
-        if (transaction.TxInput != null)
+        if (transaction.TxInputs != null && transaction.TxInputs.Any())
         {
-            var from = transaction.TxInput.FromAddress;
+            var from = transaction.TxInputs[0].FromAddress;
 
             var pendingTx = Mempool
-                .Where(tx => tx.TxInput != null && tx.TxInput.FromAddress == from)
+                .Where(tx => tx.TxInputs != null)
+                .SelectMany(tx => tx.TxInputs!)
+                .Where(txi => txi.FromAddress == from)
                 .ToList();
 
-            if (pendingTx.Count > 0)
-                return new Validation(false, $"This wallet has a pending transaction");
+            if (pendingTx.Any())
+                return new Validation(false, "This wallet has a pending transaction");
 
-            // TODO: Validate funds origin here if needed
+            // TODO: validate funds origin (UTXO)
         }
 
         var validation = transaction.IsValid();
@@ -68,39 +80,39 @@ public class Blockchain
         if (Blocks.Any(b => b.Transactions.Any(tx => tx.Hash == transaction.Hash)))
             return new Validation(false, "Duplicated tx in blockchain");
 
-        if (Mempool.Any(tx => tx.Hash == transaction.Hash))
-            return new Validation(false, "Duplicated tx in mempool");
-
         Mempool.Add(transaction);
+
         return new Validation(true, transaction.Hash);
     }
 
     public Validation AddBlock(Block block)
     {
-        var lastBlock = GetLastBlock();
+        var nextBlockInfo = GetNextBlock();
+        if (nextBlockInfo == null)
+            return new Validation(false, "There is no next block info");
 
-        var validation = block.IsValid(lastBlock.Hash, lastBlock.Index, GetDifficulty());
+        var validation = block.IsValid(
+            nextBlockInfo.PreviousHash,
+            nextBlockInfo.Index - 1,
+            nextBlockInfo.Difficulty
+        );
+
         if (!validation.Success)
             return new Validation(false, $"Invalid block: {validation.Message}");
 
-        // Filter out non-fee transactions from the block
-        var txHashes = block.Transactions
+        var txs = block.Transactions
             .Where(tx => tx.Type != TransactionType.FEE)
             .Select(tx => tx.Hash)
             .ToList();
 
-        // Remove block transactions from the mempool
         var newMempool = Mempool
-            .Where(tx => !txHashes.Contains(tx.Hash))
+            .Where(tx => !txs.Contains(tx.Hash))
             .ToList();
 
-        // Validate that all block txs came from the mempool
-        if (newMempool.Count + txHashes.Count != Mempool.Count)
+        if (newMempool.Count + txs.Count != Mempool.Count)
             return new Validation(false, "Invalid tx in block: mempool");
 
-        // Update the mempool
         Mempool = newMempool;
-
         Blocks.Add(block);
         NextIndex++;
 
