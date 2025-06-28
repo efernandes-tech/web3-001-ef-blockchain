@@ -15,7 +15,8 @@ public class TransactionUnitTest
         );
         txInput.Sign(TransactionMockFactory.MockedPrivateKey);
 
-        var tx = new Transaction(txInput: txInput, to: TransactionMockFactory.MockedPublicKeyTo);
+        var tx = new Transaction(txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput> { new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKeyTo, amount: 1000) });
 
         // Act
         var valid = tx.IsValid();
@@ -31,7 +32,7 @@ public class TransactionUnitTest
         var tx = new Transaction(
             type: TransactionType.REGULAR,
             timestamp: DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-            txInput: new TransactionInput()
+            txInputs: new List<TransactionInput> { new TransactionInput() }
         );
 
         // Force invalid hash with reflection
@@ -57,8 +58,14 @@ public class TransactionUnitTest
         txInput.Sign(TransactionMockFactory.MockedPrivateKey);
         var tx = new Transaction(
             type: TransactionType.FEE,
-            txInput: txInput,
-            to: TransactionMockFactory.MockedPublicKeyTo
+            txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput>
+            {
+                new TransactionOutput(
+                    toAddress: TransactionMockFactory.MockedPublicKeyTo,
+                    amount: 1000
+                )
+            }
         );
 
         // Act
@@ -92,8 +99,13 @@ public class TransactionUnitTest
         );
 
         var tx = new Transaction(
-            txInput: txInput,
-            to: "carteiraTo"
+            txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput> {
+                new TransactionOutput(
+                    toAddress: "carteiraTo",
+                    amount: 1000
+                )
+            }
         );
 
         // Act

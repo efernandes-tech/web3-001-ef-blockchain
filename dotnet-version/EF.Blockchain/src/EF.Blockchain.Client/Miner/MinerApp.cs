@@ -39,14 +39,12 @@ public class MinerApp
 
                 var newBlock = Block.FromBlockInfo(blockInfo);
 
-                // Add reward transaction (FEE)
-                var rewardTransaction = new Transaction(
-                    type: TransactionType.FEE,
-                    to: _minerWallet.PublicKey
-                );
-                newBlock.Transactions.Add(rewardTransaction);
+                var rewardTx = GetRewardTx();
+
+                newBlock.Transactions.Add(rewardTx);
 
                 Console.WriteLine($"Start mining block #{blockInfo.Index}...");
+
                 newBlock.Mine(blockInfo.Difficulty, _minerWallet.PublicKey);
 
                 Console.WriteLine("Block mined! Sending to blockchain...");
@@ -69,5 +67,20 @@ public class MinerApp
 
             await Task.Delay(1000);
         }
+    }
+
+    private Transaction GetRewardTx()
+    {
+        var rewardOutput = new TransactionOutput(
+            toAddress: _minerWallet.PublicKey,
+            amount: 10
+        );
+
+        var rewardTransaction = new Transaction(
+            type: TransactionType.FEE,
+            txOutputs: new List<TransactionOutput> { rewardOutput }
+        );
+
+        return rewardTransaction;
     }
 }

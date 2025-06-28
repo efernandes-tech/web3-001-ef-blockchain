@@ -29,7 +29,10 @@ public class BlockUnitTest
 
         var transactionFee = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           to: TransactionMockFactory.MockedPublicKey
+           transactionOutput: new TransactionOutput(
+               toAddress: TransactionMockFactory.MockedPublicKey,
+               amount: 1
+           )
         );
 
         var block = new Block(
@@ -56,7 +59,10 @@ public class BlockUnitTest
 
         var transactionFee = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           to: ExampleMiner
+           transactionOutput: new TransactionOutput(
+               toAddress: ExampleMiner,
+               amount: 1
+           )
         );
 
         var block = new Block(
@@ -108,7 +114,7 @@ public class BlockUnitTest
         );
         var transactionFee = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           to: exampleMiner
+           transactionOutput: new TransactionOutput(toAddress: exampleMiner, amount: 1)
         );
         var blockInfo = new BlockInfo
         {
@@ -165,7 +171,7 @@ public class BlockUnitTest
 
         var transactionFee = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           to: TransactionMockFactory.MockedPublicKey
+           transactionOutput: new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1)
         );
 
         var block = new Block(
@@ -208,7 +214,7 @@ public class BlockUnitTest
 
         var transactionFee = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           to: TransactionMockFactory.MockedPublicKey
+           transactionOutput: new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1)
         );
 
         var block = new Block(
@@ -237,7 +243,7 @@ public class BlockUnitTest
 
         var transactionFee = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           to: TransactionMockFactory.MockedPublicKey
+           transactionOutput: new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1)
         );
 
         var block = new Block(
@@ -274,7 +280,7 @@ public class BlockUnitTest
 
         var transactionFee = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           to: TransactionMockFactory.MockedPublicKey
+           transactionOutput: new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1)
         );
 
         var block = new Block(
@@ -307,7 +313,7 @@ public class BlockUnitTest
 
         var transactionFee = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           to: TransactionMockFactory.MockedPublicKey
+           transactionOutput: new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1)
         );
 
         var block = new Block(
@@ -333,7 +339,7 @@ public class BlockUnitTest
 
         var transactionFee = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           to: TransactionMockFactory.MockedPublicKey
+           transactionOutput: new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1)
         );
 
         var block = new Block(
@@ -362,7 +368,7 @@ public class BlockUnitTest
 
         var transactionFee = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           to: TransactionMockFactory.MockedPublicKey
+           transactionOutput: new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1)
         );
 
         var block = new Block(

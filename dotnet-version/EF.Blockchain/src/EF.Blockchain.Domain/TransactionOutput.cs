@@ -32,7 +32,7 @@ public class TransactionOutput
 
     public string GetHash()
     {
-        var input = $"{ToAddress}{Amount}{Tx}";
+        var input = $"{ToAddress}{Amount}";
         using var sha = SHA256.Create();
         var hashBytes = sha.ComputeHash(Encoding.UTF8.GetBytes(input));
         return Convert.ToHexString(hashBytes).ToLower();

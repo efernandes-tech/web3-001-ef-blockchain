@@ -10,7 +10,7 @@ public class BlockchainUnitTest
     public void BlockchainTests_Constructor_ShouldHasGenesisBlocks()
     {
         // Arrange
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
 
         // Act
         var blockCount = blockchain.Blocks.Count;
@@ -23,7 +23,7 @@ public class BlockchainUnitTest
     public void BlockchainTests_IsValid_ShouldBeValidGenesis()
     {
         // Arrange
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
 
         // Act
         var valid = blockchain.IsValid();
@@ -36,7 +36,7 @@ public class BlockchainUnitTest
     public void BlockchainTests_IsValid_ShouldBeValidTwoBlocks()
     {
         // Arrange
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
         var transaction = TransactionMockFactory.Create();
         blockchain.AddBlock(
             BlockMockFactory.Create(index: 1,
@@ -55,12 +55,14 @@ public class BlockchainUnitTest
     public void BlockchainTests_IsValid_ShouldNotBeValid()
     {
         // Arrange
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
 
         var transaction = TransactionMockFactory.Create(type: TransactionType.REGULAR, transactionInput: new TransactionInput());
         var transactionFee = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           to: TransactionMockFactory.MockedPublicKey
+           transactionOutput: new TransactionOutput(
+               toAddress: TransactionMockFactory.MockedPublicKey
+            )
         );
 
         blockchain.Mempool.Add(transaction);
@@ -94,7 +96,7 @@ public class BlockchainUnitTest
     public void BlockchainTests_AddTransaction_ShouldAddTransaction()
     {
         // Arrange
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
         var tx = TransactionMockFactory.Create();
 
         // Act
@@ -107,7 +109,7 @@ public class BlockchainUnitTest
     [Fact]
     public void BlockchainTests_AddTransaction_ShouldNotAddTransactionPendingTx()
     {
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
 
         var tx1 = TransactionMockFactory.Create(
             type: TransactionType.REGULAR,
@@ -122,7 +124,7 @@ public class BlockchainUnitTest
         // Simulate same sender (force same fromAddress)
         typeof(TransactionInput)
             .GetProperty(nameof(TransactionInput.FromAddress))!
-            .SetValue(tx2.TxInput, tx1.TxInput.FromAddress);
+            .SetValue(tx2.TxInputs[0], tx1.TxInputs[0].FromAddress);
 
         var validation = blockchain.AddTransaction(tx2);
 
@@ -133,7 +135,7 @@ public class BlockchainUnitTest
     [Fact]
     public void BlockchainTests_AddTransaction_ShouldNotAddTransactionInvalidTx()
     {
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
 
         var tx = TransactionMockFactory.CreateInvalidTxInput();
 
@@ -144,7 +146,7 @@ public class BlockchainUnitTest
     [Fact]
     public void BlockchainTests_AddTransaction_ShouldNotAddTransactionDuplicatedInBlockchain()
     {
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
 
         var tx = TransactionMockFactory.Create();
 
@@ -162,7 +164,7 @@ public class BlockchainUnitTest
     [Fact]
     public void BlockchainTests_AddTransaction_ShouldNotAddTransactionDuplicatedInMempool()
     {
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
 
         var tx = TransactionMockFactory.Create();
 
@@ -175,7 +177,7 @@ public class BlockchainUnitTest
     [Fact]
     public void BlockchainTests_GetTransaction_ShouldGetTransactionMempool()
     {
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
 
         var tx = TransactionMockFactory.Create();
 
@@ -188,7 +190,7 @@ public class BlockchainUnitTest
     [Fact]
     public void BlockchainTests_GetTransaction_ShouldGetTransactionBlockchain()
     {
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
 
         var tx = TransactionMockFactory.Create();
 
@@ -207,7 +209,7 @@ public class BlockchainUnitTest
     [Fact]
     public void BlockchainTests_GetTransaction_ShouldNotGetTransaction()
     {
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
 
         var result = blockchain.GetTransaction("xyz");
 
@@ -219,7 +221,7 @@ public class BlockchainUnitTest
     public void BlockchainTests_AddBlock_ShouldAddBlock()
     {
         // Arrange
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
 
         var transaction = TransactionMockFactory.Create(
             type: TransactionType.REGULAR,
@@ -227,7 +229,9 @@ public class BlockchainUnitTest
 
         var transactionFee = TransactionMockFactory.Create(
            type: TransactionType.FEE,
-           to: TransactionMockFactory.MockedPublicKey
+           transactionOutput: new TransactionOutput(
+               toAddress: TransactionMockFactory.MockedPublicKey
+           )
         );
 
         blockchain.Mempool.Add(transaction);
@@ -250,7 +254,7 @@ public class BlockchainUnitTest
     public void BlockchainTests_GetBlock_ShouldGetBlock()
     {
         // Arrange
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
 
         // Act
         var block = blockchain.GetBlock(blockchain.GetLastBlock().Hash);
@@ -263,7 +267,7 @@ public class BlockchainUnitTest
     public void BlockchainTests_AddBlock_ShouldNotAddBlock()
     {
         // Arrange
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
         var transaction = TransactionMockFactory.Create();
         var block = BlockMockFactory.Create(index: -1,
             previousHash: blockchain.GetLastBlock().Hash,
@@ -280,7 +284,7 @@ public class BlockchainUnitTest
     public void BlockchainTests_GetNextBlock_ShouldGetNextBlockInfo()
     {
         // Arrange
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
         blockchain.Mempool.Add(new Transaction());
 
         // Act
@@ -294,7 +298,7 @@ public class BlockchainUnitTest
     public void BlockchainTests_GetNextBlock_ShouldNotGetNextBlockInfo()
     {
         // Arrange
-        var blockchain = new Domain.Blockchain();
+        var blockchain = new Domain.Blockchain(TransactionMockFactory.MockedPublicKey);
 
         // Act
         var info = blockchain.GetNextBlock();

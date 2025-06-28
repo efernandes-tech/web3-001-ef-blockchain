@@ -94,9 +94,12 @@ public class ServerIntegrationTest
 
         txInput.Sign(TransactionMockFactory.MockedPrivateKey);
 
-        var transaction = new Transaction(timestamp: timestamp, txInput: txInput, to: TransactionMockFactory.MockedPublicKeyTo);
+        var transaction = new Transaction(timestamp: timestamp, txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput> { new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKeyTo, amount: 1000) });
 
-        var transactionFee = new Transaction(type: TransactionType.FEE, to: TransactionMockFactory.MockedPublicKey, timestamp: timestamp);
+        var transactionFee = new Transaction(type: TransactionType.FEE,
+            txOutputs: new List<TransactionOutput> { new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1000) },
+            timestamp: timestamp);
 
         var flurl = CreateFlurlClientWithBlockHash("abc", transaction);
 
@@ -175,7 +178,8 @@ public class ServerIntegrationTest
 
         txInput.Sign(TransactionMockFactory.MockedPrivateKey);
 
-        var tx = new Transaction(timestamp: timestamp, txInput: txInput, to: TransactionMockFactory.MockedPublicKeyTo);
+        var tx = new Transaction(timestamp: timestamp, txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput> { new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1000) });
 
         var blockchain = BlockchainMockFactory.CreateWithBlocks(3, false);
 
@@ -202,7 +206,9 @@ public class ServerIntegrationTest
             fromAddress: TransactionMockFactory.MockedPublicKey,
             amount: 1000);
         txInput.Sign(TransactionMockFactory.MockedPrivateKey);
-        var tx = new Transaction(timestamp: DateTimeOffset.UtcNow.ToUnixTimeSeconds(), txInput: txInput, to: TransactionMockFactory.MockedPublicKeyTo);
+        var tx = new Transaction(timestamp: DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+            txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput> { new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKeyTo, amount: 1000) });
 
         // Act
         var response = await _flurl.Request("/transactions").PostJsonAsync(tx);

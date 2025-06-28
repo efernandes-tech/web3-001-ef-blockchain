@@ -1,7 +1,12 @@
 using EF.Blockchain.Domain;
 using Microsoft.AspNetCore.Http.Json;
-using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System.Diagnostics.CodeAnalysis;
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +18,7 @@ var minerWallet = new Wallet(miner);
 
 builder.Services.AddSingleton<Blockchain>(_ => new Blockchain(minerWallet.PublicKey));
 
-builder.Services.AddLogging();
+builder.Host.UseSerilog();
 
 builder.Services.Configure<JsonOptions>(options =>
 {
@@ -41,7 +46,6 @@ app.UseHttpsRedirection();
 /// </summary>
 app.Use(async (context, next) =>
 {
-    var logger = app.Logger;
     var method = context.Request.Method;
     var path = context.Request.Path;
 
@@ -65,7 +69,7 @@ app.Use(async (context, next) =>
     var statusCode = context.Response.StatusCode;
     var duration = DateTime.Now - start;
 
-    logger.LogInformation("{Method} {Path} → {StatusCode} ({Duration} ms) | Body: {Body}",
+    Log.Information("{Method} {Path} → {StatusCode} ({Duration} ms) | Body: {Body}",
         method, path, statusCode, duration.TotalMilliseconds, body);
 });
 
@@ -141,6 +145,25 @@ app.MapPost("/transactions", (TransactionDto transactionDto) =>
         : Results.BadRequest(validation);
 });
 
+app.MapGet("/wallets/{walletAddress}", (string walletAddress) =>
+{
+    // TODO: make real UTXO logic
+    var dummyUtxo = new TransactionOutput(
+        toAddress: walletAddress,
+        amount: 10,
+        tx: "abc"
+    );
+
+    return Results.Json(new
+    {
+        balance = 10,
+        fee = blockchain.GetFeePerTx(),
+        utxo = new List<TransactionOutput> { dummyUtxo }
+    });
+});
+
+AppDomain.CurrentDomain.ProcessExit += (s, e) => Log.CloseAndFlush();
+
 app.Run();
 
 [ExcludeFromCodeCoverage]
@@ -153,10 +176,11 @@ public class TransactionInputDto
     public string? FromAddress { get; set; } = string.Empty;
     public long? Amount { get; set; } = null;
     public string? Signature { get; set; } = string.Empty;
+    public string? PreviousTx { get; set; } = string.Empty;
 
     public TransactionInput ToDomain()
     {
-        return new TransactionInput(FromAddress, Amount, Signature);
+        return new TransactionInput(FromAddress, Amount, Signature, PreviousTx);
     }
 }
 

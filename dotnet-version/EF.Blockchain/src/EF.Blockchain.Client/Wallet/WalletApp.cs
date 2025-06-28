@@ -143,13 +143,13 @@ public class WalletApp
         }
 
         Console.Write("Amount: ");
-        if (!decimal.TryParse(Console.ReadLine(), out var amount) || amount <= 0)
+        if (!int.TryParse(Console.ReadLine(), out var amount) || amount <= 0)
         {
             Console.WriteLine("Invalid amount.");
             return;
         }
 
-        // TODO: balance validation
+        /*// TODO: balance validation
 
         // Create TransactionInput
         var txInput = new TransactionInput(
@@ -165,10 +165,42 @@ public class WalletApp
             timestamp: DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
             txInput: txInput,
             to: toWallet
-        );
+        );*/
 
         try
         {
+            // Get balance, fee and UTXO list
+            var walletData = await $"{_blockchainServer}/wallets/{_myWalletPublicKey}"
+                .GetJsonAsync<WalletResponse>();
+
+            if (walletData.Balance < amount + walletData.Fee)
+            {
+                Console.WriteLine("Insufficient balance (tx + fee).");
+                return;
+            }
+
+            // Build inputs
+            var txInput = new TransactionInput(
+                fromAddress: _myWalletPublicKey,
+                amount: amount,
+                previousTx: walletData.Utxo.First().Tx
+            );
+            txInput.Sign(_myWalletPrivateKey);
+
+            // Build outputs
+            var txOutput = new TransactionOutput(
+                toAddress: toWallet,
+                amount: amount
+            );
+
+            // Build transaction
+            var tx = new Transaction(
+                type: TransactionType.REGULAR,
+                timestamp: DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                txInputs: new List<TransactionInput> { txInput },
+                txOutputs: new List<TransactionOutput> { txOutput }
+            );
+
             Console.WriteLine("Send a transaction...");
 
             var response = await $"{_blockchainServer}/transactions/"
@@ -225,4 +257,11 @@ public class WalletApp
             Console.WriteLine($"Error ({status}): {error}");
         }
     }
+}
+
+public class WalletResponse
+{
+    public decimal Balance { get; set; }
+    public decimal Fee { get; set; }
+    public List<TransactionOutput> Utxo { get; set; } = new();
 }
