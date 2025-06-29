@@ -1,17 +1,20 @@
 using EF.Blockchain.Domain;
-using EF.Blockchain.Tests.Mocks;
 
 namespace EF.Blockchain.Tests.UnitTest;
 
 public class BlockUnitTest
 {
     private readonly int ExampleDifficulty = 1;
-    private readonly string ExampleMiner = "ef";
+    private readonly Wallet _loki;
+    private readonly Wallet _thor;
     private Block Genesis;
 
     public BlockUnitTest()
     {
-        var genesisTx = TransactionMockFactory.Create(
+        _loki = new Wallet();
+        _thor = new Wallet();
+
+        var genesisTx = new Transaction(
             type: TransactionType.FEE
         );
 
@@ -23,16 +26,34 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldBeValid()
     {
         // Arrange
-        var transaction = TransactionMockFactory.Create(
-           type: TransactionType.REGULAR
+        var txInput = new TransactionInput(
+            fromAddress: _loki.PublicKey,
+            amount: 10,
+            previousTx: "previousTxHash"
+        );
+        txInput.Sign(_loki.PrivateKey);
+
+        var transaction = new Transaction(
+            type: TransactionType.REGULAR,
+            txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput>
+            {
+                new TransactionOutput(
+                    toAddress: _loki.PublicKey,
+                    amount: 10
+                )
+            }
         );
 
-        var transactionFee = TransactionMockFactory.Create(
+        var transactionFee = new Transaction(
            type: TransactionType.FEE,
-           transactionOutput: new TransactionOutput(
-               toAddress: TransactionMockFactory.MockedPublicKey,
-               amount: 1
-           )
+           txOutputs: new List<TransactionOutput>
+           {
+               new TransactionOutput(
+                   toAddress: _loki.PublicKey,
+                   amount: 1
+               )
+           }
         );
 
         var block = new Block(
@@ -40,7 +61,7 @@ public class BlockUnitTest
             previousHash: Genesis.Hash,
             transactions: new List<Transaction> { transaction, transactionFee });
 
-        block.Mine(ExampleDifficulty, TransactionMockFactory.MockedPublicKey);
+        block.Mine(ExampleDifficulty, _loki.PublicKey);
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
@@ -53,16 +74,33 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidFeeForOther()
     {
         // Arrange
-        var transaction = TransactionMockFactory.Create(
-           type: TransactionType.REGULAR
+        var txInput = new TransactionInput(
+            fromAddress: _loki.PublicKey,
+            amount: 10,
+            previousTx: "previousTxHash"
+        );
+        txInput.Sign(_loki.PrivateKey);
+        var transaction = new Transaction(
+            type: TransactionType.REGULAR,
+            txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput>
+            {
+                new TransactionOutput(
+                    toAddress: _loki.PublicKey,
+                    amount: 10
+                )
+            }
         );
 
-        var transactionFee = TransactionMockFactory.Create(
+        var transactionFee = new Transaction(
            type: TransactionType.FEE,
-           transactionOutput: new TransactionOutput(
-               toAddress: ExampleMiner,
-               amount: 1
-           )
+           txOutputs: new List<TransactionOutput>
+           {
+                new TransactionOutput(
+                     toAddress: _thor.PublicKey,
+                     amount: 1
+                )
+           }
         );
 
         var block = new Block(
@@ -70,7 +108,7 @@ public class BlockUnitTest
             previousHash: Genesis.Hash,
             transactions: new List<Transaction> { transaction, transactionFee });
 
-        block.Mine(ExampleDifficulty, TransactionMockFactory.MockedPublicKey);
+        block.Mine(ExampleDifficulty, _loki.PublicKey);
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
@@ -84,7 +122,7 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidNoFee()
     {
         // Arrange
-        var transaction = TransactionMockFactory.Create(
+        var transaction = new Transaction(
            type: TransactionType.REGULAR
         );
 
@@ -93,7 +131,7 @@ public class BlockUnitTest
             previousHash: Genesis.Hash,
             transactions: new List<Transaction> { transaction });
 
-        block.Mine(ExampleDifficulty, TransactionMockFactory.MockedPublicKey);
+        block.Mine(ExampleDifficulty, _loki.PublicKey);
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
@@ -107,15 +145,34 @@ public class BlockUnitTest
     public void BlockTests_FromBlockInfo_ShouldCreateFromBlockInfo()
     {
         // Arrange
-        var exampleMiner = TransactionMockFactory.MockedPublicKey;
+        var txInput = new TransactionInput(
+            fromAddress: _loki.PublicKey,
+            amount: 10,
+            previousTx: "previousTxHash"
+        );
+        txInput.Sign(_loki.PrivateKey);
 
-        var transaction = TransactionMockFactory.Create(
-           type: TransactionType.REGULAR
+        var transaction = new Transaction(
+           type: TransactionType.REGULAR,
+           txInputs: new List<TransactionInput> { txInput },
+           txOutputs: new List<TransactionOutput> {
+               new TransactionOutput(
+                   toAddress: _loki.PublicKey,
+                   amount: 10
+               )
+           }
         );
-        var transactionFee = TransactionMockFactory.Create(
+
+        var transactionFee = new Transaction(
            type: TransactionType.FEE,
-           transactionOutput: new TransactionOutput(toAddress: exampleMiner, amount: 1)
+           txOutputs: new List<TransactionOutput> {
+               new TransactionOutput(
+                   toAddress: _loki.PublicKey,
+                   amount: 1
+               )
+           }
         );
+
         var blockInfo = new BlockInfo
         {
             Index = 1,
@@ -128,7 +185,7 @@ public class BlockUnitTest
 
         // Act
         var block = Block.FromBlockInfo(blockInfo);
-        block.Mine(ExampleDifficulty, exampleMiner);
+        block.Mine(ExampleDifficulty, _loki.PublicKey);
         var validation = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
 
         // Assert
@@ -139,13 +196,16 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValid2Fee()
     {
         // Arrange
-        var tx1 = TransactionMockFactory.Create(
+        var tx1 = new Transaction(
             type: TransactionType.FEE,
-            transactionInput: new TransactionInput()
+            txOutputs: new List<TransactionOutput>
+            {
+                new TransactionOutput()
+            }
         );
-        var tx2 = TransactionMockFactory.Create(
+        var tx2 = new Transaction(
             type: TransactionType.FEE,
-            transactionInput: new TransactionInput()
+            txOutputs: new List<TransactionOutput> { new TransactionOutput() }
         );
 
         var block = new Block(
@@ -153,7 +213,7 @@ public class BlockUnitTest
             previousHash: Genesis.Hash,
             transactions: new List<Transaction> { tx1, tx2 }
         );
-        block.Mine(ExampleDifficulty, ExampleMiner);
+        block.Mine(ExampleDifficulty, _loki.PublicKey);
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
@@ -167,11 +227,24 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidInvalidTx()
     {
         // Arrange
-        var invalidTx = TransactionMockFactory.CreateInvalidTxInput();
+        var invalidTx = new Transaction(
+            type: TransactionType.REGULAR,
+            txInputs: new List<TransactionInput>
+            {
+                new TransactionInput(
+                    amount: -1)
+            }
+        );
 
-        var transactionFee = TransactionMockFactory.Create(
+        var transactionFee = new Transaction(
            type: TransactionType.FEE,
-           transactionOutput: new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1)
+           txOutputs: new List<TransactionOutput>
+           {
+               new TransactionOutput(
+                   toAddress: _loki.PublicKey,
+                   amount: 1
+               )
+           }
         );
 
         var block = new Block(
@@ -180,7 +253,7 @@ public class BlockUnitTest
             transactions: new List<Transaction> { invalidTx, transactionFee }
         );
 
-        block.Mine(ExampleDifficulty, TransactionMockFactory.MockedPublicKey);
+        block.Mine(ExampleDifficulty, _loki.PublicKey);
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
@@ -207,14 +280,36 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidInvalidPreviousHash()
     {
         // Arrange
-        var transaction = TransactionMockFactory.Create(
+        var txInput = new TransactionInput(
+            fromAddress: _loki.PublicKey,
+            amount: 10,
+            previousTx: "previousTxHash"
+        );
+        txInput.Sign(_loki.PrivateKey);
+        var transaction = new Transaction(
            type: TransactionType.REGULAR,
-           transactionInput: new TransactionInput()
+           txInputs: new List<TransactionInput>
+           {
+               txInput
+           },
+           txOutputs: new List<TransactionOutput>
+           {
+               new TransactionOutput(
+                   toAddress: _loki.PublicKey,
+                   amount: 10
+               )
+           }
         );
 
-        var transactionFee = TransactionMockFactory.Create(
+        var transactionFee = new Transaction(
            type: TransactionType.FEE,
-           transactionOutput: new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1)
+           txOutputs: new List<TransactionOutput>
+           {
+                new TransactionOutput(
+                     toAddress: _loki.PublicKey,
+                     amount: 1
+                )
+           }
         );
 
         var block = new Block(
@@ -222,7 +317,7 @@ public class BlockUnitTest
             previousHash: "abc",
             transactions: new List<Transaction> { transaction, transactionFee });
 
-        block.Mine(ExampleDifficulty, TransactionMockFactory.MockedPublicKey);
+        block.Mine(ExampleDifficulty, _loki.PublicKey);
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
@@ -236,14 +331,36 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidInvalidTimestamp()
     {
         // Arrange
-        var transaction = TransactionMockFactory.Create(
-           type: TransactionType.REGULAR,
-           transactionInput: new TransactionInput()
+        var txInput = new TransactionInput(
+            fromAddress: _loki.PublicKey,
+            amount: 10,
+            previousTx: "previousTxHash"
+        );
+        txInput.Sign(_loki.PrivateKey);
+        var transaction = new Transaction(
+            type: TransactionType.REGULAR,
+            txInputs: new List<TransactionInput>
+            {
+                txInput
+            },
+            txOutputs: new List<TransactionOutput>
+            {
+                new TransactionOutput(
+                    toAddress: _loki.PublicKey,
+                    amount: 10
+                )
+            }
         );
 
-        var transactionFee = TransactionMockFactory.Create(
+        var transactionFee = new Transaction(
            type: TransactionType.FEE,
-           transactionOutput: new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1)
+           txOutputs: new List<TransactionOutput>
+           {
+                new TransactionOutput(
+                     toAddress: _loki.PublicKey,
+                     amount: 1
+                )
+           }
         );
 
         var block = new Block(
@@ -251,7 +368,7 @@ public class BlockUnitTest
             previousHash: Genesis.Hash,
             transactions: new List<Transaction> { transaction, transactionFee });
 
-        block.Mine(ExampleDifficulty, TransactionMockFactory.MockedPublicKey);
+        block.Mine(ExampleDifficulty, _loki.PublicKey);
 
         // Use reflection to change private/internal state
         typeof(Block)
@@ -273,14 +390,33 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidEmptyHash()
     {
         // Arrange
-        var transaction = TransactionMockFactory.Create(
+        var txInput = new TransactionInput(
+            fromAddress: _loki.PublicKey,
+            amount: 10,
+            previousTx: "previousTxHash"
+        );
+        txInput.Sign(_loki.PrivateKey);
+        var transaction = new Transaction(
            type: TransactionType.REGULAR,
-           transactionInput: new TransactionInput()
+           txInputs: new List<TransactionInput> { txInput },
+           txOutputs: new List<TransactionOutput>
+              {
+                 new TransactionOutput(
+                        toAddress: _loki.PublicKey,
+                        amount: 10
+                 )
+              }
         );
 
-        var transactionFee = TransactionMockFactory.Create(
+        var transactionFee = new Transaction(
            type: TransactionType.FEE,
-           transactionOutput: new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1)
+           txOutputs: new List<TransactionOutput>
+           {
+                new TransactionOutput(
+                     toAddress: _loki.PublicKey,
+                     amount: 1
+                )
+           }
         );
 
         var block = new Block(
@@ -288,7 +424,7 @@ public class BlockUnitTest
             previousHash: Genesis.Hash,
             transactions: new List<Transaction> { transaction, transactionFee });
 
-        block.Mine(ExampleDifficulty, TransactionMockFactory.MockedPublicKey);
+        block.Mine(ExampleDifficulty, _loki.PublicKey);
 
         typeof(Block)
             .GetProperty(nameof(Block.Hash))!
@@ -306,14 +442,36 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidNoMined()
     {
         // Arrange
-        var transaction = TransactionMockFactory.Create(
-           type: TransactionType.REGULAR,
-           transactionInput: new TransactionInput()
+        var txInput = new TransactionInput(
+            fromAddress: _loki.PublicKey,
+            amount: 10,
+            previousTx: "previousTxHash"
+        );
+        txInput.Sign(_loki.PrivateKey);
+        var transaction = new Transaction(
+            type: TransactionType.REGULAR,
+            txInputs: new List<TransactionInput>
+            {
+                txInput
+            },
+            txOutputs: new List<TransactionOutput>
+            {
+                new TransactionOutput(
+                    toAddress: _loki.PublicKey,
+                    amount: 10
+                )
+            }
         );
 
-        var transactionFee = TransactionMockFactory.Create(
-           type: TransactionType.FEE,
-           transactionOutput: new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1)
+        var transactionFee = new Transaction(
+            type: TransactionType.FEE,
+            txOutputs: new List<TransactionOutput>
+            {
+                new TransactionOutput(
+                    toAddress: _loki.PublicKey,
+                    amount: 1
+                )
+            }
         );
 
         var block = new Block(
@@ -321,7 +479,7 @@ public class BlockUnitTest
             previousHash: Genesis.Hash,
             transactions: new List<Transaction> { transaction, transactionFee },
             nonce: 0,
-            miner: TransactionMockFactory.MockedPublicKey);
+            miner: _loki.PublicKey);
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
@@ -335,11 +493,25 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeTxInput()
     {
         // Arrange
-        var transaction = TransactionMockFactory.CreateInvalidTxInput();
+        var transaction = new Transaction(
+            type: TransactionType.REGULAR,
+            txInputs: new List<TransactionInput>
+            {
+                new TransactionInput(
+                    amount: -1
+                )
+            }
+            );
 
-        var transactionFee = TransactionMockFactory.Create(
+        var transactionFee = new Transaction(
            type: TransactionType.FEE,
-           transactionOutput: new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1)
+           txOutputs: new List<TransactionOutput>
+           {
+                new TransactionOutput(
+                     toAddress: _loki.PublicKey,
+                     amount: 1
+                )
+           }
         );
 
         var block = new Block(
@@ -347,7 +519,7 @@ public class BlockUnitTest
             previousHash: Genesis.Hash,
             transactions: new List<Transaction> { transaction, transactionFee });
 
-        block.Mine(ExampleDifficulty, TransactionMockFactory.MockedPublicKey);
+        block.Mine(ExampleDifficulty, _loki.PublicKey);
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);
@@ -361,14 +533,37 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidInvalidIndex()
     {
         // Arrange
-        var transaction = TransactionMockFactory.Create(
-           type: TransactionType.REGULAR,
-           transactionInput: new TransactionInput()
+        var txInput = new TransactionInput(
+            fromAddress: _loki.PublicKey,
+            amount: 10,
+            previousTx: "previousTxHash"
+        );
+        txInput.Sign(_loki.PrivateKey);
+
+        var transaction = new Transaction(
+            type: TransactionType.REGULAR,
+            txInputs: new List<TransactionInput>
+            {
+                txInput
+            },
+            txOutputs: new List<TransactionOutput>
+            {
+                new TransactionOutput(
+                    toAddress: _loki.PublicKey,
+                    amount: 10
+                )
+            }
         );
 
-        var transactionFee = TransactionMockFactory.Create(
+        var transactionFee = new Transaction(
            type: TransactionType.FEE,
-           transactionOutput: new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1)
+           txOutputs: new List<TransactionOutput>
+           {
+                new TransactionOutput(
+                     toAddress: _loki.PublicKey,
+                     amount: 1
+                )
+           }
         );
 
         var block = new Block(
@@ -376,7 +571,7 @@ public class BlockUnitTest
             previousHash: Genesis.Hash,
             transactions: new List<Transaction> { transaction, transactionFee });
 
-        block.Mine(ExampleDifficulty, TransactionMockFactory.MockedPublicKey);
+        block.Mine(ExampleDifficulty, _loki.PublicKey);
 
         // Act
         var valid = block.IsValid(Genesis.Hash, Genesis.Index, ExampleDifficulty);

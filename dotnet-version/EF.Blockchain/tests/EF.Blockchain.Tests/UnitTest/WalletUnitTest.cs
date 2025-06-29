@@ -26,7 +26,7 @@ public class WalletUnitTest
     [Fact]
     public void WalletTests_InitPK_ShouldRecoverWalletPK()
     {
-        // Arrange
+        // Arrange & Act
         var recovered = new Wallet(_loki.PrivateKey);
 
         // Assert
@@ -36,7 +36,7 @@ public class WalletUnitTest
     [Fact]
     public void WalletTests_InitWIF_ShouldRecoverWalletWIF()
     {
-        // Arrange
+        // Arrange & Act
         var wallet = new Wallet(ExampleWIF);
 
         // Assert

@@ -9,12 +9,14 @@ namespace EF.Blockchain.Tests.IntegrationTest;
 public class ServerIntegrationTest
 {
     private readonly IFlurlClient _flurl;
+    private readonly Wallet _loki;
 
     public ServerIntegrationTest()
     {
         var factory = new CustomWebApplicationFactory();
         var client = factory.CreateClient();
         _flurl = new FlurlClient(client);
+        _loki = new Wallet();
     }
 
     [Fact]
@@ -27,7 +29,7 @@ public class ServerIntegrationTest
 
         // Assert
         result.Should().NotBeNull();
-        result.blocks.Should().Be(3);
+        result.blocks.Should().Be(1);
         result.IsValid.Success.Should().BeTrue();
     }
 
@@ -54,7 +56,7 @@ public class ServerIntegrationTest
             .GetJsonAsync<BlockInfo>();
 
         // Assert
-        Assert.Equal(3, response.Index);
+        Assert.Equal(1, response.Index);
     }
 
     [Fact]
@@ -89,26 +91,37 @@ public class ServerIntegrationTest
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
         var txInput = new TransactionInput(
-            fromAddress: TransactionMockFactory.MockedPublicKey,
-            amount: 1000);
+            fromAddress: BlockchainMockFactory.MockedPublicKey,
+            amount: 1000, previousTx: "previousTxMock");
 
-        txInput.Sign(TransactionMockFactory.MockedPrivateKey);
+        txInput.Sign(BlockchainMockFactory.MockedPrivateKey);
 
-        var transaction = new Transaction(timestamp: timestamp, txInputs: new List<TransactionInput> { txInput },
-            txOutputs: new List<TransactionOutput> { new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKeyTo, amount: 1000) });
+        var transaction = new Transaction(
+            timestamp: timestamp,
+            txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput> {
+                new TransactionOutput(
+                    toAddress: BlockchainMockFactory.MockedPublicKey, amount: 1000) });
 
-        var transactionFee = new Transaction(type: TransactionType.FEE,
-            txOutputs: new List<TransactionOutput> { new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1000) },
+        var transactionFee = new Transaction(
+            type: TransactionType.FEE,
+            txOutputs: new List<TransactionOutput> {
+                new TransactionOutput(
+                    toAddress: BlockchainMockFactory.MockedPublicKey, amount: 1000) },
             timestamp: timestamp);
 
         var flurl = CreateFlurlClientWithBlockHash("abc", transaction);
 
-        var index = 5;
+        var index = 1;
         var previousHash = "abc";
 
-        var block = new Block(index, previousHash, new List<Transaction> { transaction, transactionFee }, timestamp);
+        var block = new Block(
+            index,
+            previousHash,
+            new List<Transaction> { transaction, transactionFee },
+            timestamp);
 
-        block.Mine(difficulty: 2, miner: TransactionMockFactory.MockedPublicKey);
+        block.Mine(difficulty: 2, miner: BlockchainMockFactory.MockedPublicKey);
 
         var postBlock = new
         {
@@ -127,7 +140,7 @@ public class ServerIntegrationTest
             .ReceiveJson<BlockResponse>();
 
         // Assert
-        response.Index.Should().Be(5);
+        response.Index.Should().Be(1);
     }
 
     [Fact]
@@ -173,13 +186,18 @@ public class ServerIntegrationTest
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
         var txInput = new TransactionInput(
-            fromAddress: TransactionMockFactory.MockedPublicKey,
-            amount: 1000);
+            fromAddress: BlockchainMockFactory.MockedPublicKey,
+            amount: 1000,
+            previousTx: "previousTxMock");
 
-        txInput.Sign(TransactionMockFactory.MockedPrivateKey);
+        txInput.Sign(BlockchainMockFactory.MockedPrivateKey);
 
-        var tx = new Transaction(timestamp: timestamp, txInputs: new List<TransactionInput> { txInput },
-            txOutputs: new List<TransactionOutput> { new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKey, amount: 1000) });
+        var tx = new Transaction(
+            timestamp: timestamp,
+            txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput> {
+                new TransactionOutput(
+                    toAddress: BlockchainMockFactory.MockedPublicKey, amount: 1000) });
 
         var blockchain = BlockchainMockFactory.CreateWithBlocks(3, false);
 
@@ -195,7 +213,7 @@ public class ServerIntegrationTest
 
         // Assert
         response.StatusCode.Should().Be(200);
-        body.MempoolIndex.Should().Be(0);
+        body.MempoolIndex.Should().Be(2);
     }
 
     [Fact]
@@ -203,12 +221,18 @@ public class ServerIntegrationTest
     {
         // Arrange
         var txInput = new TransactionInput(
-            fromAddress: TransactionMockFactory.MockedPublicKey,
-            amount: 1000);
-        txInput.Sign(TransactionMockFactory.MockedPrivateKey);
-        var tx = new Transaction(timestamp: DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+            fromAddress: _loki.PublicKey,
+            amount: 1000,
+            previousTx: "previousTxMock");
+
+        txInput.Sign(_loki.PrivateKey);
+
+        var tx = new Transaction(
+            timestamp: DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
             txInputs: new List<TransactionInput> { txInput },
-            txOutputs: new List<TransactionOutput> { new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKeyTo, amount: 1000) });
+            txOutputs: new List<TransactionOutput> {
+                new TransactionOutput(
+                    toAddress: _loki.PublicKey, amount: 1000) });
 
         // Act
         var response = await _flurl.Request("/transactions").PostJsonAsync(tx);

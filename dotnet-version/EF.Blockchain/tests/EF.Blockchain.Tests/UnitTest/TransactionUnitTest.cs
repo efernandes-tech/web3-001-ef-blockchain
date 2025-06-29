@@ -5,18 +5,29 @@ namespace EF.Blockchain.Tests.UnitTest;
 
 public class TransactionUnitTest
 {
+    private readonly Wallet _loki;
+
+    public TransactionUnitTest()
+    {
+        _loki = new Wallet();
+    }
+
     [Fact]
     public void TransactionTests_IsValid_ShouldBeValidRegularDefault()
     {
         // Arrange
         var txInput = new TransactionInput(
-            fromAddress: TransactionMockFactory.MockedPublicKey,
-            amount: 1000
+            fromAddress: _loki.PublicKey,
+            amount: 1000,
+            previousTx: "previousTxHash"
         );
-        txInput.Sign(TransactionMockFactory.MockedPrivateKey);
+        txInput.Sign(_loki.PrivateKey);
 
-        var tx = new Transaction(txInputs: new List<TransactionInput> { txInput },
-            txOutputs: new List<TransactionOutput> { new TransactionOutput(toAddress: TransactionMockFactory.MockedPublicKeyTo, amount: 1000) });
+        var tx = new Transaction(
+            txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput> {
+                new TransactionOutput(
+                    toAddress: _loki.PublicKey, amount: 1000) });
 
         // Act
         var valid = tx.IsValid();
@@ -52,17 +63,20 @@ public class TransactionUnitTest
     {
         // Arrange
         var txInput = new TransactionInput(
-            fromAddress: TransactionMockFactory.MockedPublicKey,
-            amount: 1000
+            fromAddress: _loki.PublicKey,
+            amount: 1000,
+            previousTx: "previousTxHash"
         );
-        txInput.Sign(TransactionMockFactory.MockedPrivateKey);
+
+        txInput.Sign(_loki.PrivateKey);
+
         var tx = new Transaction(
             type: TransactionType.FEE,
             txInputs: new List<TransactionInput> { txInput },
             txOutputs: new List<TransactionOutput>
             {
                 new TransactionOutput(
-                    toAddress: TransactionMockFactory.MockedPublicKeyTo,
+                    toAddress: _loki.PublicKey,
                     amount: 1000
                 )
             }
