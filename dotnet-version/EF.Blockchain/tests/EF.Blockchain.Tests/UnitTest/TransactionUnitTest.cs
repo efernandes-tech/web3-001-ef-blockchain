@@ -1,5 +1,6 @@
 using EF.Blockchain.Domain;
 using EF.Blockchain.Tests.Mocks;
+using FluentAssertions;
 
 namespace EF.Blockchain.Tests.UnitTest;
 
@@ -34,6 +35,48 @@ public class TransactionUnitTest
 
         // Assert
         Assert.True(valid.Success);
+    }
+
+    [Fact]
+    public void TransactionTests_IsValid_ShouldNotBeValidTxoHashDiffTxHash()
+    {
+        // Arrange
+        var txInput = new TransactionInput(_loki.PublicKey, 10, "abc");
+        txInput.Sign(_loki.PrivateKey);
+
+        var txOutput = new TransactionOutput(_loki.PublicKey, 10);
+        var tx = new Transaction(
+            txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput> { txOutput }
+        );
+
+        txOutput.SetTx("mismatch");
+
+        // Act
+        var result = tx.IsValid();
+
+        // Assert
+        result.Success.Should().BeFalse();
+    }
+
+    [Fact]
+    public void TransactionTests_IsValid_ShouldNotBeValidInputsLessOutputs()
+    {
+        // Arrange
+        var txInput = new TransactionInput(_loki.PublicKey, 1, "abc");
+        txInput.Sign(_loki.PrivateKey);
+
+        var txOutput = new TransactionOutput(_loki.PublicKey, 2);
+        var tx = new Transaction(
+            txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput> { txOutput }
+        );
+
+        // Act
+        var result = tx.IsValid();
+
+        // Assert
+        result.Success.Should().BeFalse();
     }
 
     [Fact]

@@ -1,4 +1,5 @@
 using EF.Blockchain.Domain;
+using FluentAssertions;
 
 namespace EF.Blockchain.Tests.UnitTest;
 
@@ -28,5 +29,52 @@ public class TransactionOutputUnitTest
 
         // Assert
         Assert.True(valid.Success);
+    }
+
+    [Fact]
+    public void TransactionOutputTests_IsValid_ShouldNotBeValidDefault()
+    {
+        // Arrange
+        var txOutput = new TransactionOutput();
+
+        // Act
+        var result = txOutput.IsValid();
+
+        // Assert
+        result.Success.Should().BeFalse();
+    }
+
+    [Fact]
+    public void TransactionOutputTests_IsValid_ShouldNotBeValid()
+    {
+        // Arrange
+        var txOutput = new TransactionOutput(
+            toAddress: _loki.PublicKey,
+            amount: -10,
+            tx: "abc"
+        );
+
+        // Act
+        var result = txOutput.IsValid();
+
+        // Assert
+        result.Success.Should().BeFalse();
+    }
+
+    [Fact]
+    public void TransactionOutputTests_GetHash_ShouldGetHash()
+    {
+        // Arrange
+        var txOutput = new TransactionOutput(
+            toAddress: _loki.PublicKey,
+            amount: 10,
+            tx: "abc"
+        );
+
+        // Act
+        var hash = txOutput.GetHash();
+
+        // Assert
+        hash.Should().NotBeNullOrWhiteSpace();
     }
 }

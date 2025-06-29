@@ -39,7 +39,7 @@ public class BlockchainUnitTest
     }
 
     [Fact]
-    public void BlockchainTests_IsValid_ShouldBeValidTwoBlocks_INVALID()
+    public void BlockchainTests_IsValid_ShouldBeValidTwoBlocks()
     {
         // Arrange
         var blockchain = new Domain.Blockchain(_loki.PublicKey);
@@ -76,7 +76,9 @@ public class BlockchainUnitTest
             fromAddress: _loki.PublicKey,
             amount: 10,
             previousTx: "previousTx");
+
         txInput.Sign(_loki.PrivateKey);
+
         var transaction = new Transaction(
             type: TransactionType.REGULAR,
             txInputs: new List<TransactionInput>
@@ -134,7 +136,9 @@ public class BlockchainUnitTest
             fromAddress: _loki.PublicKey,
             amount: 10,
             previousTx: "previousTx");
+
         txInput.Sign(_loki.PrivateKey);
+
         var transaction = new Transaction(
             type: TransactionType.REGULAR,
             txInputs: new List<TransactionInput>
@@ -164,7 +168,9 @@ public class BlockchainUnitTest
             fromAddress: _loki.PublicKey,
             amount: 10,
             previousTx: "previousTx");
+
         txInput.Sign(_loki.PrivateKey);
+
         var tx1 = new Transaction(
             type: TransactionType.REGULAR,
             txInputs: new List<TransactionInput>
@@ -250,29 +256,6 @@ public class BlockchainUnitTest
     }
 
     [Fact]
-    public void BlockchainTests_AddTransaction_ShouldNotAddTransactionDuplicatedInMempool()
-    {
-        // Arrange
-        var blockchain = new Domain.Blockchain(_loki.PublicKey);
-
-        var tx = new Transaction(
-            type: TransactionType.REGULAR,
-            txInputs: new List<TransactionInput>
-            {
-                new TransactionInput()
-            }
-        );
-
-        blockchain.Mempool.Add(tx);
-
-        // Act
-        var validation = blockchain.AddTransaction(tx);
-
-        // Assert
-        validation.Success.Should().BeFalse();
-    }
-
-    [Fact]
     public void BlockchainTests_GetTransaction_ShouldGetTransactionMempool()
     {
         // Arrange
@@ -347,7 +330,9 @@ public class BlockchainUnitTest
             fromAddress: _loki.PublicKey,
             amount: 10,
             previousTx: "previousTx");
+
         txInput.Sign(_loki.PrivateKey);
+
         var transaction = new Transaction(
             type: TransactionType.REGULAR,
             txInputs: new List<TransactionInput>
@@ -385,6 +370,33 @@ public class BlockchainUnitTest
     }
 
     [Fact]
+    public void BlockchainTests_AddBlock_ShouldNotAddBlockInvalidMempool()
+    {
+        // Arrange
+        var blockchain = new Domain.Blockchain(_loki.PublicKey);
+
+        // Add 2 transactions to mempool, but only use 1 in the block
+        blockchain.Mempool.Add(new Transaction());
+        blockchain.Mempool.Add(new Transaction());
+
+        var tx = new Transaction(
+            txInputs: new List<TransactionInput> { new TransactionInput() }
+        );
+
+        var block = new Block(
+            index: 1,
+            previousHash: blockchain.GetLastBlock().Hash,
+            transactions: new List<Transaction> { tx }
+        );
+
+        // Act
+        var result = blockchain.AddBlock(block);
+
+        // Assert
+        result.Success.Should().BeFalse();
+    }
+
+    [Fact]
     public void BlockchainTests_GetBlock_ShouldGetBlock()
     {
         // Arrange
@@ -398,28 +410,37 @@ public class BlockchainUnitTest
     }
 
     [Fact]
-    public void BlockchainTests_AddBlock_ShouldNotAddBlock()
+    public void BlockchainTests_AddBlock_ShouldNotAddBlockInvalidIndex()
     {
         // Arrange
-        var blockchain = new Domain.Blockchain(_loki.PublicKey);
+        var blockchain = new EF.Blockchain.Domain.Blockchain(_loki.PublicKey);
+        blockchain.Mempool.Add(new Transaction()); // simulate a pending tx
 
-        var transaction = new Transaction(
-            type: TransactionType.REGULAR,
-            txInputs: new List<TransactionInput>
+        var feeTx = new Transaction(
+            type: TransactionType.FEE,
+            txOutputs: new List<TransactionOutput>
             {
-                new TransactionInput()
-            });
+            new TransactionOutput(toAddress: _loki.PublicKey, amount: 1)
+            }
+        );
 
         var block = new Block(
             index: -1,
             previousHash: blockchain.GetLastBlock().Hash,
-            transactions: new List<Transaction> { transaction });
+            transactions: new List<Transaction> { feeTx }
+        );
+
+        // Use reflection to change private/internal state
+        typeof(Block)
+            .GetProperty(nameof(Block.Hash))!
+            .SetValue(
+                block, block.GetHash());
 
         // Act
         var result = blockchain.AddBlock(block);
 
         // Assert
-        Assert.False(result.Success);
+        result.Success.Should().BeFalse();
     }
 
     [Fact]

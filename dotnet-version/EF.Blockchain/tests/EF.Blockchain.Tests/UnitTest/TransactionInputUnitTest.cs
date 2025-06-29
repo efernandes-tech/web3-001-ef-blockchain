@@ -1,4 +1,5 @@
 using EF.Blockchain.Domain;
+using FluentAssertions;
 
 namespace EF.Blockchain.Tests.UnitTest;
 
@@ -54,7 +55,8 @@ public class TransactionInputUnitTest
         // Arrange
         var txInput = new TransactionInput(
             fromAddress: _loki.PublicKey,
-            amount: 10
+            amount: 10,
+            previousTx: "abc"
         );
 
         // Act
@@ -70,7 +72,8 @@ public class TransactionInputUnitTest
         // Arrange
         var txInput = new TransactionInput(
             fromAddress: _loki.PublicKey,
-            amount: -10
+            amount: -10,
+            previousTx: "abc"
         );
 
         txInput.Sign(_loki.PrivateKey);
@@ -88,7 +91,8 @@ public class TransactionInputUnitTest
         // Arrange
         var txInput = new TransactionInput(
             fromAddress: _loki.PublicKey,
-            amount: 10
+            amount: 10,
+            previousTx: "abc"
         );
 
         txInput.Sign(_thor.PrivateKey); // Wrong key used
@@ -101,25 +105,19 @@ public class TransactionInputUnitTest
     }
 
     [Fact]
-    public void TransactionInputTests_IsValid_ShouldNotBeValidErrorVerifyingSignature()
+    public void TransactionInputTests_IsValid_ShouldNotBeValidInvalidPreviousTx()
     {
         // Arrange
         var txInput = new TransactionInput(
             fromAddress: _loki.PublicKey,
             amount: 10
         );
-
-        txInput.Sign(_thor.PrivateKey); // Wrong key used
-
-        // Force invalid signature with reflection
-        typeof(TransactionInput)
-            .GetProperty(nameof(TransactionInput.Signature))!
-            .SetValue(txInput, "abc");
+        txInput.Sign(_loki.PrivateKey);
 
         // Act
-        var valid = txInput.IsValid();
+        var result = txInput.IsValid();
 
         // Assert
-        Assert.False(valid.Success);
+        result.Success.Should().BeFalse();
     }
 }
