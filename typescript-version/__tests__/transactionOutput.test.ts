@@ -12,13 +12,41 @@ describe("TransactionOutput tests", () => {
     })
 
     test('Should be valid', () => {
-        const txInput = new TransactionOutput({
+        const txOutput = new TransactionOutput({
             amount: 10,
             toAddress: alice.publicKey,
             tx: "abc"
         } as TransactionOutput)
 
-        const valid = txInput.isValid();
+        const valid = txOutput.isValid();
         expect(valid.success).toBeTruthy();
+    })
+
+    test('Should NOT be valid (default)', () => {
+        const txOutput = new TransactionOutput();
+        const valid = txOutput.isValid();
+        expect(valid.success).toBeFalsy();
+    })
+
+    test('Should NOT be valid', () => {
+        const txOutput = new TransactionOutput({
+            amount: -10,
+            toAddress: alice.publicKey,
+            tx: "abc"
+        } as TransactionOutput)
+
+        const valid = txOutput.isValid();
+        expect(valid.success).toBeFalsy();
+    })
+
+    test('Should get hash', () => {
+        const txOutput = new TransactionOutput({
+            amount: 10,
+            toAddress: alice.publicKey,
+            tx: "abc"
+        } as TransactionOutput)
+
+        const hash = txOutput.getHash();
+        expect(hash).toBeTruthy();
     })
 })
