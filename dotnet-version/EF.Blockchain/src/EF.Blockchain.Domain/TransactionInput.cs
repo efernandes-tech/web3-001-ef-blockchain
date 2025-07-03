@@ -77,4 +77,13 @@ public class TransactionInput
             return new Validation(false, "Error verifying signature");
         }
     }
+
+    public static TransactionInput FromTxo(TransactionOutput txo)
+    {
+        return new TransactionInput(
+            fromAddress: txo.ToAddress,
+            amount: txo.Amount,
+            previousTx: txo.Tx
+        );
+    }
 }

@@ -8,6 +8,23 @@
 	},
 	"item": [
 		{
+			"name": "/status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BLOCKCHAIN_SERVER_URL}}/status",
+					"host": [
+						"{{BLOCKCHAIN_SERVER_URL}}"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/blocks/next",
 			"request": {
 				"method": "GET",
@@ -20,23 +37,6 @@
 					"path": [
 						"blocks",
 						"next"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/status",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{BLOCKCHAIN_SERVER_URL}}/status",
-					"host": [
-						"{{BLOCKCHAIN_SERVER_URL}}"
-					],
-					"path": [
-						"status"
 					]
 				}
 			},
@@ -87,6 +87,31 @@
 			"response": []
 		},
 		{
+			"name": "/transactions/{hash?}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"hash\": \" \",\r\n    \"data\": \"tx1\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BLOCKCHAIN_SERVER_URL}}/transactions/",
+					"host": [
+						"{{BLOCKCHAIN_SERVER_URL}}"
+					],
+					"path": [
+						"transactions",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/transactions",
 			"request": {
 				"method": "POST",
@@ -113,7 +138,7 @@
 			"response": []
 		},
 		{
-			"name": "/transactions/{hash?}",
+			"name": "/wallets/{walletAddress}",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -125,13 +150,13 @@
 					"raw": "{\r\n    \"hash\": \" \",\r\n    \"data\": \"tx1\"\r\n}"
 				},
 				"url": {
-					"raw": "{{BLOCKCHAIN_SERVER_URL}}/transactions/",
+					"raw": "{{BLOCKCHAIN_SERVER_URL}}/wallets/02e11761fee94d9577794f9ae4ce4060af61ec0025871953ca4d249131f888b216",
 					"host": [
 						"{{BLOCKCHAIN_SERVER_URL}}"
 					],
 					"path": [
-						"transactions",
-						""
+						"wallets",
+						"02e11761fee94d9577794f9ae4ce4060af61ec0025871953ca4d249131f888b216"
 					]
 				}
 			},

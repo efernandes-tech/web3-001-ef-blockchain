@@ -148,8 +148,8 @@ app.MapPost("/transactions", (TransactionDto transactionDto) =>
 app.MapGet("/wallets/{walletAddress}", (string walletAddress) =>
 {
     var utxo = blockchain.GetUtxo(walletAddress);
-    var balance = blockchain.GetBalance(walletAddress);
-    var fee = blockchain.GetFeePerTx();
+    int balance = blockchain.GetBalance(walletAddress);
+    int fee = blockchain.GetFeePerTx();
 
     return Results.Json(new
     {

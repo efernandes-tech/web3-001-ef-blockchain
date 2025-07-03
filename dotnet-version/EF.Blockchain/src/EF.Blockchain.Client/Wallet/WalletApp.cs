@@ -49,7 +49,7 @@ public class WalletApp
                     break;
 
                 case "3":
-                    GetBalance();
+                    GetBalanceAsync();
                     break;
 
                 case "4":
@@ -108,7 +108,7 @@ public class WalletApp
         }
     }
 
-    private void GetBalance()
+    private async Task GetBalanceAsync()
     {
         Console.Clear();
 
@@ -118,7 +118,21 @@ public class WalletApp
             return;
         }
 
-        Console.WriteLine("(TODO) Get balance via API");
+        try
+        {
+            var walletData = await $"{_blockchainServer}/wallets/{_myWalletPublicKey}"
+                .GetJsonAsync<WalletResponse>();
+
+            Console.WriteLine($"Balance: {walletData.Balance}");
+        }
+        catch (FlurlHttpException ex)
+        {
+            var status = ex.Call?.Response?.StatusCode.ToString() ?? "No HTTP response";
+            var error = await ex.GetResponseStringAsync();
+            if (string.IsNullOrWhiteSpace(error)) error = ex.Message;
+
+            Console.WriteLine($"Error ({status}): {error}");
+        }
     }
 
     private async Task SendTransaction()
@@ -149,56 +163,51 @@ public class WalletApp
             return;
         }
 
-        /*// TODO: balance validation
-
-        // Create TransactionInput
-        var txInput = new TransactionInput(
-            fromAddress: _myWalletPublicKey,
-            amount: amount
-        );
-
-        txInput.Sign(_myWalletPrivateKey);
-
-        // Create Transaction
-        var tx = new Transaction(
-            type: TransactionType.REGULAR,
-            timestamp: DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-            txInput: txInput,
-            to: toWallet
-        );*/
-
         try
         {
-            // Get balance, fee and UTXO list
+            // Get wallet data
             var walletData = await $"{_blockchainServer}/wallets/{_myWalletPublicKey}"
                 .GetJsonAsync<WalletResponse>();
 
-            if (walletData.Balance < amount + walletData.Fee)
+            var balance = walletData.Balance;
+            var fee = walletData.Fee;
+            var utxos = walletData.Utxo;
+
+            if (balance < amount + fee)
             {
                 Console.WriteLine("Insufficient balance (tx + fee).");
                 return;
             }
 
-            // Build inputs
-            var txInput = new TransactionInput(
-                fromAddress: _myWalletPublicKey,
-                amount: amount,
-                previousTx: walletData.Utxo.First().Tx
-            );
-            txInput.Sign(_myWalletPrivateKey);
+            // Build inputs from UTXOs
+            var txInputs = utxos
+                .Select(TransactionInput.FromTxo)
+                .ToList();
+
+            txInputs.ForEach(input => input.Sign(_myWalletPrivateKey));
 
             // Build outputs
-            var txOutput = new TransactionOutput(
-                toAddress: toWallet,
-                amount: amount
-            );
+            var txOutputs = new List<TransactionOutput>
+            {
+                new TransactionOutput(toAddress: toWallet, amount: amount)
+            };
+
+            // Change
+            var remaining = balance - amount - fee;
+            if (remaining > 0)
+            {
+                txOutputs.Add(new TransactionOutput(
+                    toAddress: _myWalletPublicKey,
+                    amount: remaining
+                ));
+            }
 
             // Build transaction
             var tx = new Transaction(
                 type: TransactionType.REGULAR,
                 timestamp: DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                txInputs: new List<TransactionInput> { txInput },
-                txOutputs: new List<TransactionOutput> { txOutput }
+                txInputs: txInputs,
+                txOutputs: txOutputs
             );
 
             Console.WriteLine("Send a transaction...");
@@ -261,7 +270,7 @@ public class WalletApp
 
 public class WalletResponse
 {
-    public decimal Balance { get; set; }
-    public decimal Fee { get; set; }
+    public int Balance { get; set; }
+    public int Fee { get; set; }
     public List<TransactionOutput> Utxo { get; set; } = new();
 }
