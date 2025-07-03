@@ -70,7 +70,15 @@ public class Blockchain
             if (pendingTx.Any())
                 return new Validation(false, "This wallet has a pending transaction");
 
-            // TODO: validate funds origin (UTXO)
+            var utxo = GetUtxo(from);
+            foreach (var txi in transaction.TxInputs)
+            {
+                var match = utxo.FirstOrDefault(txo =>
+                    txo.Tx == txi.PreviousTx && txo.Amount >= txi.Amount);
+
+                if (match == null)
+                    return new Validation(false, "Invalid tx: the TXO is already spent or nonexistent");
+            }
         }
 
         var validation = transaction.IsValid();
@@ -200,5 +208,49 @@ public class Blockchain
             FeePerTx = feePerTx,
             MaxDifficulty = maxDifficulty
         };
+    }
+
+    public List<TransactionInput> GetTxInputs(string wallet)
+    {
+        return Blocks
+            .SelectMany(b => b.Transactions)
+            .Where(tx => tx.TxInputs != null && tx.TxInputs.Any())
+            .SelectMany(tx => tx.TxInputs!)
+            .Where(txi => txi.FromAddress == wallet)
+            .ToList();
+    }
+
+    public List<TransactionOutput> GetTxOutputs(string wallet)
+    {
+        return Blocks
+            .SelectMany(b => b.Transactions)
+            .Where(tx => tx.TxOutputs != null && tx.TxOutputs.Any())
+            .SelectMany(tx => tx.TxOutputs!)
+            .Where(txo => txo.ToAddress == wallet)
+            .ToList();
+    }
+
+    public List<TransactionOutput> GetUtxo(string wallet)
+    {
+        var txIns = GetTxInputs(wallet);
+        var txOuts = GetTxOutputs(wallet);
+
+        if (txIns == null || txIns.Count == 0)
+            return txOuts;
+
+        foreach (var txi in txIns)
+        {
+            var index = txOuts.FindIndex(txo => txo.Amount == txi.Amount);
+            if (index != -1)
+                txOuts.RemoveAt(index);
+        }
+
+        return txOuts;
+    }
+
+    public int GetBalance(string wallet)
+    {
+        var utxo = GetUtxo(wallet);
+        return utxo?.Sum(txo => txo.Amount) ?? 0;
     }
 }

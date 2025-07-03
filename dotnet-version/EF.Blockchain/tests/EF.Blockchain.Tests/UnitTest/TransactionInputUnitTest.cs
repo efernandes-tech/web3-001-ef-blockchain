@@ -120,4 +120,25 @@ public class TransactionInputUnitTest
         // Assert
         result.Success.Should().BeFalse();
     }
+
+    // ########## ########## ########## ########## ##########
+
+    [Fact]
+    public void TransactionInputTests_IsValid_ShouldNotBeValidErrorVerifyingSing()
+    {
+        // Arrange
+        var txInput = new TransactionInput(
+            fromAddress: "abc",
+            amount: 10,
+            previousTx: "def"
+        );
+        txInput.Sign(_loki.PrivateKey);
+
+        // Act
+        var result = txInput.IsValid();
+
+        // Assert
+        result.Success.Should().BeFalse();
+        Assert.Contains("Error verifying signature", result.Message);
+    }
 }

@@ -147,18 +147,15 @@ app.MapPost("/transactions", (TransactionDto transactionDto) =>
 
 app.MapGet("/wallets/{walletAddress}", (string walletAddress) =>
 {
-    // TODO: make real UTXO logic
-    var dummyUtxo = new TransactionOutput(
-        toAddress: walletAddress,
-        amount: 10,
-        tx: "abc"
-    );
+    var utxo = blockchain.GetUtxo(walletAddress);
+    var balance = blockchain.GetBalance(walletAddress);
+    var fee = blockchain.GetFeePerTx();
 
     return Results.Json(new
     {
-        balance = 10,
-        fee = blockchain.GetFeePerTx(),
-        utxo = new List<TransactionOutput> { dummyUtxo }
+        balance,
+        fee,
+        utxo
     });
 });
 
