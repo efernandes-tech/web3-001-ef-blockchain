@@ -94,7 +94,7 @@ public class Block
     /// /// <param name="previousIndex">The previous block index</param>
     /// /// <param name="difficulty">The blockchain current difficulty</param>
     /// <returns><c>Validation</c> if the block is valid</returns>
-    public Validation IsValid(string previousHash, int previousIndex, int difficulty)
+    public Validation IsValid(string previousHash, int previousIndex, int difficulty, int feePerTx)
     {
         if (Transactions != null && Transactions.Any())
         {
@@ -111,8 +111,10 @@ public class Block
             if (!feeTxs[0].TxOutputs.Any(txo => txo.ToAddress == Miner))
                 return new Validation(false, "Invalid fee tx: different from miner");
 
+            var totalFees = feePerTx * Transactions.Count(tx => tx.Type != TransactionType.FEE);
+
             var validations = Transactions
-                .Select(tx => tx.IsValid())
+                .Select(tx => tx.IsValid(difficulty, totalFees))
                 .Where(v => !v.Success)
                 .Select(v => v.Message)
                 .ToList();

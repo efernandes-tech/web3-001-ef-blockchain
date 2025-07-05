@@ -24,15 +24,11 @@ public class Blockchain
 
     private Block CreateGenesis(string miner)
     {
-        var amount = 10; // TODO: calculate reward
+        var amount = GetRewardAmount(GetDifficulty());
 
         var txOutput = new TransactionOutput(toAddress: miner, amount: amount);
 
-        var feeTx = new Transaction(
-            type: TransactionType.FEE,
-            txInputs: null,
-            txOutputs: new List<TransactionOutput> { txOutput }
-        );
+        var feeTx = Transaction.FromReward(txOutput);
 
         var blockGenesis = new Block(
             index: NextIndex,
@@ -81,7 +77,7 @@ public class Blockchain
             }
         }
 
-        var validation = transaction.IsValid();
+        var validation = transaction.IsValid(GetDifficulty(), GetFeePerTx());
         if (!validation.Success)
             return new Validation(false, "Invalid tx: " + validation.Message);
 
@@ -102,7 +98,8 @@ public class Blockchain
         var validation = block.IsValid(
             nextBlockInfo.PreviousHash,
             nextBlockInfo.Index - 1,
-            nextBlockInfo.Difficulty
+            nextBlockInfo.Difficulty,
+            nextBlockInfo.FeePerTx
         );
 
         if (!validation.Success)
@@ -172,7 +169,12 @@ public class Blockchain
             var currentBlock = Blocks[i];
             var previousBlock = Blocks[i - 1];
             var validation = currentBlock.IsValid(
-                previousBlock.Hash, previousBlock.Index, GetDifficulty());
+                previousBlock.Hash,
+                previousBlock.Index,
+                GetDifficulty(),
+                GetFeePerTx()
+            );
+
             if (!validation.Success)
                 return new Validation(false,
                     $"Invalid block #{currentBlock.Index}: {validation.Message}");
@@ -252,5 +254,10 @@ public class Blockchain
     {
         var utxo = GetUtxo(wallet);
         return utxo?.Sum(txo => txo.Amount) ?? 0;
+    }
+
+    public static int GetRewardAmount(int difficulty)
+    {
+        return (64 - difficulty) * 10;
     }
 }

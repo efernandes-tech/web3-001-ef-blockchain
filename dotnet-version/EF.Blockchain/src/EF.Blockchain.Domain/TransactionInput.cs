@@ -9,12 +9,12 @@ namespace EF.Blockchain.Domain;
 public class TransactionInput
 {
     public string FromAddress { get; private set; }
-    public decimal Amount { get; private set; }
+    public int Amount { get; private set; }
     public string Signature { get; private set; }
     public string PreviousTx { get; private set; }
 
     [JsonConstructor]
-    public TransactionInput(string fromAddress, decimal amount, string signature, string previousTx)
+    public TransactionInput(string fromAddress, int amount, string signature, string previousTx)
     {
         FromAddress = fromAddress;
         Amount = amount;
@@ -22,7 +22,7 @@ public class TransactionInput
         PreviousTx = previousTx;
     }
 
-    public TransactionInput(string? fromAddress = null, decimal? amount = null, string? signature = null, string? previousTx = null)
+    public TransactionInput(string? fromAddress = null, int? amount = null, string? signature = null, string? previousTx = null)
     {
         FromAddress = fromAddress ?? string.Empty;
         Amount = amount ?? 0;

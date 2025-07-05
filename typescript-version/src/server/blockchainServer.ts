@@ -6,7 +6,6 @@ import morgan from 'morgan';
 import Block from '../lib/block';
 import Blockchain from '../lib/blockchain';
 import Transaction from '../lib/transaction';
-import TransactionOutput from '../lib/transactionOutput';
 import Wallet from '../lib/wallet';
 
 /* c8 ignore next */

@@ -70,10 +70,21 @@ public class Transaction
         return Convert.ToHexString(hashBytes).ToLower();
     }
 
+    public int GetFee()
+    {
+        if (TxInputs == null || !TxInputs.Any())
+            return 0;
+
+        var inputSum = TxInputs.Sum(txi => txi.Amount);
+        var outputSum = TxOutputs?.Sum(txo => txo.Amount) ?? 0;
+
+        return inputSum - outputSum;
+    }
+
     /// <summary>
     /// Validates the transaction.
     /// </summary>
-    public Validation IsValid()
+    public Validation IsValid(int difficulty, int totalFees)
     {
         if (Hash != GetHash())
             return new Validation(false, "Invalid hash");
@@ -103,8 +114,25 @@ public class Transaction
         if (TxOutputs.Any(txo => txo.Tx != Hash))
             return new Validation(false, "Invalid TXO reference hash");
 
-        // TODO: validate fee/reward if type == FEE
+        if (Type == TransactionType.FEE)
+        {
+            var txo = TxOutputs[0];
+            if (txo.Amount > Blockchain.GetRewardAmount(difficulty) + totalFees)
+                return new Validation(false, "Invalid tx reward");
+        }
 
         return new Validation();
+    }
+
+    public static Transaction FromReward(TransactionOutput txo)
+    {
+        var tx = new Transaction(
+            type: TransactionType.FEE,
+            txOutputs: new List<TransactionOutput> { txo }
+        );
+
+        tx.Hash = tx.GetHash();
+        tx.TxOutputs[0].SetTx(tx.Hash);
+        return tx;
     }
 }

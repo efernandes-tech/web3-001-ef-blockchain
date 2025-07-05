@@ -39,7 +39,12 @@ public class MinerApp
 
                 var newBlock = Block.FromBlockInfo(blockInfo);
 
-                var rewardTx = GetRewardTx();
+                var rewardTx = GetRewardTx(blockInfo, newBlock);
+                if (rewardTx == null)
+                {
+                    await Task.Delay(5000);
+                    continue;
+                }
 
                 newBlock.Transactions.Add(rewardTx);
 
@@ -69,18 +74,29 @@ public class MinerApp
         }
     }
 
-    private Transaction GetRewardTx()
+    private Transaction? GetRewardTx(BlockInfo blockInfo, Block nextBlock)
     {
+        var amount = 0;
+
+        if (blockInfo.Difficulty <= blockInfo.MaxDifficulty)
+            amount += Domain.Blockchain.GetRewardAmount(blockInfo.Difficulty);
+
+        var fees = nextBlock.Transactions.Sum(tx => tx.GetFee());
+        var feeCheck = nextBlock.Transactions.Count * blockInfo.FeePerTx;
+
+        if (fees < feeCheck)
+        {
+            Console.WriteLine("Low fees. Awaiting next block.");
+            return null;
+        }
+
+        amount += fees;
+
         var rewardOutput = new TransactionOutput(
             toAddress: _minerWallet.PublicKey,
-            amount: 10
+            amount: amount
         );
 
-        var rewardTransaction = new Transaction(
-            type: TransactionType.FEE,
-            txOutputs: new List<TransactionOutput> { rewardOutput }
-        );
-
-        return rewardTransaction;
+        return Transaction.FromReward(rewardOutput);
     }
 }
