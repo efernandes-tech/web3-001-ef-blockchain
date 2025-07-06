@@ -5,7 +5,10 @@ namespace EF.Blockchain.Tests.UnitTest;
 
 public class BlockUnitTest
 {
-    private readonly int _difficulty = 1;
+    private const int _difficulty = 1;
+    private const int _feePerTx = 1;
+    private const string _exampleTx = "8eba6c75bbd12d9e21f657b76726312aad08f2d3a10aee52d2b1017e6248c186";
+
     private readonly Wallet _loki;
     private readonly Wallet _thor;
     private Block _genesis;
@@ -23,30 +26,55 @@ public class BlockUnitTest
             transactions: new List<Transaction> { genesisTx });
     }
 
-    [Fact]
-    public void BlockTests_IsValid_ShouldBeValid()
+    private Block GetFullBlock()
     {
-        // Arrange
-        var transactionFee = new Transaction(
-           type: TransactionType.FEE,
-           txOutputs: new List<TransactionOutput>
-           {
-               new TransactionOutput(
-                   toAddress: _loki.PublicKey,
-                   amount: 1
-               )
-           }
+        var txInput = new TransactionInput(
+            amount: 10,
+            fromAddress: _loki.PublicKey,
+            previousTx: _exampleTx
+        );
+        txInput.Sign(_loki.PrivateKey);
+
+        var txOutput = new TransactionOutput(
+            toAddress: _thor.PublicKey,
+            amount: 10
+        );
+
+        var regularTx = new Transaction(
+            txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput> { txOutput }
+        );
+
+        var feeTx = new Transaction(
+            type: TransactionType.FEE,
+            txOutputs: new List<TransactionOutput>
+            {
+                new TransactionOutput(
+                    toAddress: _loki.PublicKey,
+                    amount: 1
+                )
+            }
         );
 
         var block = new Block(
             index: 1,
             previousHash: _genesis.Hash,
-            transactions: new List<Transaction> { transactionFee });
+            transactions: new List<Transaction> { regularTx, feeTx }
+        );
 
         block.Mine(_difficulty, _loki.PublicKey);
 
+        return block;
+    }
+
+    [Fact]
+    public void BlockTests_IsValid_ShouldBeValid()
+    {
+        // Arrange
+        var block = GetFullBlock();
+
         // Act
-        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty);
+        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty, _feePerTx);
 
         // Assert
         Assert.True(valid.Success);
@@ -56,20 +84,14 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidDifferentHash()
     {
         // Arrange
-        var fee = new Transaction(TransactionType.FEE, txOutputs: new List<TransactionOutput>
-        {
-            new TransactionOutput(_loki.PublicKey, 1)
-        });
-
-        var block = new Block(1, _genesis.Hash, new List<Transaction> { fee });
-        block.Mine(_difficulty, _loki.PublicKey);
+        var block = GetFullBlock();
 
         typeof(Block)
             .GetProperty(nameof(Block.Hash))!
             .SetValue(block, "abc");
 
         // Act
-        var result = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty);
+        var result = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty, _feePerTx);
 
         // Assert
         result.Success.Should().BeFalse();
@@ -91,7 +113,7 @@ public class BlockUnitTest
         block.Mine(_difficulty, _loki.PublicKey);
 
         // Act
-        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty);
+        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty, _feePerTx);
 
         // Assert
         Assert.False(valid.Success);
@@ -125,7 +147,7 @@ public class BlockUnitTest
         // Act
         var block = Block.FromBlockInfo(blockInfo);
         block.Mine(_difficulty, _loki.PublicKey);
-        var validation = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty);
+        var validation = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty, _feePerTx);
 
         // Assert
         Assert.True(validation.Success);
@@ -135,27 +157,19 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValid2Fee()
     {
         // Arrange
-        var fee1 = new Transaction(
-            type: TransactionType.FEE,
-            txOutputs: new List<TransactionOutput>
-            {
-                new TransactionOutput()
-            }
-        );
+        var block = GetFullBlock();
+
         var fee2 = new Transaction(
             type: TransactionType.FEE,
             txOutputs: new List<TransactionOutput> { new TransactionOutput() }
         );
 
-        var block = new Block(
-            index: 1,
-            previousHash: _genesis.Hash,
-            transactions: new List<Transaction> { fee1, fee2 }
-        );
+        block.Transactions.Add(fee2);
+
         block.Mine(_difficulty, _loki.PublicKey);
 
         // Act
-        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty);
+        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty, _feePerTx);
 
         // Assert
         Assert.False(valid.Success);
@@ -166,36 +180,14 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidInvalidTx()
     {
         // Arrange
-        var invalidTx = new Transaction(
-            type: TransactionType.REGULAR,
-            txInputs: new List<TransactionInput>
-            {
-                new TransactionInput(
-                    amount: -1)
-            }
-        );
+        var block = GetFullBlock();
 
-        var transactionFee = new Transaction(
-           type: TransactionType.FEE,
-           txOutputs: new List<TransactionOutput>
-           {
-               new TransactionOutput(
-                   toAddress: _loki.PublicKey,
-                   amount: 1
-               )
-           }
-        );
-
-        var block = new Block(
-            index: 1,
-            previousHash: _genesis.Hash,
-            transactions: new List<Transaction> { invalidTx, transactionFee }
-        );
-
-        block.Mine(_difficulty, _loki.PublicKey);
+        typeof(Transaction)
+            .GetProperty(nameof(Transaction.Timestamp))!
+            .SetValue(block.Transactions[0], -1);
 
         // Act
-        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty);
+        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty, _feePerTx);
 
         // Assert
         Assert.False(valid.Success);
@@ -209,7 +201,7 @@ public class BlockUnitTest
         var block = new Block();
 
         // Act
-        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty);
+        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty, _feePerTx);
 
         // Assert
         Assert.False(valid.Success);
@@ -219,26 +211,17 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidInvalidPreviousHash()
     {
         // Arrange
-        var transactionFee = new Transaction(
-           type: TransactionType.FEE,
-           txOutputs: new List<TransactionOutput>
-           {
-                new TransactionOutput(
-                     toAddress: _loki.PublicKey,
-                     amount: 1
-                )
-           }
-        );
+        var block = GetFullBlock();
 
-        var block = new Block(
-            index: 1,
-            previousHash: "abc",
-            transactions: new List<Transaction> { transactionFee });
-
-        block.Mine(_difficulty, _loki.PublicKey);
+        typeof(Block)
+            .GetProperty(nameof(Block.PreviousHash))!
+            .SetValue(block, "xyz");
+        typeof(Block)
+            .GetProperty(nameof(Block.Hash))!
+            .SetValue(block, block.GetHash());
 
         // Act
-        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty);
+        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty, _feePerTx);
 
         // Assert
         Assert.False(valid.Success);
@@ -249,23 +232,7 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidInvalidTimestamp()
     {
         // Arrange
-        var transactionFee = new Transaction(
-           type: TransactionType.FEE,
-           txOutputs: new List<TransactionOutput>
-           {
-                new TransactionOutput(
-                     toAddress: _loki.PublicKey,
-                     amount: 1
-                )
-           }
-        );
-
-        var block = new Block(
-            index: 1,
-            previousHash: _genesis.Hash,
-            transactions: new List<Transaction> { transactionFee });
-
-        block.Mine(_difficulty, _loki.PublicKey);
+        var block = GetFullBlock();
 
         // Use reflection to change private/internal state
         typeof(Block)
@@ -276,7 +243,7 @@ public class BlockUnitTest
             .SetValue(block, block.GetHash());
 
         // Act
-        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty);
+        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty, _feePerTx);
 
         // Assert
         Assert.False(valid.Success);
@@ -287,30 +254,14 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidEmptyHash()
     {
         // Arrange
-        var transactionFee = new Transaction(
-           type: TransactionType.FEE,
-           txOutputs: new List<TransactionOutput>
-           {
-                new TransactionOutput(
-                     toAddress: _loki.PublicKey,
-                     amount: 1
-                )
-           }
-        );
-
-        var block = new Block(
-            index: 1,
-            previousHash: _genesis.Hash,
-            transactions: new List<Transaction> { transactionFee });
-
-        block.Mine(_difficulty, _loki.PublicKey);
+        var block = GetFullBlock();
 
         typeof(Block)
             .GetProperty(nameof(Block.Hash))!
             .SetValue(block, "");
 
         // Act
-        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty);
+        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty, _feePerTx);
 
         // Assert
         Assert.False(valid.Success);
@@ -321,26 +272,18 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidNoMined()
     {
         // Arrange
-        var transactionFee = new Transaction(
-            type: TransactionType.FEE,
-            txOutputs: new List<TransactionOutput>
-            {
-                new TransactionOutput(
-                    toAddress: _loki.PublicKey,
-                    amount: 1
-                )
-            }
-        );
+        var block = GetFullBlock();
 
-        var block = new Block(
-            index: 1,
-            previousHash: _genesis.Hash,
-            transactions: new List<Transaction> { transactionFee },
-            nonce: 0,
-            miner: _loki.PublicKey);
+        // Use reflection to change private/internal state
+        typeof(Block)
+            .GetProperty(nameof(Block.Nonce))!
+            .SetValue(block, 0);
+        typeof(Block)
+            .GetProperty(nameof(Block.Hash))!
+            .SetValue(block, block.GetHash());
 
         // Act
-        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty);
+        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty, _feePerTx);
 
         // Assert
         Assert.False(valid.Success);
@@ -348,29 +291,17 @@ public class BlockUnitTest
     }
 
     [Fact]
-    public void BlockTests_IsValid_ShouldNotBeTxInput()
+    public void BlockTests_IsValid_ShouldNotBeValidTxInput()
     {
         // Arrange
-        var transactionFee = new Transaction(
-           type: TransactionType.FEE,
-           txOutputs: new List<TransactionOutput>
-           {
-                new TransactionOutput(
-                     toAddress: _loki.PublicKey,
-                     amount: -1
-                )
-           }
-        );
+        var block = GetFullBlock();
 
-        var block = new Block(
-            index: -1,
-            previousHash: _genesis.Hash,
-            transactions: new List<Transaction> { transactionFee });
-
-        block.Mine(_difficulty, _loki.PublicKey);
+        typeof(TransactionInput)
+            .GetProperty(nameof(TransactionInput.Amount))!
+            .SetValue(block.Transactions[0].TxInputs![0], -1);
 
         // Act
-        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty);
+        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty, _feePerTx);
 
         // Assert
         Assert.False(valid.Success);
@@ -381,26 +312,18 @@ public class BlockUnitTest
     public void BlockTests_IsValid_ShouldNotBeValidInvalidIndex()
     {
         // Arrange
-        var transactionFee = new Transaction(
-           type: TransactionType.FEE,
-           txOutputs: new List<TransactionOutput>
-           {
-                new TransactionOutput(
-                     toAddress: _loki.PublicKey,
-                     amount: 1
-                )
-           }
-        );
+        var block = GetFullBlock();
 
-        var block = new Block(
-            index: -1,
-            previousHash: _genesis.Hash,
-            transactions: new List<Transaction> { transactionFee });
-
-        block.Mine(_difficulty, _loki.PublicKey);
+        // Use reflection to change private/internal state
+        typeof(Block)
+            .GetProperty(nameof(Block.Index))!
+            .SetValue(block, -1);
+        typeof(Block)
+            .GetProperty(nameof(Block.Hash))!
+            .SetValue(block, block.GetHash());
 
         // Act
-        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty);
+        var valid = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty, _feePerTx);
 
         // Assert
         Assert.False(valid.Success);

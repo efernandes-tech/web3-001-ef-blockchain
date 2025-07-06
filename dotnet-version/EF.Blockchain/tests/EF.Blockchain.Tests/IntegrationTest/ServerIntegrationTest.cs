@@ -11,12 +11,16 @@ public class ServerIntegrationTest
     private readonly IFlurlClient _flurl;
     private readonly Wallet _loki;
 
+    private Domain.Blockchain _blockchain;
+
     public ServerIntegrationTest()
     {
         var factory = new CustomWebApplicationFactory();
         var client = factory.CreateClient();
         _flurl = new FlurlClient(client);
         _loki = new Wallet();
+
+        _blockchain = factory._mockBlockchain;
     }
 
     [Fact]
@@ -92,7 +96,7 @@ public class ServerIntegrationTest
 
         var txInput = new TransactionInput(
             fromAddress: BlockchainMockFactory.MockedPublicKey,
-            amount: 1000, previousTx: "previousTxMock");
+            amount: 1, previousTx: "previousTxMock");
 
         txInput.Sign(BlockchainMockFactory.MockedPrivateKey);
 
@@ -101,23 +105,34 @@ public class ServerIntegrationTest
             txInputs: new List<TransactionInput> { txInput },
             txOutputs: new List<TransactionOutput> {
                 new TransactionOutput(
-                    toAddress: BlockchainMockFactory.MockedPublicKey, amount: 1000) });
+                    toAddress: BlockchainMockFactory.MockedPublicKey, amount: 1) });
 
         var transactionFee = new Transaction(
             type: TransactionType.FEE,
             txOutputs: new List<TransactionOutput> {
                 new TransactionOutput(
-                    toAddress: BlockchainMockFactory.MockedPublicKey, amount: 1000) },
+                    toAddress: BlockchainMockFactory.MockedPublicKey, amount: 1) },
             timestamp: timestamp);
 
         var flurl = CreateFlurlClientWithBlockHash("abc", transaction);
 
         var index = 1;
-        var previousHash = "abc";
+
+        var utxo = _blockchain.Blocks[0].Transactions[0];
+
+        // Force invalid hash with reflection
+        typeof(TransactionInput)
+            .GetProperty(nameof(TransactionInput.PreviousTx))!
+            .SetValue(transaction.TxInputs![0], utxo.Hash);
+        typeof(Transaction)
+            .GetProperty(nameof(Transaction.Hash))!
+            .SetValue(transaction, transaction.GetHash());
+
+        transaction.TxInputs![0].Sign(BlockchainMockFactory.MockedPrivateKey);
 
         var block = new Block(
             index,
-            previousHash,
+            previousHash: "abc",
             new List<Transaction> { transaction, transactionFee },
             timestamp);
 
@@ -220,19 +235,22 @@ public class ServerIntegrationTest
     public async Task ServerTests_PostTransaction_ShouldAddTx()
     {
         // Arrange
-        var txInput = new TransactionInput(
-            fromAddress: _loki.PublicKey,
-            amount: 1000,
-            previousTx: "previousTxMock");
+        var utxo = _blockchain.Blocks[0].Transactions[0];
+        _blockchain.Mempool.Clear();
 
-        txInput.Sign(_loki.PrivateKey);
+        var txInput = new TransactionInput(
+            fromAddress: BlockchainMockFactory.MockedPublicKey,
+            amount: 1,
+            previousTx: utxo.Hash);
+
+        txInput.Sign(BlockchainMockFactory.MockedPrivateKey);
 
         var tx = new Transaction(
             timestamp: DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
             txInputs: new List<TransactionInput> { txInput },
             txOutputs: new List<TransactionOutput> {
                 new TransactionOutput(
-                    toAddress: _loki.PublicKey, amount: 1000) });
+                    toAddress: _loki.PublicKey, amount: 1) });
 
         // Act
         var response = await _flurl.Request("/transactions").PostJsonAsync(tx);
@@ -272,19 +290,28 @@ public class ServerIntegrationTest
 
     private IFlurlClient CreateFlurlClientWithBlockHash(string hash, Transaction? transaction = null)
     {
-        var blockchain = BlockchainMockFactory.CreateWithBlocks(5);
+        _blockchain = BlockchainMockFactory.CreateWithBlocks(5);
 
         if (transaction is not null)
         {
-            blockchain.Mempool.Add(transaction);
+            var utxo = _blockchain.Blocks[0].Transactions[0];
+
+            // Force invalid hash with reflection
+            typeof(TransactionInput)
+                .GetProperty(nameof(TransactionInput.PreviousTx))!
+                .SetValue(transaction.TxInputs![0], utxo.Hash);
+
+            transaction.TxInputs![0].Sign(BlockchainMockFactory.MockedPrivateKey);
+
+            _blockchain.Mempool.Add(transaction);
         }
 
         // Use reflection to change private/internal state
         typeof(Block)
             .GetProperty(nameof(Block.Hash))!
-            .SetValue(blockchain.Blocks[blockchain.Blocks.Count - 1], hash);
+            .SetValue(_blockchain.Blocks[_blockchain.Blocks.Count - 1], hash);
 
-        var factory = new CustomWebApplicationFactory(blockchain);
+        var factory = new CustomWebApplicationFactory(_blockchain);
         var client = factory.CreateClient();
 
         return new FlurlClient(client);

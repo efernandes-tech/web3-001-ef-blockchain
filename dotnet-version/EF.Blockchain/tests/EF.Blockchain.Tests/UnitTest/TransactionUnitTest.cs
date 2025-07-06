@@ -1,16 +1,21 @@
 using EF.Blockchain.Domain;
-using EF.Blockchain.Tests.Mocks;
 using FluentAssertions;
 
 namespace EF.Blockchain.Tests.UnitTest;
 
 public class TransactionUnitTest
 {
+    private const int _exampleDifficulty = 1;
+    private const int _exampleFee = 1;
+    private const string _exampleTx = "8eba6c75bbd12d9e21f657b76726312aad08f2d3a10aee52d2b1017e6248c186";
+
     private readonly Wallet _loki;
+    private readonly Wallet _thor;
 
     public TransactionUnitTest()
     {
         _loki = new Wallet();
+        _thor = new Wallet();
     }
 
     [Fact]
@@ -31,7 +36,7 @@ public class TransactionUnitTest
                     toAddress: _loki.PublicKey, amount: 1000) });
 
         // Act
-        var valid = tx.IsValid();
+        var valid = tx.IsValid(_exampleDifficulty, _exampleFee);
 
         // Assert
         Assert.True(valid.Success);
@@ -53,7 +58,7 @@ public class TransactionUnitTest
         txOutput.SetTx("mismatch");
 
         // Act
-        var result = tx.IsValid();
+        var result = tx.IsValid(_exampleDifficulty, _exampleFee);
 
         // Assert
         result.Success.Should().BeFalse();
@@ -73,7 +78,7 @@ public class TransactionUnitTest
         );
 
         // Act
-        var result = tx.IsValid();
+        var result = tx.IsValid(_exampleDifficulty, _exampleFee);
 
         // Assert
         result.Success.Should().BeFalse();
@@ -95,7 +100,7 @@ public class TransactionUnitTest
             .SetValue(tx, "abc");
 
         // Act
-        var valid = tx.IsValid();
+        var valid = tx.IsValid(_exampleDifficulty, _exampleFee);
 
         // Assert
         Assert.False(valid.Success);
@@ -107,7 +112,7 @@ public class TransactionUnitTest
         // Arrange
         var txInput = new TransactionInput(
             fromAddress: _loki.PublicKey,
-            amount: 1000,
+            amount: 1,
             previousTx: "previousTxHash"
         );
 
@@ -120,13 +125,13 @@ public class TransactionUnitTest
             {
                 new TransactionOutput(
                     toAddress: _loki.PublicKey,
-                    amount: 1000
+                    amount: 1
                 )
             }
         );
 
         // Act
-        var valid = tx.IsValid();
+        var valid = tx.IsValid(_exampleDifficulty, _exampleFee);
 
         // Assert
         Assert.True(valid.Success);
@@ -139,7 +144,7 @@ public class TransactionUnitTest
         var tx = new Transaction();
 
         // Act
-        var valid = tx.IsValid();
+        var valid = tx.IsValid(_exampleDifficulty, _exampleFee);
 
         // Assert
         Assert.False(valid.Success);
@@ -166,7 +171,7 @@ public class TransactionUnitTest
         );
 
         // Act
-        var valid = tx.IsValid();
+        var valid = tx.IsValid(_exampleDifficulty, _exampleFee);
 
         // Assert
         Assert.False(valid.Success);

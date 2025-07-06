@@ -131,11 +131,12 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain(_loki.PublicKey);
+        var utxo = blockchain.Blocks[0].Transactions[0];
 
         var txInput = new TransactionInput(
             fromAddress: _loki.PublicKey,
             amount: 10,
-            previousTx: "previousTx");
+            previousTx: utxo.Hash);
 
         txInput.Sign(_loki.PrivateKey);
 
@@ -163,11 +164,12 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain(_loki.PublicKey);
+        var utxo = blockchain.Blocks[0].Transactions[0];
 
         var txInput = new TransactionInput(
             fromAddress: _loki.PublicKey,
             amount: 10,
-            previousTx: "previousTx");
+            previousTx: utxo.Hash);
 
         txInput.Sign(_loki.PrivateKey);
 

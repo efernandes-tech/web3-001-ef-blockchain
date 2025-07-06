@@ -12,7 +12,7 @@ namespace EF.Blockchain.Tests.IntegrationTest.Commons;
 /// </summary>
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
-    private readonly Domain.Blockchain _mockBlockchain;
+    public readonly Domain.Blockchain _mockBlockchain;
 
     /// <summary>
     /// Initializes the factory with a custom or mocked Blockchain instance.
