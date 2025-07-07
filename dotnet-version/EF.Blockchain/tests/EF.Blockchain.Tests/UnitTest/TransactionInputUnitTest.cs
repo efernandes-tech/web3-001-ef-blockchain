@@ -120,7 +120,7 @@ public class TransactionInputUnitTest
         var result = txInput.IsValid();
 
         // Assert
-        result.Success.Should().BeFalse();
+        Assert.False(result.Success);
     }
 
     [Fact]
@@ -141,10 +141,8 @@ public class TransactionInputUnitTest
         var result = txi.IsValid();
 
         // Assert
-        result.Success.Should().BeFalse();
+        Assert.False(result.Success);
     }
-
-    // ########## ########## ########## ########## ##########
 
     [Fact]
     public void TransactionInputTests_IsValid_ShouldNotBeValidErrorVerifyingSing()
@@ -161,7 +159,7 @@ public class TransactionInputUnitTest
         var result = txInput.IsValid();
 
         // Assert
-        result.Success.Should().BeFalse();
+        Assert.False(result.Success);
         Assert.Contains("Error verifying signature", result.Message);
     }
 }

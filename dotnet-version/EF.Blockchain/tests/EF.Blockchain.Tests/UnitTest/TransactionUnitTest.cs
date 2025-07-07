@@ -1,5 +1,4 @@
 using EF.Blockchain.Domain;
-using FluentAssertions;
 
 namespace EF.Blockchain.Tests.UnitTest;
 
@@ -61,7 +60,7 @@ public class TransactionUnitTest
         var result = tx.IsValid(_exampleDifficulty, _exampleFee);
 
         // Assert
-        result.Success.Should().BeFalse();
+        Assert.False(result.Success);
         Assert.Contains("Invalid TXO reference hash", result.Message);
     }
 
@@ -82,7 +81,7 @@ public class TransactionUnitTest
         var result = tx.IsValid(_exampleDifficulty, _exampleFee);
 
         // Assert
-        result.Success.Should().BeFalse();
+        Assert.False(result.Success);
         Assert.Contains("Invalid tx: input amounts must be equals or greater than outputs amounts", result.Message);
     }
 
@@ -204,7 +203,7 @@ public class TransactionUnitTest
         var fee = tx.GetFee();
 
         // Assert
-        fee.Should().BeGreaterThan(0);
+        Assert.True(fee > 0);
     }
 
     [Fact]
@@ -217,7 +216,7 @@ public class TransactionUnitTest
         var fee = tx.GetFee();
 
         // Assert
-        fee.Should().Be(0);
+        Assert.Equal(0, fee);
     }
 
     [Fact]
@@ -231,7 +230,7 @@ public class TransactionUnitTest
         var valid = tx.IsValid(_exampleDifficulty, _exampleFee);
 
         // Assert
-        valid.Success.Should().BeTrue();
+        Assert.True(valid.Success);
     }
 
     [Fact]
@@ -252,6 +251,6 @@ public class TransactionUnitTest
         var result = tx.IsValid(_exampleDifficulty, _exampleFee);
 
         // Assert
-        result.Success.Should().BeFalse();
+        Assert.False(result.Success);
     }
 }

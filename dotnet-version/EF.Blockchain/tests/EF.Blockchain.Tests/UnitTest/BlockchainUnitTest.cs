@@ -1,5 +1,4 @@
 using EF.Blockchain.Domain;
-using FluentAssertions;
 
 namespace EF.Blockchain.Tests.UnitTest;
 
@@ -158,7 +157,7 @@ public class BlockchainUnitTest
         var validation = blockchain.AddTransaction(transaction);
 
         // Assert
-        validation.Success.Should().BeTrue();
+        Assert.True(validation.Success);
     }
 
     [Fact]
@@ -190,7 +189,7 @@ public class BlockchainUnitTest
         var result = blockchain.AddTransaction(tx);
 
         // Assert
-        result.Success.Should().BeFalse();
+        Assert.False(result.Success);
     }
 
     [Fact]
@@ -237,8 +236,8 @@ public class BlockchainUnitTest
         var validation = blockchain.AddTransaction(tx2);
 
         // Assert
-        validation.Success.Should().BeFalse();
-        validation.Message.Should().Be("This wallet has a pending transaction");
+        Assert.False(validation.Success);
+        Assert.Equal("This wallet has a pending transaction", validation.Message);
     }
 
     [Fact]
@@ -260,7 +259,7 @@ public class BlockchainUnitTest
         var validation = blockchain.AddTransaction(tx);
 
         // Assert
-        validation.Success.Should().BeFalse();
+        Assert.False(validation.Success);
     }
 
     [Fact]
@@ -288,7 +287,7 @@ public class BlockchainUnitTest
         var validation = blockchain.AddTransaction(tx);
 
         // Assert
-        validation.Success.Should().BeFalse();
+        Assert.False(validation.Success);
     }
 
     [Fact]
@@ -311,7 +310,7 @@ public class BlockchainUnitTest
         var result = blockchain.GetTransaction(tx.Hash);
 
         // Assert
-        result.MempoolIndex.Should().Be(0);
+        Assert.Equal(0, result.MempoolIndex);
     }
 
     [Fact]
@@ -339,7 +338,7 @@ public class BlockchainUnitTest
         var result = blockchain.GetTransaction(tx.Hash);
 
         // Assert
-        result.BlockIndex.Should().Be(1);
+        Assert.Equal(1, result.BlockIndex);
     }
 
     [Fact]
@@ -352,8 +351,8 @@ public class BlockchainUnitTest
         var result = blockchain.GetTransaction("xyz");
 
         // Assert
-        result.BlockIndex.Should().Be(-1);
-        result.MempoolIndex.Should().Be(-1);
+        Assert.Equal(-1, result.BlockIndex);
+        Assert.Equal(-1, result.MempoolIndex);
     }
 
     [Fact]
@@ -429,7 +428,7 @@ public class BlockchainUnitTest
         var result = blockchain.AddBlock(block);
 
         // Assert
-        result.Success.Should().BeFalse();
+        Assert.False(result.Success);
     }
 
     [Fact]
@@ -476,7 +475,7 @@ public class BlockchainUnitTest
         var result = blockchain.AddBlock(block);
 
         // Assert
-        result.Success.Should().BeFalse();
+        Assert.False(result.Success);
     }
 
     [Fact]
@@ -517,7 +516,7 @@ public class BlockchainUnitTest
         var balance = blockchain.GetBalance(_loki.PublicKey);
 
         // Assert
-        balance.Should().BeGreaterThan(0);
+        Assert.True(balance > 0);
     }
 
     [Fact]
@@ -530,7 +529,7 @@ public class BlockchainUnitTest
         var balance = blockchain.GetBalance(_thor.PublicKey);
 
         // Assert
-        balance.Should().Be(0);
+        Assert.Equal(0, balance);
     }
 
     [Fact]
@@ -568,6 +567,6 @@ public class BlockchainUnitTest
         var utxos = blockchain.GetUtxo(_loki.PublicKey);
 
         // Assert
-        utxos.Should().NotBeEmpty();
+        Assert.NotEmpty(utxos);
     }
 }
