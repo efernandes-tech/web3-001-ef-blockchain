@@ -1,5 +1,4 @@
 using EF.Blockchain.Domain;
-using FluentAssertions;
 
 namespace EF.Blockchain.Tests.UnitTest;
 
@@ -94,7 +93,7 @@ public class BlockUnitTest
         var result = block.IsValid(_genesis.Hash, _genesis.Index, _difficulty, _feePerTx);
 
         // Assert
-        result.Success.Should().BeFalse();
+        Assert.False(result.Success);
     }
 
     [Fact]

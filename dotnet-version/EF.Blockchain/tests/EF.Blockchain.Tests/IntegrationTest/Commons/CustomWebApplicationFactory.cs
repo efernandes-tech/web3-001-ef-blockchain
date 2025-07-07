@@ -1,4 +1,3 @@
-using EF.Blockchain.Domain;
 using EF.Blockchain.Tests.Mocks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
