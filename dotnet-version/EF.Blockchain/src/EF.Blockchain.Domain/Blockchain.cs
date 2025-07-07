@@ -9,7 +9,7 @@ public class Blockchain
     public List<Transaction> Mempool { get; private set; }
     public int NextIndex { get; private set; } = 0;
     public static readonly int DIFFICULTY_FACTOR = 5;
-    public static readonly int TX_PER_BLOCK = 2; // Max transactions per block
+    public static readonly int TX_PER_BLOCK = 2;
     public static readonly int MAX_DIFFICULTY = 62;
 
     public Blockchain(string miner)
@@ -158,7 +158,7 @@ public class Blockchain
         {
             BlockIndex = -1,
             MempoolIndex = -1,
-            Transaction = null! // or handle null properly
+            Transaction = null!
         };
     }
 
@@ -176,10 +176,8 @@ public class Blockchain
             );
 
             if (!validation.Success)
-                return new Validation(false,
-                    $"Invalid block #{currentBlock.Index}: {validation.Message}");
+                return new Validation(false, $"Invalid block #{currentBlock.Index}: {validation.Message}");
         }
-
         return new Validation();
     }
 
@@ -243,6 +241,7 @@ public class Blockchain
         foreach (var txi in txIns)
         {
             var index = txOuts.FindIndex(txo => txo.Amount == txi.Amount);
+
             if (index != -1)
                 txOuts.RemoveAt(index);
         }

@@ -46,7 +46,7 @@ public class TransactionUnitTest
     public void TransactionTests_IsValid_ShouldNotBeValidTxoHashDiffTxHash()
     {
         // Arrange
-        var txInput = new TransactionInput(_loki.PublicKey, 10, "abc");
+        var txInput = new TransactionInput(_loki.PublicKey, 10, "abc", previousTx: "xyz");
         txInput.Sign(_loki.PrivateKey);
 
         var txOutput = new TransactionOutput(_loki.PublicKey, 10);
@@ -62,13 +62,14 @@ public class TransactionUnitTest
 
         // Assert
         result.Success.Should().BeFalse();
+        Assert.Contains("Invalid TXO reference hash", result.Message);
     }
 
     [Fact]
     public void TransactionTests_IsValid_ShouldNotBeValidInputsLessOutputs()
     {
         // Arrange
-        var txInput = new TransactionInput(_loki.PublicKey, 1, "abc");
+        var txInput = new TransactionInput(_loki.PublicKey, 1, "abc", "xyz");
         txInput.Sign(_loki.PrivateKey);
 
         var txOutput = new TransactionOutput(_loki.PublicKey, 2);
@@ -82,6 +83,7 @@ public class TransactionUnitTest
 
         // Assert
         result.Success.Should().BeFalse();
+        Assert.Contains("Invalid tx: input amounts must be equals or greater than outputs amounts", result.Message);
     }
 
     [Fact]
@@ -175,5 +177,81 @@ public class TransactionUnitTest
 
         // Assert
         Assert.False(valid.Success);
+    }
+
+    [Fact]
+    public void TransactionTests_GetFee_ShouldGetFee()
+    {
+        // Arrange
+        var txInput = new TransactionInput(
+            fromAddress: _loki.PublicKey,
+            amount: 11,
+            previousTx: _exampleTx
+        );
+        txInput.Sign(_loki.PrivateKey);
+
+        var txOutput = new TransactionOutput(
+            toAddress: _thor.PublicKey,
+            amount: 10
+        );
+
+        var tx = new Transaction(
+            txInputs: new List<TransactionInput> { txInput },
+            txOutputs: new List<TransactionOutput> { txOutput }
+        );
+
+        // Act
+        var fee = tx.GetFee();
+
+        // Assert
+        fee.Should().BeGreaterThan(0);
+    }
+
+    [Fact]
+    public void TransactionTests_GetFee_ShouldGetZeroFee()
+    {
+        // Arrange
+        var tx = new Transaction(); // No inputs
+
+        // Act
+        var fee = tx.GetFee();
+
+        // Assert
+        fee.Should().Be(0);
+    }
+
+    [Fact]
+    public void TransactionTests_IsValid_ShouldCreateFromReward()
+    {
+        // Arrange
+        var txo = new TransactionOutput(_loki.PublicKey, 10);
+        var tx = Transaction.FromReward(txo);
+
+        // Act
+        var valid = tx.IsValid(_exampleDifficulty, _exampleFee);
+
+        // Assert
+        valid.Success.Should().BeTrue();
+    }
+
+    [Fact]
+    public void TransactionTests_IsValid_ShouldNotBeValidFeeExcess()
+    {
+        // Arrange
+        var txo = new TransactionOutput(
+            toAddress: _thor.PublicKey,
+            amount: int.MaxValue
+        );
+
+        var tx = new Transaction(
+            type: TransactionType.FEE,
+            txOutputs: new List<TransactionOutput> { txo }
+        );
+
+        // Act
+        var result = tx.IsValid(_exampleDifficulty, _exampleFee);
+
+        // Assert
+        result.Success.Should().BeFalse();
     }
 }

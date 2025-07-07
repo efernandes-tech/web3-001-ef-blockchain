@@ -6,10 +6,12 @@ namespace EF.Blockchain.Tests.UnitTest;
 public class BlockchainUnitTest
 {
     private readonly Wallet _loki;
+    private readonly Wallet _thor;
 
     public BlockchainUnitTest()
     {
         _loki = new Wallet();
+        _thor = new Wallet();
     }
 
     [Fact]
@@ -131,12 +133,12 @@ public class BlockchainUnitTest
     {
         // Arrange
         var blockchain = new Domain.Blockchain(_loki.PublicKey);
-        var utxo = blockchain.Blocks[0].Transactions[0];
+        var txo = blockchain.Blocks[0].Transactions[0];
 
         var txInput = new TransactionInput(
             fromAddress: _loki.PublicKey,
             amount: 10,
-            previousTx: utxo.Hash);
+            previousTx: txo.Hash);
 
         txInput.Sign(_loki.PrivateKey);
 
@@ -160,16 +162,48 @@ public class BlockchainUnitTest
     }
 
     [Fact]
+    public void BlockchainTests_AddTransaction_ShouldNotAddTransactionInvalidUTXO()
+    {
+        // Arrange
+        var blockchain = new Domain.Blockchain(_loki.PublicKey);
+
+        var tx = new Transaction(
+            txInputs: new List<TransactionInput>
+            {
+                new TransactionInput(
+                    amount: 10,
+                    previousTx: "wrong",
+                    fromAddress: _loki.PublicKey,
+                    signature: "abc"
+                )
+            },
+            txOutputs: new List<TransactionOutput>
+            {
+                new TransactionOutput(
+                    amount: 10,
+                    toAddress : "abc"
+                )
+            }
+        );
+
+        // Act
+        var result = blockchain.AddTransaction(tx);
+
+        // Assert
+        result.Success.Should().BeFalse();
+    }
+
+    [Fact]
     public void BlockchainTests_AddTransaction_ShouldNotAddTransactionPendingTx()
     {
         // Arrange
         var blockchain = new Domain.Blockchain(_loki.PublicKey);
-        var utxo = blockchain.Blocks[0].Transactions[0];
+        var txo = blockchain.Blocks[0].Transactions[0];
 
         var txInput = new TransactionInput(
             fromAddress: _loki.PublicKey,
             amount: 10,
-            previousTx: utxo.Hash);
+            previousTx: txo.Hash);
 
         txInput.Sign(_loki.PrivateKey);
 
@@ -471,5 +505,69 @@ public class BlockchainUnitTest
 
         // Assert
         Assert.Null(info);
+    }
+
+    [Fact]
+    public void BlockchainTests_GetBalance_ShouldGetBalance()
+    {
+        // Arrange
+        var blockchain = new Domain.Blockchain(_loki.PublicKey);
+
+        // Act
+        var balance = blockchain.GetBalance(_loki.PublicKey);
+
+        // Assert
+        balance.Should().BeGreaterThan(0);
+    }
+
+    [Fact]
+    public void BlockchainTests_GetBalance_ShouldGetZeroBalance()
+    {
+        // Arrange
+        var blockchain = new Domain.Blockchain(_loki.PublicKey);
+
+        // Act
+        var balance = blockchain.GetBalance(_thor.PublicKey);
+
+        // Assert
+        balance.Should().Be(0);
+    }
+
+    [Fact]
+    public void BlockchainTests_GetUtxo_ShouldGetUtxo()
+    {
+        // Arrange
+        var blockchain = new Domain.Blockchain(_loki.PublicKey);
+        var baseTx = blockchain.Blocks[0].Transactions[0];
+
+        var input = new TransactionInput(
+            fromAddress: _loki.PublicKey,
+            amount: 10,
+            previousTx: baseTx.Hash
+        );
+        input.Sign(_loki.PrivateKey);
+
+        var tx = new Transaction(
+            txInputs: new List<TransactionInput> { input },
+            txOutputs: new List<TransactionOutput>
+            {
+            new TransactionOutput("abc", 5),
+            new TransactionOutput(_loki.PublicKey, 4)
+            }
+        );
+
+        var block = new Block(
+            index: 1,
+            previousHash: blockchain.GetLastBlock().Hash,
+            transactions: new List<Transaction> { tx }
+        );
+
+        blockchain.Blocks.Add(block);
+
+        // Act
+        var utxos = blockchain.GetUtxo(_loki.PublicKey);
+
+        // Assert
+        utxos.Should().NotBeEmpty();
     }
 }

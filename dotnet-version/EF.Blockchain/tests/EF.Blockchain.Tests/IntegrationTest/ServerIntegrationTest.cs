@@ -232,6 +232,21 @@ public class ServerIntegrationTest
     }
 
     [Fact]
+    public async Task ServerTests_GetWallet_ShouldGetBalance()
+    {
+        // Arrange
+        var walletAddress = BlockchainMockFactory.MockedPublicKey;
+
+        // Act
+        var response = await _flurl.Request($"/wallets/{walletAddress}").GetAsync();
+        var json = await response.GetJsonAsync<WalletResponse>();
+
+        // Assert
+        response.StatusCode.Should().Be(200);
+        json.Balance.Should().Be(630); // or your expected mocked value
+    }
+
+    [Fact]
     public async Task ServerTests_PostTransaction_ShouldAddTx()
     {
         // Arrange
@@ -287,6 +302,8 @@ public class ServerIntegrationTest
     private record TransactionResponse(
         Transaction Transaction
     );
+
+    private record WalletResponse(int Balance);
 
     private IFlurlClient CreateFlurlClientWithBlockHash(string hash, Transaction? transaction = null)
     {

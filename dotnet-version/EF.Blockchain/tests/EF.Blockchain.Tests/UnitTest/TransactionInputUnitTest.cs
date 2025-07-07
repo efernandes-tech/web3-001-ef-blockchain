@@ -5,6 +5,8 @@ namespace EF.Blockchain.Tests.UnitTest;
 
 public class TransactionInputUnitTest
 {
+    private const string _exampleTx = "8eba6c75bbd12d9e21f657b76726312aad08f2d3a10aee52d2b1017e6248c186";
+
     private readonly Wallet _loki;
     private readonly Wallet _thor;
 
@@ -116,6 +118,27 @@ public class TransactionInputUnitTest
 
         // Act
         var result = txInput.IsValid();
+
+        // Assert
+        result.Success.Should().BeFalse();
+    }
+
+    [Fact]
+    public void TransactionInputTests_IsValid_ShouldCreateFromTxo()
+    {
+        // Arrange
+        var txo = new TransactionOutput(_loki.PublicKey, 10, _exampleTx);
+
+        var txi = TransactionInput.FromTxo(txo);
+        txi.Sign(_loki.PrivateKey);
+
+        // Force invalid hash with reflection
+        typeof(TransactionInput)
+            .GetProperty(nameof(TransactionInput.Amount))!
+            .SetValue(txi, 11);
+
+        // Act
+        var result = txi.IsValid();
 
         // Assert
         result.Success.Should().BeFalse();
