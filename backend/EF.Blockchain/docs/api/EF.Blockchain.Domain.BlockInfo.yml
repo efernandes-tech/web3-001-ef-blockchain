@@ -1,0 +1,723 @@
+### YamlMime:ManagedReference
+items:
+- uid: EF.Blockchain.Domain.BlockInfo
+  commentId: T:EF.Blockchain.Domain.BlockInfo
+  id: BlockInfo
+  parent: EF.Blockchain.Domain
+  children:
+  - EF.Blockchain.Domain.BlockInfo.#ctor(System.Int32,System.String,System.Int32,System.Int32,System.Int32,System.Collections.Generic.List{EF.Blockchain.Domain.Transaction})
+  - EF.Blockchain.Domain.BlockInfo.Difficulty
+  - EF.Blockchain.Domain.BlockInfo.FeePerTx
+  - EF.Blockchain.Domain.BlockInfo.Index
+  - EF.Blockchain.Domain.BlockInfo.MaxDifficulty
+  - EF.Blockchain.Domain.BlockInfo.PreviousHash
+  - EF.Blockchain.Domain.BlockInfo.Transactions
+  langs:
+  - csharp
+  - vb
+  name: BlockInfo
+  nameWithType: BlockInfo
+  fullName: EF.Blockchain.Domain.BlockInfo
+  type: Class
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/BlockInfo.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: BlockInfo
+    path: ../src/EF.Blockchain.Domain/BlockInfo.cs
+    startLine: 5
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Represents the metadata required to create or mine the next block in the blockchain.
+  example: []
+  syntax:
+    content: public class BlockInfo
+    content.vb: Public Class BlockInfo
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: EF.Blockchain.Domain.BlockInfo.Index
+  commentId: P:EF.Blockchain.Domain.BlockInfo.Index
+  id: Index
+  parent: EF.Blockchain.Domain.BlockInfo
+  langs:
+  - csharp
+  - vb
+  name: Index
+  nameWithType: BlockInfo.Index
+  fullName: EF.Blockchain.Domain.BlockInfo.Index
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/BlockInfo.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: Index
+    path: ../src/EF.Blockchain.Domain/BlockInfo.cs
+    startLine: 10
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Index of the next block to be mined.
+  example: []
+  syntax:
+    content: public int Index { get; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property Index As Integer
+  overload: EF.Blockchain.Domain.BlockInfo.Index*
+- uid: EF.Blockchain.Domain.BlockInfo.PreviousHash
+  commentId: P:EF.Blockchain.Domain.BlockInfo.PreviousHash
+  id: PreviousHash
+  parent: EF.Blockchain.Domain.BlockInfo
+  langs:
+  - csharp
+  - vb
+  name: PreviousHash
+  nameWithType: BlockInfo.PreviousHash
+  fullName: EF.Blockchain.Domain.BlockInfo.PreviousHash
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/BlockInfo.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: PreviousHash
+    path: ../src/EF.Blockchain.Domain/BlockInfo.cs
+    startLine: 15
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Hash of the last confirmed block in the chain.
+  example: []
+  syntax:
+    content: public string PreviousHash { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property PreviousHash As String
+  overload: EF.Blockchain.Domain.BlockInfo.PreviousHash*
+- uid: EF.Blockchain.Domain.BlockInfo.Difficulty
+  commentId: P:EF.Blockchain.Domain.BlockInfo.Difficulty
+  id: Difficulty
+  parent: EF.Blockchain.Domain.BlockInfo
+  langs:
+  - csharp
+  - vb
+  name: Difficulty
+  nameWithType: BlockInfo.Difficulty
+  fullName: EF.Blockchain.Domain.BlockInfo.Difficulty
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/BlockInfo.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: Difficulty
+    path: ../src/EF.Blockchain.Domain/BlockInfo.cs
+    startLine: 20
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Current difficulty level for mining.
+  example: []
+  syntax:
+    content: public int Difficulty { get; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property Difficulty As Integer
+  overload: EF.Blockchain.Domain.BlockInfo.Difficulty*
+- uid: EF.Blockchain.Domain.BlockInfo.MaxDifficulty
+  commentId: P:EF.Blockchain.Domain.BlockInfo.MaxDifficulty
+  id: MaxDifficulty
+  parent: EF.Blockchain.Domain.BlockInfo
+  langs:
+  - csharp
+  - vb
+  name: MaxDifficulty
+  nameWithType: BlockInfo.MaxDifficulty
+  fullName: EF.Blockchain.Domain.BlockInfo.MaxDifficulty
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/BlockInfo.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: MaxDifficulty
+    path: ../src/EF.Blockchain.Domain/BlockInfo.cs
+    startLine: 25
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Maximum allowed difficulty in the network.
+  example: []
+  syntax:
+    content: public int MaxDifficulty { get; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property MaxDifficulty As Integer
+  overload: EF.Blockchain.Domain.BlockInfo.MaxDifficulty*
+- uid: EF.Blockchain.Domain.BlockInfo.FeePerTx
+  commentId: P:EF.Blockchain.Domain.BlockInfo.FeePerTx
+  id: FeePerTx
+  parent: EF.Blockchain.Domain.BlockInfo
+  langs:
+  - csharp
+  - vb
+  name: FeePerTx
+  nameWithType: BlockInfo.FeePerTx
+  fullName: EF.Blockchain.Domain.BlockInfo.FeePerTx
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/BlockInfo.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: FeePerTx
+    path: ../src/EF.Blockchain.Domain/BlockInfo.cs
+    startLine: 30
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Fee applied per transaction included in the block.
+  example: []
+  syntax:
+    content: public int FeePerTx { get; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property FeePerTx As Integer
+  overload: EF.Blockchain.Domain.BlockInfo.FeePerTx*
+- uid: EF.Blockchain.Domain.BlockInfo.Transactions
+  commentId: P:EF.Blockchain.Domain.BlockInfo.Transactions
+  id: Transactions
+  parent: EF.Blockchain.Domain.BlockInfo
+  langs:
+  - csharp
+  - vb
+  name: Transactions
+  nameWithType: BlockInfo.Transactions
+  fullName: EF.Blockchain.Domain.BlockInfo.Transactions
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/BlockInfo.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: Transactions
+    path: ../src/EF.Blockchain.Domain/BlockInfo.cs
+    startLine: 35
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Transactions selected from the mempool for inclusion in the block.
+  example: []
+  syntax:
+    content: public List<Transaction> Transactions { get; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{EF.Blockchain.Domain.Transaction}
+    content.vb: Public Property Transactions As List(Of Transaction)
+  overload: EF.Blockchain.Domain.BlockInfo.Transactions*
+- uid: EF.Blockchain.Domain.BlockInfo.#ctor(System.Int32,System.String,System.Int32,System.Int32,System.Int32,System.Collections.Generic.List{EF.Blockchain.Domain.Transaction})
+  commentId: M:EF.Blockchain.Domain.BlockInfo.#ctor(System.Int32,System.String,System.Int32,System.Int32,System.Int32,System.Collections.Generic.List{EF.Blockchain.Domain.Transaction})
+  id: '#ctor(System.Int32,System.String,System.Int32,System.Int32,System.Int32,System.Collections.Generic.List{EF.Blockchain.Domain.Transaction})'
+  parent: EF.Blockchain.Domain.BlockInfo
+  langs:
+  - csharp
+  - vb
+  name: BlockInfo(int, string, int, int, int, List<Transaction>)
+  nameWithType: BlockInfo.BlockInfo(int, string, int, int, int, List<Transaction>)
+  fullName: EF.Blockchain.Domain.BlockInfo.BlockInfo(int, string, int, int, int, System.Collections.Generic.List<EF.Blockchain.Domain.Transaction>)
+  type: Constructor
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/BlockInfo.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: .ctor
+    path: ../src/EF.Blockchain.Domain/BlockInfo.cs
+    startLine: 46
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Initializes a new instance of the <xref href="EF.Blockchain.Domain.BlockInfo" data-throw-if-not-resolved="false"></xref> class.
+  example: []
+  syntax:
+    content: public BlockInfo(int index, string previousHash, int difficulty, int maxDifficulty, int feePerTx, List<Transaction> transactions)
+    parameters:
+    - id: index
+      type: System.Int32
+      description: Index of the block.
+    - id: previousHash
+      type: System.String
+      description: Hash of the previous block.
+    - id: difficulty
+      type: System.Int32
+      description: Current mining difficulty.
+    - id: maxDifficulty
+      type: System.Int32
+      description: Maximum difficulty allowed.
+    - id: feePerTx
+      type: System.Int32
+      description: Fee per transaction.
+    - id: transactions
+      type: System.Collections.Generic.List{EF.Blockchain.Domain.Transaction}
+      description: Transactions included in the block.
+    content.vb: Public Sub New(index As Integer, previousHash As String, difficulty As Integer, maxDifficulty As Integer, feePerTx As Integer, transactions As List(Of Transaction))
+  overload: EF.Blockchain.Domain.BlockInfo.#ctor*
+  nameWithType.vb: BlockInfo.New(Integer, String, Integer, Integer, Integer, List(Of Transaction))
+  fullName.vb: EF.Blockchain.Domain.BlockInfo.New(Integer, String, Integer, Integer, Integer, System.Collections.Generic.List(Of EF.Blockchain.Domain.Transaction))
+  name.vb: New(Integer, String, Integer, Integer, Integer, List(Of Transaction))
+references:
+- uid: EF.Blockchain.Domain
+  commentId: N:EF.Blockchain.Domain
+  href: EF.html
+  name: EF.Blockchain.Domain
+  nameWithType: EF.Blockchain.Domain
+  fullName: EF.Blockchain.Domain
+  spec.csharp:
+  - uid: EF
+    name: EF
+    href: EF.html
+  - name: .
+  - uid: EF.Blockchain
+    name: Blockchain
+    href: EF.Blockchain.html
+  - name: .
+  - uid: EF.Blockchain.Domain
+    name: Domain
+    href: EF.Blockchain.Domain.html
+  spec.vb:
+  - uid: EF
+    name: EF
+    href: EF.html
+  - name: .
+  - uid: EF.Blockchain
+    name: Blockchain
+    href: EF.Blockchain.html
+  - name: .
+  - uid: EF.Blockchain.Domain
+    name: Domain
+    href: EF.Blockchain.Domain.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: EF.Blockchain.Domain.BlockInfo.Index*
+  commentId: Overload:EF.Blockchain.Domain.BlockInfo.Index
+  href: EF.Blockchain.Domain.BlockInfo.html#EF_Blockchain_Domain_BlockInfo_Index
+  name: Index
+  nameWithType: BlockInfo.Index
+  fullName: EF.Blockchain.Domain.BlockInfo.Index
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: EF.Blockchain.Domain.BlockInfo.PreviousHash*
+  commentId: Overload:EF.Blockchain.Domain.BlockInfo.PreviousHash
+  href: EF.Blockchain.Domain.BlockInfo.html#EF_Blockchain_Domain_BlockInfo_PreviousHash
+  name: PreviousHash
+  nameWithType: BlockInfo.PreviousHash
+  fullName: EF.Blockchain.Domain.BlockInfo.PreviousHash
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: EF.Blockchain.Domain.BlockInfo.Difficulty*
+  commentId: Overload:EF.Blockchain.Domain.BlockInfo.Difficulty
+  href: EF.Blockchain.Domain.BlockInfo.html#EF_Blockchain_Domain_BlockInfo_Difficulty
+  name: Difficulty
+  nameWithType: BlockInfo.Difficulty
+  fullName: EF.Blockchain.Domain.BlockInfo.Difficulty
+- uid: EF.Blockchain.Domain.BlockInfo.MaxDifficulty*
+  commentId: Overload:EF.Blockchain.Domain.BlockInfo.MaxDifficulty
+  href: EF.Blockchain.Domain.BlockInfo.html#EF_Blockchain_Domain_BlockInfo_MaxDifficulty
+  name: MaxDifficulty
+  nameWithType: BlockInfo.MaxDifficulty
+  fullName: EF.Blockchain.Domain.BlockInfo.MaxDifficulty
+- uid: EF.Blockchain.Domain.BlockInfo.FeePerTx*
+  commentId: Overload:EF.Blockchain.Domain.BlockInfo.FeePerTx
+  href: EF.Blockchain.Domain.BlockInfo.html#EF_Blockchain_Domain_BlockInfo_FeePerTx
+  name: FeePerTx
+  nameWithType: BlockInfo.FeePerTx
+  fullName: EF.Blockchain.Domain.BlockInfo.FeePerTx
+- uid: EF.Blockchain.Domain.BlockInfo.Transactions*
+  commentId: Overload:EF.Blockchain.Domain.BlockInfo.Transactions
+  href: EF.Blockchain.Domain.BlockInfo.html#EF_Blockchain_Domain_BlockInfo_Transactions
+  name: Transactions
+  nameWithType: BlockInfo.Transactions
+  fullName: EF.Blockchain.Domain.BlockInfo.Transactions
+- uid: System.Collections.Generic.List{EF.Blockchain.Domain.Transaction}
+  commentId: T:System.Collections.Generic.List{EF.Blockchain.Domain.Transaction}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<Transaction>
+  nameWithType: List<Transaction>
+  fullName: System.Collections.Generic.List<EF.Blockchain.Domain.Transaction>
+  nameWithType.vb: List(Of Transaction)
+  fullName.vb: System.Collections.Generic.List(Of EF.Blockchain.Domain.Transaction)
+  name.vb: List(Of Transaction)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: EF.Blockchain.Domain.Transaction
+    name: Transaction
+    href: EF.Blockchain.Domain.Transaction.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: EF.Blockchain.Domain.Transaction
+    name: Transaction
+    href: EF.Blockchain.Domain.Transaction.html
+  - name: )
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: EF.Blockchain.Domain.BlockInfo
+  commentId: T:EF.Blockchain.Domain.BlockInfo
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.BlockInfo.html
+  name: BlockInfo
+  nameWithType: BlockInfo
+  fullName: EF.Blockchain.Domain.BlockInfo
+- uid: EF.Blockchain.Domain.BlockInfo.#ctor*
+  commentId: Overload:EF.Blockchain.Domain.BlockInfo.#ctor
+  href: EF.Blockchain.Domain.BlockInfo.html#EF_Blockchain_Domain_BlockInfo__ctor_System_Int32_System_String_System_Int32_System_Int32_System_Int32_System_Collections_Generic_List_EF_Blockchain_Domain_Transaction__
+  name: BlockInfo
+  nameWithType: BlockInfo.BlockInfo
+  fullName: EF.Blockchain.Domain.BlockInfo.BlockInfo
+  nameWithType.vb: BlockInfo.New
+  fullName.vb: EF.Blockchain.Domain.BlockInfo.New
+  name.vb: New

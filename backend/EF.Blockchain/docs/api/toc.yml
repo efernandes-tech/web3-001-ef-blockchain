@@ -1,5 +1,28 @@
 ### YamlMime:TableOfContent
 items:
+- uid: EF.Blockchain.Client.Miner
+  name: EF.Blockchain.Client.Miner
+  type: Namespace
+  items:
+  - uid: EF.Blockchain.Client.Miner.MinerApp
+    name: MinerApp
+    type: Class
+  - uid: EF.Blockchain.Client.Miner.MinerAppFactory
+    name: MinerAppFactory
+    type: Class
+- uid: EF.Blockchain.Client.Wallet
+  name: EF.Blockchain.Client.Wallet
+  type: Namespace
+  items:
+  - uid: EF.Blockchain.Client.Wallet.WalletApp
+    name: WalletApp
+    type: Class
+  - uid: EF.Blockchain.Client.Wallet.WalletAppFactory
+    name: WalletAppFactory
+    type: Class
+  - uid: EF.Blockchain.Client.Wallet.WalletResponse
+    name: WalletResponse
+    type: Class
 - uid: EF.Blockchain.Domain
   name: EF.Blockchain.Domain
   type: Namespace
@@ -7,10 +30,124 @@ items:
   - uid: EF.Blockchain.Domain.Block
     name: Block
     type: Class
+  - uid: EF.Blockchain.Domain.BlockInfo
+    name: BlockInfo
+    type: Class
   - uid: EF.Blockchain.Domain.Blockchain
     name: Blockchain
     type: Class
+  - uid: EF.Blockchain.Domain.Transaction
+    name: Transaction
+    type: Class
+  - uid: EF.Blockchain.Domain.TransactionInput
+    name: TransactionInput
+    type: Class
+  - uid: EF.Blockchain.Domain.TransactionOutput
+    name: TransactionOutput
+    type: Class
+  - uid: EF.Blockchain.Domain.TransactionSearch
+    name: TransactionSearch
+    type: Class
+  - uid: EF.Blockchain.Domain.TransactionType
+    name: TransactionType
+    type: Enum
   - uid: EF.Blockchain.Domain.Validation
     name: Validation
+    type: Class
+  - uid: EF.Blockchain.Domain.Wallet
+    name: Wallet
+    type: Class
+- uid: EF.Blockchain.Server.Dtos
+  name: EF.Blockchain.Server.Dtos
+  type: Namespace
+  items:
+  - uid: EF.Blockchain.Server.Dtos.BlockDto
+    name: BlockDto
+    type: Class
+  - uid: EF.Blockchain.Server.Dtos.BlockInfoDto
+    name: BlockInfoDto
+    type: Class
+  - uid: EF.Blockchain.Server.Dtos.StatusDto
+    name: StatusDto
+    type: Class
+  - uid: EF.Blockchain.Server.Dtos.TransactionDto
+    name: TransactionDto
+    type: Class
+  - uid: EF.Blockchain.Server.Dtos.TransactionInputDto
+    name: TransactionInputDto
+    type: Class
+  - uid: EF.Blockchain.Server.Dtos.TransactionOutputDto
+    name: TransactionOutputDto
+    type: Class
+  - uid: EF.Blockchain.Server.Dtos.TransactionSearchDto
+    name: TransactionSearchDto
+    type: Class
+  - uid: EF.Blockchain.Server.Dtos.WalletDto
+    name: WalletDto
+    type: Class
+- uid: EF.Blockchain.Server.Endpoints
+  name: EF.Blockchain.Server.Endpoints
+  type: Namespace
+  items:
+  - uid: EF.Blockchain.Server.Endpoints.BlockEndpoints
+    name: BlockEndpoints
+    type: Class
+  - uid: EF.Blockchain.Server.Endpoints.StatusEndpoints
+    name: StatusEndpoints
+    type: Class
+  - uid: EF.Blockchain.Server.Endpoints.TransactionEndpoints
+    name: TransactionEndpoints
+    type: Class
+  - uid: EF.Blockchain.Server.Endpoints.WalletEndpoints
+    name: WalletEndpoints
+    type: Class
+- uid: EF.Blockchain.Server.Extensions
+  name: EF.Blockchain.Server.Extensions
+  type: Namespace
+  items:
+  - uid: EF.Blockchain.Server.Extensions.EndpointExtensions
+    name: EndpointExtensions
+    type: Class
+- uid: EF.Blockchain.Server.Mappers
+  name: EF.Blockchain.Server.Mappers
+  type: Namespace
+  items:
+  - uid: EF.Blockchain.Server.Mappers.BlockInfoMapper
+    name: BlockInfoMapper
+    type: Class
+  - uid: EF.Blockchain.Server.Mappers.BlockMapper
+    name: BlockMapper
+    type: Class
+  - uid: EF.Blockchain.Server.Mappers.TransactionInputMapper
+    name: TransactionInputMapper
+    type: Class
+  - uid: EF.Blockchain.Server.Mappers.TransactionMapper
+    name: TransactionMapper
+    type: Class
+  - uid: EF.Blockchain.Server.Mappers.TransactionOutputMapper
+    name: TransactionOutputMapper
+    type: Class
+  - uid: EF.Blockchain.Server.Mappers.TransactionSearchMapper
+    name: TransactionSearchMapper
+    type: Class
+  - uid: EF.Blockchain.Server.Mappers.WalletMapper
+    name: WalletMapper
+    type: Class
+- uid: EF.Blockchain.Server.Middleware
+  name: EF.Blockchain.Server.Middleware
+  type: Namespace
+  items:
+  - uid: EF.Blockchain.Server.Middleware.RequestLoggingMiddleware
+    name: RequestLoggingMiddleware
+    type: Class
+- uid: EF.Blockchain.Server.Startup
+  name: EF.Blockchain.Server.Startup
+  type: Namespace
+  items:
+  - uid: EF.Blockchain.Server.Startup.ApplicationSetup
+    name: ApplicationSetup
+    type: Class
+  - uid: EF.Blockchain.Server.Startup.SerilogSetup
+    name: SerilogSetup
     type: Class
 memberLayout: SamePage

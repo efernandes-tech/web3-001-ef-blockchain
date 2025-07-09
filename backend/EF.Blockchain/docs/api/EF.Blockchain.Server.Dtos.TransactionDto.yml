@@ -1,0 +1,705 @@
+### YamlMime:ManagedReference
+items:
+- uid: EF.Blockchain.Server.Dtos.TransactionDto
+  commentId: T:EF.Blockchain.Server.Dtos.TransactionDto
+  id: TransactionDto
+  parent: EF.Blockchain.Server.Dtos
+  children:
+  - EF.Blockchain.Server.Dtos.TransactionDto.Hash
+  - EF.Blockchain.Server.Dtos.TransactionDto.Timestamp
+  - EF.Blockchain.Server.Dtos.TransactionDto.TxInputs
+  - EF.Blockchain.Server.Dtos.TransactionDto.TxOutputs
+  - EF.Blockchain.Server.Dtos.TransactionDto.Type
+  langs:
+  - csharp
+  - vb
+  name: TransactionDto
+  nameWithType: TransactionDto
+  fullName: EF.Blockchain.Server.Dtos.TransactionDto
+  type: Class
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Server/Dtos/TransactionDto.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: TransactionDto
+    path: ../src/EF.Blockchain.Server/Dtos/TransactionDto.cs
+    startLine: 4
+  assemblies:
+  - EF.Blockchain.Server
+  namespace: EF.Blockchain.Server.Dtos
+  syntax:
+    content: public class TransactionDto
+    content.vb: Public Class TransactionDto
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: EF.Blockchain.Server.Dtos.TransactionDto.Type
+  commentId: P:EF.Blockchain.Server.Dtos.TransactionDto.Type
+  id: Type
+  parent: EF.Blockchain.Server.Dtos.TransactionDto
+  langs:
+  - csharp
+  - vb
+  name: Type
+  nameWithType: TransactionDto.Type
+  fullName: EF.Blockchain.Server.Dtos.TransactionDto.Type
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Server/Dtos/TransactionDto.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: Type
+    path: ../src/EF.Blockchain.Server/Dtos/TransactionDto.cs
+    startLine: 6
+  assemblies:
+  - EF.Blockchain.Server
+  namespace: EF.Blockchain.Server.Dtos
+  syntax:
+    content: public TransactionType? Type { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{EF.Blockchain.Domain.TransactionType}
+    content.vb: Public Property Type As TransactionType?
+  overload: EF.Blockchain.Server.Dtos.TransactionDto.Type*
+- uid: EF.Blockchain.Server.Dtos.TransactionDto.Timestamp
+  commentId: P:EF.Blockchain.Server.Dtos.TransactionDto.Timestamp
+  id: Timestamp
+  parent: EF.Blockchain.Server.Dtos.TransactionDto
+  langs:
+  - csharp
+  - vb
+  name: Timestamp
+  nameWithType: TransactionDto.Timestamp
+  fullName: EF.Blockchain.Server.Dtos.TransactionDto.Timestamp
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Server/Dtos/TransactionDto.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: Timestamp
+    path: ../src/EF.Blockchain.Server/Dtos/TransactionDto.cs
+    startLine: 7
+  assemblies:
+  - EF.Blockchain.Server
+  namespace: EF.Blockchain.Server.Dtos
+  syntax:
+    content: public long? Timestamp { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int64}
+    content.vb: Public Property Timestamp As Long?
+  overload: EF.Blockchain.Server.Dtos.TransactionDto.Timestamp*
+- uid: EF.Blockchain.Server.Dtos.TransactionDto.Hash
+  commentId: P:EF.Blockchain.Server.Dtos.TransactionDto.Hash
+  id: Hash
+  parent: EF.Blockchain.Server.Dtos.TransactionDto
+  langs:
+  - csharp
+  - vb
+  name: Hash
+  nameWithType: TransactionDto.Hash
+  fullName: EF.Blockchain.Server.Dtos.TransactionDto.Hash
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Server/Dtos/TransactionDto.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: Hash
+    path: ../src/EF.Blockchain.Server/Dtos/TransactionDto.cs
+    startLine: 8
+  assemblies:
+  - EF.Blockchain.Server
+  namespace: EF.Blockchain.Server.Dtos
+  syntax:
+    content: public string? Hash { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Hash As String
+  overload: EF.Blockchain.Server.Dtos.TransactionDto.Hash*
+- uid: EF.Blockchain.Server.Dtos.TransactionDto.TxInputs
+  commentId: P:EF.Blockchain.Server.Dtos.TransactionDto.TxInputs
+  id: TxInputs
+  parent: EF.Blockchain.Server.Dtos.TransactionDto
+  langs:
+  - csharp
+  - vb
+  name: TxInputs
+  nameWithType: TransactionDto.TxInputs
+  fullName: EF.Blockchain.Server.Dtos.TransactionDto.TxInputs
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Server/Dtos/TransactionDto.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: TxInputs
+    path: ../src/EF.Blockchain.Server/Dtos/TransactionDto.cs
+    startLine: 9
+  assemblies:
+  - EF.Blockchain.Server
+  namespace: EF.Blockchain.Server.Dtos
+  syntax:
+    content: public List<TransactionInputDto>? TxInputs { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{EF.Blockchain.Server.Dtos.TransactionInputDto}
+    content.vb: Public Property TxInputs As List(Of TransactionInputDto)
+  overload: EF.Blockchain.Server.Dtos.TransactionDto.TxInputs*
+- uid: EF.Blockchain.Server.Dtos.TransactionDto.TxOutputs
+  commentId: P:EF.Blockchain.Server.Dtos.TransactionDto.TxOutputs
+  id: TxOutputs
+  parent: EF.Blockchain.Server.Dtos.TransactionDto
+  langs:
+  - csharp
+  - vb
+  name: TxOutputs
+  nameWithType: TransactionDto.TxOutputs
+  fullName: EF.Blockchain.Server.Dtos.TransactionDto.TxOutputs
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Server/Dtos/TransactionDto.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: TxOutputs
+    path: ../src/EF.Blockchain.Server/Dtos/TransactionDto.cs
+    startLine: 10
+  assemblies:
+  - EF.Blockchain.Server
+  namespace: EF.Blockchain.Server.Dtos
+  syntax:
+    content: public List<TransactionOutputDto> TxOutputs { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{EF.Blockchain.Server.Dtos.TransactionOutputDto}
+    content.vb: Public Property TxOutputs As List(Of TransactionOutputDto)
+  overload: EF.Blockchain.Server.Dtos.TransactionDto.TxOutputs*
+references:
+- uid: EF.Blockchain.Server.Dtos
+  commentId: N:EF.Blockchain.Server.Dtos
+  href: EF.html
+  name: EF.Blockchain.Server.Dtos
+  nameWithType: EF.Blockchain.Server.Dtos
+  fullName: EF.Blockchain.Server.Dtos
+  spec.csharp:
+  - uid: EF
+    name: EF
+    href: EF.html
+  - name: .
+  - uid: EF.Blockchain
+    name: Blockchain
+    href: EF.Blockchain.html
+  - name: .
+  - uid: EF.Blockchain.Server
+    name: Server
+    href: EF.Blockchain.Server.html
+  - name: .
+  - uid: EF.Blockchain.Server.Dtos
+    name: Dtos
+    href: EF.Blockchain.Server.Dtos.html
+  spec.vb:
+  - uid: EF
+    name: EF
+    href: EF.html
+  - name: .
+  - uid: EF.Blockchain
+    name: Blockchain
+    href: EF.Blockchain.html
+  - name: .
+  - uid: EF.Blockchain.Server
+    name: Server
+    href: EF.Blockchain.Server.html
+  - name: .
+  - uid: EF.Blockchain.Server.Dtos
+    name: Dtos
+    href: EF.Blockchain.Server.Dtos.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: EF.Blockchain.Server.Dtos.TransactionDto.Type*
+  commentId: Overload:EF.Blockchain.Server.Dtos.TransactionDto.Type
+  href: EF.Blockchain.Server.Dtos.TransactionDto.html#EF_Blockchain_Server_Dtos_TransactionDto_Type
+  name: Type
+  nameWithType: TransactionDto.Type
+  fullName: EF.Blockchain.Server.Dtos.TransactionDto.Type
+- uid: System.Nullable{EF.Blockchain.Domain.TransactionType}
+  commentId: T:System.Nullable{EF.Blockchain.Domain.TransactionType}
+  parent: System
+  definition: System.Nullable`1
+  href: EF.Blockchain.Domain.TransactionType.html
+  name: TransactionType?
+  nameWithType: TransactionType?
+  fullName: EF.Blockchain.Domain.TransactionType?
+  spec.csharp:
+  - uid: EF.Blockchain.Domain.TransactionType
+    name: TransactionType
+    href: EF.Blockchain.Domain.TransactionType.html
+  - name: '?'
+  spec.vb:
+  - uid: EF.Blockchain.Domain.TransactionType
+    name: TransactionType
+    href: EF.Blockchain.Domain.TransactionType.html
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: EF.Blockchain.Server.Dtos.TransactionDto.Timestamp*
+  commentId: Overload:EF.Blockchain.Server.Dtos.TransactionDto.Timestamp
+  href: EF.Blockchain.Server.Dtos.TransactionDto.html#EF_Blockchain_Server_Dtos_TransactionDto_Timestamp
+  name: Timestamp
+  nameWithType: TransactionDto.Timestamp
+  fullName: EF.Blockchain.Server.Dtos.TransactionDto.Timestamp
+- uid: System.Nullable{System.Int64}
+  commentId: T:System.Nullable{System.Int64}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.int64
+  name: long?
+  nameWithType: long?
+  fullName: long?
+  nameWithType.vb: Long?
+  fullName.vb: Long?
+  name.vb: Long?
+  spec.csharp:
+  - uid: System.Int64
+    name: long
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int64
+  - name: '?'
+  spec.vb:
+  - uid: System.Int64
+    name: Long
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int64
+  - name: '?'
+- uid: EF.Blockchain.Server.Dtos.TransactionDto.Hash*
+  commentId: Overload:EF.Blockchain.Server.Dtos.TransactionDto.Hash
+  href: EF.Blockchain.Server.Dtos.TransactionDto.html#EF_Blockchain_Server_Dtos_TransactionDto_Hash
+  name: Hash
+  nameWithType: TransactionDto.Hash
+  fullName: EF.Blockchain.Server.Dtos.TransactionDto.Hash
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: EF.Blockchain.Server.Dtos.TransactionDto.TxInputs*
+  commentId: Overload:EF.Blockchain.Server.Dtos.TransactionDto.TxInputs
+  href: EF.Blockchain.Server.Dtos.TransactionDto.html#EF_Blockchain_Server_Dtos_TransactionDto_TxInputs
+  name: TxInputs
+  nameWithType: TransactionDto.TxInputs
+  fullName: EF.Blockchain.Server.Dtos.TransactionDto.TxInputs
+- uid: System.Collections.Generic.List{EF.Blockchain.Server.Dtos.TransactionInputDto}
+  commentId: T:System.Collections.Generic.List{EF.Blockchain.Server.Dtos.TransactionInputDto}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<TransactionInputDto>
+  nameWithType: List<TransactionInputDto>
+  fullName: System.Collections.Generic.List<EF.Blockchain.Server.Dtos.TransactionInputDto>
+  nameWithType.vb: List(Of TransactionInputDto)
+  fullName.vb: System.Collections.Generic.List(Of EF.Blockchain.Server.Dtos.TransactionInputDto)
+  name.vb: List(Of TransactionInputDto)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: EF.Blockchain.Server.Dtos.TransactionInputDto
+    name: TransactionInputDto
+    href: EF.Blockchain.Server.Dtos.TransactionInputDto.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: EF.Blockchain.Server.Dtos.TransactionInputDto
+    name: TransactionInputDto
+    href: EF.Blockchain.Server.Dtos.TransactionInputDto.html
+  - name: )
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: EF.Blockchain.Server.Dtos.TransactionDto.TxOutputs*
+  commentId: Overload:EF.Blockchain.Server.Dtos.TransactionDto.TxOutputs
+  href: EF.Blockchain.Server.Dtos.TransactionDto.html#EF_Blockchain_Server_Dtos_TransactionDto_TxOutputs
+  name: TxOutputs
+  nameWithType: TransactionDto.TxOutputs
+  fullName: EF.Blockchain.Server.Dtos.TransactionDto.TxOutputs
+- uid: System.Collections.Generic.List{EF.Blockchain.Server.Dtos.TransactionOutputDto}
+  commentId: T:System.Collections.Generic.List{EF.Blockchain.Server.Dtos.TransactionOutputDto}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<TransactionOutputDto>
+  nameWithType: List<TransactionOutputDto>
+  fullName: System.Collections.Generic.List<EF.Blockchain.Server.Dtos.TransactionOutputDto>
+  nameWithType.vb: List(Of TransactionOutputDto)
+  fullName.vb: System.Collections.Generic.List(Of EF.Blockchain.Server.Dtos.TransactionOutputDto)
+  name.vb: List(Of TransactionOutputDto)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: EF.Blockchain.Server.Dtos.TransactionOutputDto
+    name: TransactionOutputDto
+    href: EF.Blockchain.Server.Dtos.TransactionOutputDto.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: EF.Blockchain.Server.Dtos.TransactionOutputDto
+    name: TransactionOutputDto
+    href: EF.Blockchain.Server.Dtos.TransactionOutputDto.html
+  - name: )

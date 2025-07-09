@@ -1,4 +1,5 @@
 using EF.Blockchain.Domain;
+using EF.Blockchain.Server.Dtos;
 using EF.Blockchain.Tests.Mocks;
 using Flurl.Http;
 
@@ -12,7 +13,7 @@ public class BlockIntegrationTest : BaseIntegrationTest
         // Arrange
 
         // Act
-        var response = await _flurl.Request("/blocks/0").GetJsonAsync<BlockResponse>();
+        var response = await _flurl.Request("/blocks/0").GetJsonAsync<BlockDto>();
 
         // Assert
         Assert.Equal(0, response.Index);
@@ -39,7 +40,7 @@ public class BlockIntegrationTest : BaseIntegrationTest
         var flurl = CreateFlurlClientWithBlockHash("abc");
 
         // Act
-        var response = await flurl.Request("/blocks/abc").GetJsonAsync<BlockResponse>();
+        var response = await flurl.Request("/blocks/abc").GetJsonAsync<BlockDto>();
 
         // Assert
         Assert.Equal("abc", response.Hash);
@@ -121,7 +122,7 @@ public class BlockIntegrationTest : BaseIntegrationTest
         // Act
         var response = await flurl.Request("/blocks")
             .PostJsonAsync(block)
-            .ReceiveJson<BlockResponse>();
+            .ReceiveJson<BlockDto>();
 
         // Assert
         Assert.Equal(1, response.Index);
@@ -162,12 +163,4 @@ public class BlockIntegrationTest : BaseIntegrationTest
         // Assert
         Assert.Equal(400, response.StatusCode);
     }
-
-    private record BlockResponse(
-        int Index,
-        string Hash,
-        string PreviousHash,
-        string Data,
-        long Timestamp
-    );
 }

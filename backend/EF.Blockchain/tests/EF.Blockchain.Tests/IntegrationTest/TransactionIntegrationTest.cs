@@ -1,4 +1,5 @@
 using EF.Blockchain.Domain;
+using EF.Blockchain.Server.Dtos;
 using EF.Blockchain.Tests.IntegrationTest.Commons;
 using EF.Blockchain.Tests.Mocks;
 using Flurl.Http;
@@ -37,7 +38,7 @@ public class TransactionIntegrationTest : BaseIntegrationTest
 
         // Act
         var response = await flurl.Request("/transactions/" + tx.Hash).GetAsync();
-        var body = await response.GetJsonAsync<TransactionSearchResponse>();
+        var body = await response.GetJsonAsync<TransactionSearchDto>();
 
         // Assert
         Assert.Equal(200, response.StatusCode);
@@ -71,10 +72,4 @@ public class TransactionIntegrationTest : BaseIntegrationTest
         // Assert
         Assert.Equal(201, response.StatusCode);
     }
-
-    private record TransactionSearchResponse(
-        Transaction? Transaction,
-        int MempoolIndex,
-        int BlockIndex
-    );
 }

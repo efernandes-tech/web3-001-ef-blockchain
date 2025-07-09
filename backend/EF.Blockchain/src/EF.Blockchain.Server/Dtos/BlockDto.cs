@@ -1,9 +1,5 @@
-using EF.Blockchain.Domain;
-using System.Diagnostics.CodeAnalysis;
-
 namespace EF.Blockchain.Server.Dtos;
 
-[ExcludeFromCodeCoverage]
 public class BlockDto
 {
     public int Index { get; set; }
@@ -13,13 +9,4 @@ public class BlockDto
     public List<TransactionDto> Transactions { get; set; } = new();
     public int? Nonce { get; set; } = null;
     public string? Miner { get; set; } = null;
-
-    public Block ToDomain()
-    {
-        var transactions = Transactions
-            .Select(tx => tx.ToDomain())
-            .ToList();
-
-        return new Block(Index, PreviousHash, transactions, Timestamp, Hash, Nonce, Miner);
-    }
 }

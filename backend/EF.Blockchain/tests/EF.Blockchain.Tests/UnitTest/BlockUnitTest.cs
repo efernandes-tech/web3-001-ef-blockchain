@@ -133,15 +133,14 @@ public class BlockUnitTest
            }
         );
 
-        var blockInfo = new BlockInfo
-        {
-            Index = 1,
-            PreviousHash = _genesis.GetHash(),
-            Transactions = new List<Transaction> { transactionFee },
-            Difficulty = _difficulty,
-            FeePerTx = 1,
-            MaxDifficulty = 62,
-        };
+        var blockInfo = new BlockInfo(
+            index: 1,
+            previousHash: _genesis.GetHash(),
+            transactions: new List<Transaction> { transactionFee },
+            difficulty: _difficulty,
+            feePerTx: 1,
+            maxDifficulty: 62
+        );
 
         // Act
         var block = Block.FromBlockInfo(blockInfo);

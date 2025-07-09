@@ -1,3 +1,4 @@
+using EF.Blockchain.Server.Dtos;
 using EF.Blockchain.Tests.Mocks;
 using Flurl.Http;
 
@@ -13,12 +14,10 @@ public class WalletIntegrationTest : BaseIntegrationTest
 
         // Act
         var response = await _flurl.Request($"/wallets/{walletAddress}").GetAsync();
-        var json = await response.GetJsonAsync<WalletResponse>();
+        var json = await response.GetJsonAsync<WalletDto>();
 
         // Assert
         Assert.Equal(200, response.StatusCode);
         Assert.Equal(630, json.Balance);
     }
-
-    private record WalletResponse(int Balance);
 }

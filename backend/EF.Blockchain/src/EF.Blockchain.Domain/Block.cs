@@ -4,28 +4,55 @@ using System.Text;
 namespace EF.Blockchain.Domain;
 
 /// <summary>
-/// Block class
+/// Represents a block in the blockchain. Each block contains a list of transactions and metadata like index, timestamp, hash, etc.
 /// </summary>
 public class Block
 {
+    /// <summary>
+    /// The index of the block in the blockchain.
+    /// </summary>
     public int Index { get; private set; }
+
+    /// <summary>
+    /// The Unix timestamp when the block was created.
+    /// </summary>
     public long Timestamp { get; private set; }
+
+    /// <summary>
+    /// The SHA-256 hash of the block.
+    /// </summary>
     public string Hash { get; private set; }
+
+    /// <summary>
+    /// The hash of the previous block in the chain.
+    /// </summary>
     public string PreviousHash { get; private set; }
+
+    /// <summary>
+    /// List of transactions included in this block.
+    /// </summary>
     public List<Transaction> Transactions { get; private set; } = new();
+
+    /// <summary>
+    /// The nonce value used for proof-of-work (mining).
+    /// </summary>
     public int Nonce { get; private set; }
+
+    /// <summary>
+    /// The wallet address of the miner who mined this block.
+    /// </summary>
     public string Miner { get; private set; }
 
     /// <summary>
-    /// Creates a new Block
+    /// Creates a new instance of a block.
     /// </summary>
-    /// <param name="index">The block index in blockchain</param>
-    /// <param name="previousHash">The previous block hash</param>
-    /// <param name="transactions">The block transactions</param>
-    /// <param name="timestamp">The block timestamp</param>
-    /// <param name="hash">The block hash</param>
-    /// <param name="nonce">The block nonce</param>
-    /// <param name="miner">The block miner</param>
+    /// <param name="index">The index of the block in the chain.</param>
+    /// <param name="previousHash">Hash of the previous block.</param>
+    /// <param name="transactions">List of transactions included.</param>
+    /// <param name="timestamp">Timestamp of block creation.</param>
+    /// <param name="hash">Optional predefined hash.</param>
+    /// <param name="nonce">Nonce value used for mining.</param>
+    /// <param name="miner">Miner's wallet address.</param>
     public Block(int? index = null,
         string? previousHash = null,
         List<Transaction>? transactions = null,
@@ -44,9 +71,9 @@ public class Block
     }
 
     /// <summary>
-    /// Generates the hash for the block based on its data.
+    /// Generates the SHA-256 hash for the block based on its current data.
     /// </summary>
-    /// <returns>The SHA-256 hash string.</returns>
+    /// <returns>The generated hash string.</returns>
     public string GetHash()
     {
         var txs = Transactions != null && Transactions.Any()
@@ -56,6 +83,16 @@ public class Block
         return ComputeHash(Index, Timestamp, txs, PreviousHash, Nonce, Miner);
     }
 
+    /// <summary>
+    /// Computes a SHA-256 hash based on provided parameters.
+    /// </summary>
+    /// <param name="index">Block index.</param>
+    /// <param name="timestamp">Block timestamp.</param>
+    /// <param name="txs">Concatenated transaction hashes.</param>
+    /// <param name="previousHash">Hash of the previous block.</param>
+    /// <param name="nonce">Nonce used in mining.</param>
+    /// <param name="miner">Miner's wallet address.</param>
+    /// <returns>Computed SHA-256 hash.</returns>
     public static string ComputeHash(int index,
         long timestamp,
         string txs,
@@ -66,14 +103,14 @@ public class Block
         var rawData = $"{index}{txs}{timestamp}{previousHash}{nonce}{miner}";
         using var sha256 = SHA256.Create();
         var bytes = Encoding.UTF8.GetBytes(rawData);
-        return Convert.ToHexString(sha256.ComputeHash(bytes));
+        return Convert.ToHexString(sha256.ComputeHash(bytes)).ToLower();
     }
 
     /// <summary>
-    /// Generates a new valid hash for this block with the specified difficulty
+    /// Mines the block by incrementing the nonce until the hash starts with the required number of zeros.
     /// </summary>
-    /// <param name="difficulty">The blockchain current difficulty</param>
-    /// <param name="miner">The miner wallet address</param>
+    /// <param name="difficulty">Number of leading zeros required in the hash.</param>
+    /// <param name="miner">Miner's wallet address.</param>
     public void Mine(int difficulty, string miner)
     {
         Miner = miner;
@@ -88,12 +125,13 @@ public class Block
     }
 
     /// <summary>
-    /// Validates the block
+    /// Validates this block using previous block data and difficulty.
     /// </summary>
-    /// /// <param name="previousHash">The previous block hash</param>
-    /// /// <param name="previousIndex">The previous block index</param>
-    /// /// <param name="difficulty">The blockchain current difficulty</param>
-    /// <returns><c>Validation</c> if the block is valid</returns>
+    /// <param name="previousHash">Hash of the previous block.</param>
+    /// <param name="previousIndex">Index of the previous block.</param>
+    /// <param name="difficulty">Current difficulty level.</param>
+    /// <param name="feePerTx">Expected fee per transaction.</param>
+    /// <returns>A <see cref="Validation"/> result indicating if the block is valid.</returns>
     public Validation IsValid(string previousHash, int previousIndex, int difficulty, int feePerTx)
     {
         if (Transactions != null && Transactions.Any())
@@ -145,6 +183,11 @@ public class Block
         return new Validation();
     }
 
+    /// <summary>
+    /// Creates a new block from a given <see cref="BlockInfo"/> object.
+    /// </summary>
+    /// <param name="blockInfo">The block info used to create a block.</param>
+    /// <returns>A new <see cref="Block"/> instance.</returns>
     public static Block FromBlockInfo(BlockInfo blockInfo)
     {
         return new Block

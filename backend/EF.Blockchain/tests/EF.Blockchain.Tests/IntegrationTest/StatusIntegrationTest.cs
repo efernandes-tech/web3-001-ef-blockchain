@@ -1,3 +1,4 @@
+using EF.Blockchain.Server.Dtos;
 using Flurl.Http;
 
 namespace EF.Blockchain.Tests.IntegrationTest;
@@ -10,22 +11,11 @@ public class StatusIntegrationTest : BaseIntegrationTest
         // Arrange
 
         // Act
-        var result = await _flurl.Request("/status").GetJsonAsync<StatusResponse>();
+        var result = await _flurl.Request("/status").GetJsonAsync<StatusDto>();
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(1, result.blocks);
-        Assert.True(result.IsValid.Success);
+        Assert.Equal(1, result.Blocks);
+        Assert.True(result.IsValid);
     }
-
-    private record StatusResponse(
-        int blocks,
-        ValidationResponse IsValid,
-        object? LastBlock
-    );
-
-    private record ValidationResponse(
-        bool Success,
-        string? Message
-    );
 }

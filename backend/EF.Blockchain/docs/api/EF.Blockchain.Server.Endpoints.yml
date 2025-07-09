@@ -1,0 +1,44 @@
+### YamlMime:ManagedReference
+items:
+- uid: EF.Blockchain.Server.Endpoints
+  commentId: N:EF.Blockchain.Server.Endpoints
+  id: EF.Blockchain.Server.Endpoints
+  children:
+  - EF.Blockchain.Server.Endpoints.BlockEndpoints
+  - EF.Blockchain.Server.Endpoints.StatusEndpoints
+  - EF.Blockchain.Server.Endpoints.TransactionEndpoints
+  - EF.Blockchain.Server.Endpoints.WalletEndpoints
+  langs:
+  - csharp
+  - vb
+  name: EF.Blockchain.Server.Endpoints
+  nameWithType: EF.Blockchain.Server.Endpoints
+  fullName: EF.Blockchain.Server.Endpoints
+  type: Namespace
+  assemblies:
+  - EF.Blockchain.Server
+references:
+- uid: EF.Blockchain.Server.Endpoints.BlockEndpoints
+  commentId: T:EF.Blockchain.Server.Endpoints.BlockEndpoints
+  href: EF.Blockchain.Server.Endpoints.BlockEndpoints.html
+  name: BlockEndpoints
+  nameWithType: BlockEndpoints
+  fullName: EF.Blockchain.Server.Endpoints.BlockEndpoints
+- uid: EF.Blockchain.Server.Endpoints.StatusEndpoints
+  commentId: T:EF.Blockchain.Server.Endpoints.StatusEndpoints
+  href: EF.Blockchain.Server.Endpoints.StatusEndpoints.html
+  name: StatusEndpoints
+  nameWithType: StatusEndpoints
+  fullName: EF.Blockchain.Server.Endpoints.StatusEndpoints
+- uid: EF.Blockchain.Server.Endpoints.TransactionEndpoints
+  commentId: T:EF.Blockchain.Server.Endpoints.TransactionEndpoints
+  href: EF.Blockchain.Server.Endpoints.TransactionEndpoints.html
+  name: TransactionEndpoints
+  nameWithType: TransactionEndpoints
+  fullName: EF.Blockchain.Server.Endpoints.TransactionEndpoints
+- uid: EF.Blockchain.Server.Endpoints.WalletEndpoints
+  commentId: T:EF.Blockchain.Server.Endpoints.WalletEndpoints
+  href: EF.Blockchain.Server.Endpoints.WalletEndpoints.html
+  name: WalletEndpoints
+  nameWithType: WalletEndpoints
+  fullName: EF.Blockchain.Server.Endpoints.WalletEndpoints

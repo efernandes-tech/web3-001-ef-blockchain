@@ -5,20 +5,19 @@ items:
   id: Block
   parent: EF.Blockchain.Domain
   children:
-  - EF.Blockchain.Domain.Block.#ctor(System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.Int64},System.String,System.Nullable{System.Int32},System.String)
-  - EF.Blockchain.Domain.Block.Data
+  - EF.Blockchain.Domain.Block.#ctor(System.Nullable{System.Int32},System.String,System.Collections.Generic.List{EF.Blockchain.Domain.Transaction},System.Nullable{System.Int64},System.String,System.Nullable{System.Int32},System.String)
+  - EF.Blockchain.Domain.Block.ComputeHash(System.Int32,System.Int64,System.String,System.String,System.Int32,System.String)
+  - EF.Blockchain.Domain.Block.FromBlockInfo(EF.Blockchain.Domain.BlockInfo)
   - EF.Blockchain.Domain.Block.GetHash
   - EF.Blockchain.Domain.Block.Hash
   - EF.Blockchain.Domain.Block.Index
-  - EF.Blockchain.Domain.Block.IsValid(System.String,System.Int32)
+  - EF.Blockchain.Domain.Block.IsValid(System.String,System.Int32,System.Int32,System.Int32)
   - EF.Blockchain.Domain.Block.Mine(System.Int32,System.String)
   - EF.Blockchain.Domain.Block.Miner
   - EF.Blockchain.Domain.Block.Nonce
   - EF.Blockchain.Domain.Block.PreviousHash
-  - EF.Blockchain.Domain.Block.SetData(System.String)
-  - EF.Blockchain.Domain.Block.SetHash(System.String)
-  - EF.Blockchain.Domain.Block.SetTimestamp(System.Int64)
   - EF.Blockchain.Domain.Block.Timestamp
+  - EF.Blockchain.Domain.Block.Transactions
   langs:
   - csharp
   - vb
@@ -28,7 +27,7 @@ items:
   type: Class
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: Block
@@ -37,7 +36,7 @@ items:
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
-  summary: Block class TESTE
+  summary: Represents a block in the blockchain. Each block contains a list of transactions and metadata like index, timestamp, hash, etc.
   example: []
   syntax:
     content: public class Block
@@ -65,15 +64,17 @@ items:
   type: Property
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: Index
     path: ../src/EF.Blockchain.Domain/Block.cs
-    startLine: 10
+    startLine: 13
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: The index of the block in the blockchain.
+  example: []
   syntax:
     content: public int Index { get; }
     parameters: []
@@ -94,15 +95,17 @@ items:
   type: Property
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: Timestamp
     path: ../src/EF.Blockchain.Domain/Block.cs
-    startLine: 11
+    startLine: 18
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: The Unix timestamp when the block was created.
+  example: []
   syntax:
     content: public long Timestamp { get; }
     parameters: []
@@ -123,15 +126,17 @@ items:
   type: Property
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: Hash
     path: ../src/EF.Blockchain.Domain/Block.cs
-    startLine: 12
+    startLine: 23
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: The SHA-256 hash of the block.
+  example: []
   syntax:
     content: public string Hash { get; }
     parameters: []
@@ -152,15 +157,17 @@ items:
   type: Property
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: PreviousHash
     path: ../src/EF.Blockchain.Domain/Block.cs
-    startLine: 13
+    startLine: 28
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: The hash of the previous block in the chain.
+  example: []
   syntax:
     content: public string PreviousHash { get; }
     parameters: []
@@ -168,35 +175,37 @@ items:
       type: System.String
     content.vb: Public Property PreviousHash As String
   overload: EF.Blockchain.Domain.Block.PreviousHash*
-- uid: EF.Blockchain.Domain.Block.Data
-  commentId: P:EF.Blockchain.Domain.Block.Data
-  id: Data
+- uid: EF.Blockchain.Domain.Block.Transactions
+  commentId: P:EF.Blockchain.Domain.Block.Transactions
+  id: Transactions
   parent: EF.Blockchain.Domain.Block
   langs:
   - csharp
   - vb
-  name: Data
-  nameWithType: Block.Data
-  fullName: EF.Blockchain.Domain.Block.Data
+  name: Transactions
+  nameWithType: Block.Transactions
+  fullName: EF.Blockchain.Domain.Block.Transactions
   type: Property
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
-    id: Data
+    id: Transactions
     path: ../src/EF.Blockchain.Domain/Block.cs
-    startLine: 14
+    startLine: 33
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: List of transactions included in this block.
+  example: []
   syntax:
-    content: public string Data { get; }
+    content: public List<Transaction> Transactions { get; }
     parameters: []
     return:
-      type: System.String
-    content.vb: Public Property Data As String
-  overload: EF.Blockchain.Domain.Block.Data*
+      type: System.Collections.Generic.List{EF.Blockchain.Domain.Transaction}
+    content.vb: Public Property Transactions As List(Of Transaction)
+  overload: EF.Blockchain.Domain.Block.Transactions*
 - uid: EF.Blockchain.Domain.Block.Nonce
   commentId: P:EF.Blockchain.Domain.Block.Nonce
   id: Nonce
@@ -210,15 +219,17 @@ items:
   type: Property
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: Nonce
     path: ../src/EF.Blockchain.Domain/Block.cs
-    startLine: 15
+    startLine: 38
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: The nonce value used for proof-of-work (mining).
+  example: []
   syntax:
     content: public int Nonce { get; }
     parameters: []
@@ -239,15 +250,17 @@ items:
   type: Property
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: Miner
     path: ../src/EF.Blockchain.Domain/Block.cs
-    startLine: 16
+    startLine: 43
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: The wallet address of the miner who mined this block.
+  example: []
   syntax:
     content: public string Miner { get; }
     parameters: []
@@ -255,59 +268,59 @@ items:
       type: System.String
     content.vb: Public Property Miner As String
   overload: EF.Blockchain.Domain.Block.Miner*
-- uid: EF.Blockchain.Domain.Block.#ctor(System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.Int64},System.String,System.Nullable{System.Int32},System.String)
-  commentId: M:EF.Blockchain.Domain.Block.#ctor(System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.Int64},System.String,System.Nullable{System.Int32},System.String)
-  id: '#ctor(System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.Int64},System.String,System.Nullable{System.Int32},System.String)'
+- uid: EF.Blockchain.Domain.Block.#ctor(System.Nullable{System.Int32},System.String,System.Collections.Generic.List{EF.Blockchain.Domain.Transaction},System.Nullable{System.Int64},System.String,System.Nullable{System.Int32},System.String)
+  commentId: M:EF.Blockchain.Domain.Block.#ctor(System.Nullable{System.Int32},System.String,System.Collections.Generic.List{EF.Blockchain.Domain.Transaction},System.Nullable{System.Int64},System.String,System.Nullable{System.Int32},System.String)
+  id: '#ctor(System.Nullable{System.Int32},System.String,System.Collections.Generic.List{EF.Blockchain.Domain.Transaction},System.Nullable{System.Int64},System.String,System.Nullable{System.Int32},System.String)'
   parent: EF.Blockchain.Domain.Block
   langs:
   - csharp
   - vb
-  name: Block(int?, string?, string?, long?, string?, int?, string?)
-  nameWithType: Block.Block(int?, string?, string?, long?, string?, int?, string?)
-  fullName: EF.Blockchain.Domain.Block.Block(int?, string?, string?, long?, string?, int?, string?)
+  name: Block(int?, string?, List<Transaction>?, long?, string?, int?, string?)
+  nameWithType: Block.Block(int?, string?, List<Transaction>?, long?, string?, int?, string?)
+  fullName: EF.Blockchain.Domain.Block.Block(int?, string?, System.Collections.Generic.List<EF.Blockchain.Domain.Transaction>?, long?, string?, int?, string?)
   type: Constructor
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: .ctor
     path: ../src/EF.Blockchain.Domain/Block.cs
-    startLine: 28
+    startLine: 55
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
-  summary: Creates a new Block
+  summary: Creates a new instance of a block.
   example: []
   syntax:
-    content: public Block(int? index = null, string? previousHash = null, string? data = null, long? timestamp = null, string? hash = null, int? nonce = null, string? miner = null)
+    content: public Block(int? index = null, string? previousHash = null, List<Transaction>? transactions = null, long? timestamp = null, string? hash = null, int? nonce = null, string? miner = null)
     parameters:
     - id: index
       type: System.Nullable{System.Int32}
-      description: The block index in blockchain
+      description: The index of the block in the chain.
     - id: previousHash
       type: System.String
-      description: The previous block hash
-    - id: data
-      type: System.String
-      description: The block data
+      description: Hash of the previous block.
+    - id: transactions
+      type: System.Collections.Generic.List{EF.Blockchain.Domain.Transaction}
+      description: List of transactions included.
     - id: timestamp
       type: System.Nullable{System.Int64}
-      description: The block timestamp
+      description: Timestamp of block creation.
     - id: hash
       type: System.String
-      description: The block hash
+      description: Optional predefined hash.
     - id: nonce
       type: System.Nullable{System.Int32}
-      description: The block nonce
+      description: Nonce value used for mining.
     - id: miner
       type: System.String
-      description: The block miner
-    content.vb: Public Sub New(index As Integer? = Nothing, previousHash As String = Nothing, data As String = Nothing, timestamp As Long? = Nothing, hash As String = Nothing, nonce As Integer? = Nothing, miner As String = Nothing)
+      description: Miner's wallet address.
+    content.vb: Public Sub New(index As Integer? = Nothing, previousHash As String = Nothing, transactions As List(Of Transaction) = Nothing, timestamp As Long? = Nothing, hash As String = Nothing, nonce As Integer? = Nothing, miner As String = Nothing)
   overload: EF.Blockchain.Domain.Block.#ctor*
-  nameWithType.vb: Block.New(Integer?, String, String, Long?, String, Integer?, String)
-  fullName.vb: EF.Blockchain.Domain.Block.New(Integer?, String, String, Long?, String, Integer?, String)
-  name.vb: New(Integer?, String, String, Long?, String, Integer?, String)
+  nameWithType.vb: Block.New(Integer?, String, List(Of Transaction), Long?, String, Integer?, String)
+  fullName.vb: EF.Blockchain.Domain.Block.New(Integer?, String, System.Collections.Generic.List(Of EF.Blockchain.Domain.Transaction), Long?, String, Integer?, String)
+  name.vb: New(Integer?, String, List(Of Transaction), Long?, String, Integer?, String)
 - uid: EF.Blockchain.Domain.Block.GetHash
   commentId: M:EF.Blockchain.Domain.Block.GetHash
   id: GetHash
@@ -321,24 +334,77 @@ items:
   type: Method
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: GetHash
     path: ../src/EF.Blockchain.Domain/Block.cs
-    startLine: 49
+    startLine: 76
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
-  summary: Generates the hash for the block based on its data.
+  summary: Generates the SHA-256 hash for the block based on its current data.
   example: []
   syntax:
     content: public string GetHash()
     return:
       type: System.String
-      description: The SHA-256 hash string.
+      description: The generated hash string.
     content.vb: Public Function GetHash() As String
   overload: EF.Blockchain.Domain.Block.GetHash*
+- uid: EF.Blockchain.Domain.Block.ComputeHash(System.Int32,System.Int64,System.String,System.String,System.Int32,System.String)
+  commentId: M:EF.Blockchain.Domain.Block.ComputeHash(System.Int32,System.Int64,System.String,System.String,System.Int32,System.String)
+  id: ComputeHash(System.Int32,System.Int64,System.String,System.String,System.Int32,System.String)
+  parent: EF.Blockchain.Domain.Block
+  langs:
+  - csharp
+  - vb
+  name: ComputeHash(int, long, string, string, int, string?)
+  nameWithType: Block.ComputeHash(int, long, string, string, int, string?)
+  fullName: EF.Blockchain.Domain.Block.ComputeHash(int, long, string, string, int, string?)
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: ComputeHash
+    path: ../src/EF.Blockchain.Domain/Block.cs
+    startLine: 95
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Computes a SHA-256 hash based on provided parameters.
+  example: []
+  syntax:
+    content: public static string ComputeHash(int index, long timestamp, string txs, string previousHash, int nonce = 0, string? miner = null)
+    parameters:
+    - id: index
+      type: System.Int32
+      description: Block index.
+    - id: timestamp
+      type: System.Int64
+      description: Block timestamp.
+    - id: txs
+      type: System.String
+      description: Concatenated transaction hashes.
+    - id: previousHash
+      type: System.String
+      description: Hash of the previous block.
+    - id: nonce
+      type: System.Int32
+      description: Nonce used in mining.
+    - id: miner
+      type: System.String
+      description: Miner's wallet address.
+    return:
+      type: System.String
+      description: Computed SHA-256 hash.
+    content.vb: Public Shared Function ComputeHash(index As Integer, timestamp As Long, txs As String, previousHash As String, nonce As Integer = 0, miner As String = Nothing) As String
+  overload: EF.Blockchain.Domain.Block.ComputeHash*
+  nameWithType.vb: Block.ComputeHash(Integer, Long, String, String, Integer, String)
+  fullName.vb: EF.Blockchain.Domain.Block.ComputeHash(Integer, Long, String, String, Integer, String)
+  name.vb: ComputeHash(Integer, Long, String, String, Integer, String)
 - uid: EF.Blockchain.Domain.Block.Mine(System.Int32,System.String)
   commentId: M:EF.Blockchain.Domain.Block.Mine(System.Int32,System.String)
   id: Mine(System.Int32,System.String)
@@ -352,168 +418,113 @@ items:
   type: Method
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: Mine
     path: ../src/EF.Blockchain.Domain/Block.cs
-    startLine: 63
+    startLine: 113
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
-  summary: Generates a new valid hash for this block with the specified difficulty
+  summary: Mines the block by incrementing the nonce until the hash starts with the required number of zeros.
   example: []
   syntax:
     content: public void Mine(int difficulty, string miner)
     parameters:
     - id: difficulty
       type: System.Int32
-      description: The blockchain current difficulty
+      description: Number of leading zeros required in the hash.
     - id: miner
       type: System.String
-      description: The miner wallet address
+      description: Miner's wallet address.
     content.vb: Public Sub Mine(difficulty As Integer, miner As String)
   overload: EF.Blockchain.Domain.Block.Mine*
   nameWithType.vb: Block.Mine(Integer, String)
   fullName.vb: EF.Blockchain.Domain.Block.Mine(Integer, String)
   name.vb: Mine(Integer, String)
-- uid: EF.Blockchain.Domain.Block.IsValid(System.String,System.Int32)
-  commentId: M:EF.Blockchain.Domain.Block.IsValid(System.String,System.Int32)
-  id: IsValid(System.String,System.Int32)
+- uid: EF.Blockchain.Domain.Block.IsValid(System.String,System.Int32,System.Int32,System.Int32)
+  commentId: M:EF.Blockchain.Domain.Block.IsValid(System.String,System.Int32,System.Int32,System.Int32)
+  id: IsValid(System.String,System.Int32,System.Int32,System.Int32)
   parent: EF.Blockchain.Domain.Block
   langs:
   - csharp
   - vb
-  name: IsValid(string, int)
-  nameWithType: Block.IsValid(string, int)
-  fullName: EF.Blockchain.Domain.Block.IsValid(string, int)
+  name: IsValid(string, int, int, int)
+  nameWithType: Block.IsValid(string, int, int, int)
+  fullName: EF.Blockchain.Domain.Block.IsValid(string, int, int, int)
   type: Method
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: IsValid
     path: ../src/EF.Blockchain.Domain/Block.cs
-    startLine: 82
+    startLine: 134
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
-  summary: Validates the block
+  summary: Validates this block using previous block data and difficulty.
   example: []
   syntax:
-    content: public Validation IsValid(string previousHash, int previousIndex)
+    content: public Validation IsValid(string previousHash, int previousIndex, int difficulty, int feePerTx)
     parameters:
     - id: previousHash
       type: System.String
-      description: The previous block hash
+      description: Hash of the previous block.
     - id: previousIndex
       type: System.Int32
-      description: The previous block index
+      description: Index of the previous block.
+    - id: difficulty
+      type: System.Int32
+      description: Current difficulty level.
+    - id: feePerTx
+      type: System.Int32
+      description: Expected fee per transaction.
     return:
       type: EF.Blockchain.Domain.Validation
-      description: <code>Validation</code> if the block is valid
-    content.vb: Public Function IsValid(previousHash As String, previousIndex As Integer) As Validation
+      description: A <xref href="EF.Blockchain.Domain.Validation" data-throw-if-not-resolved="false"></xref> result indicating if the block is valid.
+    content.vb: Public Function IsValid(previousHash As String, previousIndex As Integer, difficulty As Integer, feePerTx As Integer) As Validation
   overload: EF.Blockchain.Domain.Block.IsValid*
-  nameWithType.vb: Block.IsValid(String, Integer)
-  fullName.vb: EF.Blockchain.Domain.Block.IsValid(String, Integer)
-  name.vb: IsValid(String, Integer)
-- uid: EF.Blockchain.Domain.Block.SetTimestamp(System.Int64)
-  commentId: M:EF.Blockchain.Domain.Block.SetTimestamp(System.Int64)
-  id: SetTimestamp(System.Int64)
+  nameWithType.vb: Block.IsValid(String, Integer, Integer, Integer)
+  fullName.vb: EF.Blockchain.Domain.Block.IsValid(String, Integer, Integer, Integer)
+  name.vb: IsValid(String, Integer, Integer, Integer)
+- uid: EF.Blockchain.Domain.Block.FromBlockInfo(EF.Blockchain.Domain.BlockInfo)
+  commentId: M:EF.Blockchain.Domain.Block.FromBlockInfo(EF.Blockchain.Domain.BlockInfo)
+  id: FromBlockInfo(EF.Blockchain.Domain.BlockInfo)
   parent: EF.Blockchain.Domain.Block
   langs:
   - csharp
   - vb
-  name: SetTimestamp(long)
-  nameWithType: Block.SetTimestamp(long)
-  fullName: EF.Blockchain.Domain.Block.SetTimestamp(long)
+  name: FromBlockInfo(BlockInfo)
+  nameWithType: Block.FromBlockInfo(BlockInfo)
+  fullName: EF.Blockchain.Domain.Block.FromBlockInfo(EF.Blockchain.Domain.BlockInfo)
   type: Method
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
-    id: SetTimestamp
+    id: FromBlockInfo
     path: ../src/EF.Blockchain.Domain/Block.cs
-    startLine: 107
+    startLine: 190
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: Creates a new block from a given <xref href="EF.Blockchain.Domain.BlockInfo" data-throw-if-not-resolved="false"></xref> object.
+  example: []
   syntax:
-    content: public void SetTimestamp(long timestamp)
+    content: public static Block FromBlockInfo(BlockInfo blockInfo)
     parameters:
-    - id: timestamp
-      type: System.Int64
-    content.vb: Public Sub SetTimestamp(timestamp As Long)
-  overload: EF.Blockchain.Domain.Block.SetTimestamp*
-  nameWithType.vb: Block.SetTimestamp(Long)
-  fullName.vb: EF.Blockchain.Domain.Block.SetTimestamp(Long)
-  name.vb: SetTimestamp(Long)
-- uid: EF.Blockchain.Domain.Block.SetHash(System.String)
-  commentId: M:EF.Blockchain.Domain.Block.SetHash(System.String)
-  id: SetHash(System.String)
-  parent: EF.Blockchain.Domain.Block
-  langs:
-  - csharp
-  - vb
-  name: SetHash(string)
-  nameWithType: Block.SetHash(string)
-  fullName: EF.Blockchain.Domain.Block.SetHash(string)
-  type: Method
-  source:
-    remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
-      branch: main
-      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
-    id: SetHash
-    path: ../src/EF.Blockchain.Domain/Block.cs
-    startLine: 112
-  assemblies:
-  - EF.Blockchain.Domain
-  namespace: EF.Blockchain.Domain
-  syntax:
-    content: public void SetHash(string hash)
-    parameters:
-    - id: hash
-      type: System.String
-    content.vb: Public Sub SetHash(hash As String)
-  overload: EF.Blockchain.Domain.Block.SetHash*
-  nameWithType.vb: Block.SetHash(String)
-  fullName.vb: EF.Blockchain.Domain.Block.SetHash(String)
-  name.vb: SetHash(String)
-- uid: EF.Blockchain.Domain.Block.SetData(System.String)
-  commentId: M:EF.Blockchain.Domain.Block.SetData(System.String)
-  id: SetData(System.String)
-  parent: EF.Blockchain.Domain.Block
-  langs:
-  - csharp
-  - vb
-  name: SetData(string)
-  nameWithType: Block.SetData(string)
-  fullName: EF.Blockchain.Domain.Block.SetData(string)
-  type: Method
-  source:
-    remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Block.cs
-      branch: main
-      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
-    id: SetData
-    path: ../src/EF.Blockchain.Domain/Block.cs
-    startLine: 117
-  assemblies:
-  - EF.Blockchain.Domain
-  namespace: EF.Blockchain.Domain
-  syntax:
-    content: public void SetData(string data)
-    parameters:
-    - id: data
-      type: System.String
-    content.vb: Public Sub SetData(data As String)
-  overload: EF.Blockchain.Domain.Block.SetData*
-  nameWithType.vb: Block.SetData(String)
-  fullName.vb: EF.Blockchain.Domain.Block.SetData(String)
-  name.vb: SetData(String)
+    - id: blockInfo
+      type: EF.Blockchain.Domain.BlockInfo
+      description: The block info used to create a block.
+    return:
+      type: EF.Blockchain.Domain.Block
+      description: A new <xref href="EF.Blockchain.Domain.Block" data-throw-if-not-resolved="false"></xref> instance.
+    content.vb: Public Shared Function FromBlockInfo(blockInfo As BlockInfo) As Block
+  overload: EF.Blockchain.Domain.Block.FromBlockInfo*
 references:
 - uid: EF.Blockchain.Domain
   commentId: N:EF.Blockchain.Domain
@@ -839,12 +850,110 @@ references:
   name: PreviousHash
   nameWithType: Block.PreviousHash
   fullName: EF.Blockchain.Domain.Block.PreviousHash
-- uid: EF.Blockchain.Domain.Block.Data*
-  commentId: Overload:EF.Blockchain.Domain.Block.Data
-  href: EF.Blockchain.Domain.Block.html#EF_Blockchain_Domain_Block_Data
-  name: Data
-  nameWithType: Block.Data
-  fullName: EF.Blockchain.Domain.Block.Data
+- uid: EF.Blockchain.Domain.Block.Transactions*
+  commentId: Overload:EF.Blockchain.Domain.Block.Transactions
+  href: EF.Blockchain.Domain.Block.html#EF_Blockchain_Domain_Block_Transactions
+  name: Transactions
+  nameWithType: Block.Transactions
+  fullName: EF.Blockchain.Domain.Block.Transactions
+- uid: System.Collections.Generic.List{EF.Blockchain.Domain.Transaction}
+  commentId: T:System.Collections.Generic.List{EF.Blockchain.Domain.Transaction}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<Transaction>
+  nameWithType: List<Transaction>
+  fullName: System.Collections.Generic.List<EF.Blockchain.Domain.Transaction>
+  nameWithType.vb: List(Of Transaction)
+  fullName.vb: System.Collections.Generic.List(Of EF.Blockchain.Domain.Transaction)
+  name.vb: List(Of Transaction)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: EF.Blockchain.Domain.Transaction
+    name: Transaction
+    href: EF.Blockchain.Domain.Transaction.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: EF.Blockchain.Domain.Transaction
+    name: Transaction
+    href: EF.Blockchain.Domain.Transaction.html
+  - name: )
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
 - uid: EF.Blockchain.Domain.Block.Nonce*
   commentId: Overload:EF.Blockchain.Domain.Block.Nonce
   href: EF.Blockchain.Domain.Block.html#EF_Blockchain_Domain_Block_Nonce
@@ -859,7 +968,7 @@ references:
   fullName: EF.Blockchain.Domain.Block.Miner
 - uid: EF.Blockchain.Domain.Block.#ctor*
   commentId: Overload:EF.Blockchain.Domain.Block.#ctor
-  href: EF.Blockchain.Domain.Block.html#EF_Blockchain_Domain_Block__ctor_System_Nullable_System_Int32__System_String_System_String_System_Nullable_System_Int64__System_String_System_Nullable_System_Int32__System_String_
+  href: EF.Blockchain.Domain.Block.html#EF_Blockchain_Domain_Block__ctor_System_Nullable_System_Int32__System_String_System_Collections_Generic_List_EF_Blockchain_Domain_Transaction__System_Nullable_System_Int64__System_String_System_Nullable_System_Int32__System_String_
   name: Block
   nameWithType: Block.Block
   fullName: EF.Blockchain.Domain.Block.Block
@@ -946,18 +1055,18 @@ references:
   name: GetHash
   nameWithType: Block.GetHash
   fullName: EF.Blockchain.Domain.Block.GetHash
+- uid: EF.Blockchain.Domain.Block.ComputeHash*
+  commentId: Overload:EF.Blockchain.Domain.Block.ComputeHash
+  href: EF.Blockchain.Domain.Block.html#EF_Blockchain_Domain_Block_ComputeHash_System_Int32_System_Int64_System_String_System_String_System_Int32_System_String_
+  name: ComputeHash
+  nameWithType: Block.ComputeHash
+  fullName: EF.Blockchain.Domain.Block.ComputeHash
 - uid: EF.Blockchain.Domain.Block.Mine*
   commentId: Overload:EF.Blockchain.Domain.Block.Mine
   href: EF.Blockchain.Domain.Block.html#EF_Blockchain_Domain_Block_Mine_System_Int32_System_String_
   name: Mine
   nameWithType: Block.Mine
   fullName: EF.Blockchain.Domain.Block.Mine
-- uid: EF.Blockchain.Domain.Block.IsValid*
-  commentId: Overload:EF.Blockchain.Domain.Block.IsValid
-  href: EF.Blockchain.Domain.Block.html#EF_Blockchain_Domain_Block_IsValid_System_String_System_Int32_
-  name: IsValid
-  nameWithType: Block.IsValid
-  fullName: EF.Blockchain.Domain.Block.IsValid
 - uid: EF.Blockchain.Domain.Validation
   commentId: T:EF.Blockchain.Domain.Validation
   parent: EF.Blockchain.Domain
@@ -965,21 +1074,29 @@ references:
   name: Validation
   nameWithType: Validation
   fullName: EF.Blockchain.Domain.Validation
-- uid: EF.Blockchain.Domain.Block.SetTimestamp*
-  commentId: Overload:EF.Blockchain.Domain.Block.SetTimestamp
-  href: EF.Blockchain.Domain.Block.html#EF_Blockchain_Domain_Block_SetTimestamp_System_Int64_
-  name: SetTimestamp
-  nameWithType: Block.SetTimestamp
-  fullName: EF.Blockchain.Domain.Block.SetTimestamp
-- uid: EF.Blockchain.Domain.Block.SetHash*
-  commentId: Overload:EF.Blockchain.Domain.Block.SetHash
-  href: EF.Blockchain.Domain.Block.html#EF_Blockchain_Domain_Block_SetHash_System_String_
-  name: SetHash
-  nameWithType: Block.SetHash
-  fullName: EF.Blockchain.Domain.Block.SetHash
-- uid: EF.Blockchain.Domain.Block.SetData*
-  commentId: Overload:EF.Blockchain.Domain.Block.SetData
-  href: EF.Blockchain.Domain.Block.html#EF_Blockchain_Domain_Block_SetData_System_String_
-  name: SetData
-  nameWithType: Block.SetData
-  fullName: EF.Blockchain.Domain.Block.SetData
+- uid: EF.Blockchain.Domain.Block.IsValid*
+  commentId: Overload:EF.Blockchain.Domain.Block.IsValid
+  href: EF.Blockchain.Domain.Block.html#EF_Blockchain_Domain_Block_IsValid_System_String_System_Int32_System_Int32_System_Int32_
+  name: IsValid
+  nameWithType: Block.IsValid
+  fullName: EF.Blockchain.Domain.Block.IsValid
+- uid: EF.Blockchain.Domain.BlockInfo
+  commentId: T:EF.Blockchain.Domain.BlockInfo
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.BlockInfo.html
+  name: BlockInfo
+  nameWithType: BlockInfo
+  fullName: EF.Blockchain.Domain.BlockInfo
+- uid: EF.Blockchain.Domain.Block
+  commentId: T:EF.Blockchain.Domain.Block
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.Block.html
+  name: Block
+  nameWithType: Block
+  fullName: EF.Blockchain.Domain.Block
+- uid: EF.Blockchain.Domain.Block.FromBlockInfo*
+  commentId: Overload:EF.Blockchain.Domain.Block.FromBlockInfo
+  href: EF.Blockchain.Domain.Block.html#EF_Blockchain_Domain_Block_FromBlockInfo_EF_Blockchain_Domain_BlockInfo_
+  name: FromBlockInfo
+  nameWithType: Block.FromBlockInfo
+  fullName: EF.Blockchain.Domain.Block.FromBlockInfo

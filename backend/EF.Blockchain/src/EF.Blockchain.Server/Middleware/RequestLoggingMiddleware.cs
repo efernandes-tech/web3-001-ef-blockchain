@@ -28,7 +28,7 @@ public class RequestLoggingMiddleware
         await _next(context);
         var duration = DateTime.Now - start;
 
-        Log.Information("{Method} {Path} → {StatusCode} ({Duration} ms) | Body: {Body}",
+        Log.Information("{Method} {Path} => {StatusCode} ({Duration} ms) | Body: {Body}",
             method, path, context.Response.StatusCode, duration.TotalMilliseconds, body);
     }
 }

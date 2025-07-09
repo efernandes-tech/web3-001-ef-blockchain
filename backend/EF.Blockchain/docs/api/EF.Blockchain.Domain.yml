@@ -5,8 +5,15 @@ items:
   id: EF.Blockchain.Domain
   children:
   - EF.Blockchain.Domain.Block
+  - EF.Blockchain.Domain.BlockInfo
   - EF.Blockchain.Domain.Blockchain
+  - EF.Blockchain.Domain.Transaction
+  - EF.Blockchain.Domain.TransactionInput
+  - EF.Blockchain.Domain.TransactionOutput
+  - EF.Blockchain.Domain.TransactionSearch
+  - EF.Blockchain.Domain.TransactionType
   - EF.Blockchain.Domain.Validation
+  - EF.Blockchain.Domain.Wallet
   langs:
   - csharp
   - vb
@@ -30,6 +37,48 @@ references:
   name: Blockchain
   nameWithType: Blockchain
   fullName: EF.Blockchain.Domain.Blockchain
+- uid: EF.Blockchain.Domain.BlockInfo
+  commentId: T:EF.Blockchain.Domain.BlockInfo
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.BlockInfo.html
+  name: BlockInfo
+  nameWithType: BlockInfo
+  fullName: EF.Blockchain.Domain.BlockInfo
+- uid: EF.Blockchain.Domain.Transaction
+  commentId: T:EF.Blockchain.Domain.Transaction
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.Transaction.html
+  name: Transaction
+  nameWithType: Transaction
+  fullName: EF.Blockchain.Domain.Transaction
+- uid: EF.Blockchain.Domain.TransactionInput
+  commentId: T:EF.Blockchain.Domain.TransactionInput
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.TransactionInput.html
+  name: TransactionInput
+  nameWithType: TransactionInput
+  fullName: EF.Blockchain.Domain.TransactionInput
+- uid: EF.Blockchain.Domain.TransactionOutput
+  commentId: T:EF.Blockchain.Domain.TransactionOutput
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.TransactionOutput.html
+  name: TransactionOutput
+  nameWithType: TransactionOutput
+  fullName: EF.Blockchain.Domain.TransactionOutput
+- uid: EF.Blockchain.Domain.TransactionSearch
+  commentId: T:EF.Blockchain.Domain.TransactionSearch
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.TransactionSearch.html
+  name: TransactionSearch
+  nameWithType: TransactionSearch
+  fullName: EF.Blockchain.Domain.TransactionSearch
+- uid: EF.Blockchain.Domain.TransactionType
+  commentId: T:EF.Blockchain.Domain.TransactionType
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.TransactionType.html
+  name: TransactionType
+  nameWithType: TransactionType
+  fullName: EF.Blockchain.Domain.TransactionType
 - uid: EF.Blockchain.Domain.Validation
   commentId: T:EF.Blockchain.Domain.Validation
   parent: EF.Blockchain.Domain
@@ -37,6 +86,12 @@ references:
   name: Validation
   nameWithType: Validation
   fullName: EF.Blockchain.Domain.Validation
+- uid: EF.Blockchain.Domain.Wallet
+  commentId: T:EF.Blockchain.Domain.Wallet
+  href: EF.Blockchain.Domain.Wallet.html
+  name: Wallet
+  nameWithType: Wallet
+  fullName: EF.Blockchain.Domain.Wallet
 - uid: EF.Blockchain.Domain
   commentId: N:EF.Blockchain.Domain
   href: EF.html

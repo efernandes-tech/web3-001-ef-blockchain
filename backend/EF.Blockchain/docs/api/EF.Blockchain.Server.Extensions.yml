@@ -1,0 +1,23 @@
+### YamlMime:ManagedReference
+items:
+- uid: EF.Blockchain.Server.Extensions
+  commentId: N:EF.Blockchain.Server.Extensions
+  id: EF.Blockchain.Server.Extensions
+  children:
+  - EF.Blockchain.Server.Extensions.EndpointExtensions
+  langs:
+  - csharp
+  - vb
+  name: EF.Blockchain.Server.Extensions
+  nameWithType: EF.Blockchain.Server.Extensions
+  fullName: EF.Blockchain.Server.Extensions
+  type: Namespace
+  assemblies:
+  - EF.Blockchain.Server
+references:
+- uid: EF.Blockchain.Server.Extensions.EndpointExtensions
+  commentId: T:EF.Blockchain.Server.Extensions.EndpointExtensions
+  href: EF.Blockchain.Server.Extensions.EndpointExtensions.html
+  name: EndpointExtensions
+  nameWithType: EndpointExtensions
+  fullName: EF.Blockchain.Server.Extensions.EndpointExtensions

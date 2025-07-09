@@ -5,13 +5,27 @@ items:
   id: Blockchain
   parent: EF.Blockchain.Domain
   children:
-  - EF.Blockchain.Domain.Blockchain.#ctor
+  - EF.Blockchain.Domain.Blockchain.#ctor(System.String)
   - EF.Blockchain.Domain.Blockchain.AddBlock(EF.Blockchain.Domain.Block)
+  - EF.Blockchain.Domain.Blockchain.AddTransaction(EF.Blockchain.Domain.Transaction)
   - EF.Blockchain.Domain.Blockchain.Blocks
+  - EF.Blockchain.Domain.Blockchain.DIFFICULTY_FACTOR
+  - EF.Blockchain.Domain.Blockchain.GetBalance(System.String)
   - EF.Blockchain.Domain.Blockchain.GetBlock(System.String)
+  - EF.Blockchain.Domain.Blockchain.GetDifficulty
+  - EF.Blockchain.Domain.Blockchain.GetFeePerTx
   - EF.Blockchain.Domain.Blockchain.GetLastBlock
+  - EF.Blockchain.Domain.Blockchain.GetNextBlock
+  - EF.Blockchain.Domain.Blockchain.GetRewardAmount(System.Int32)
+  - EF.Blockchain.Domain.Blockchain.GetTransaction(System.String)
+  - EF.Blockchain.Domain.Blockchain.GetTxInputs(System.String)
+  - EF.Blockchain.Domain.Blockchain.GetTxOutputs(System.String)
+  - EF.Blockchain.Domain.Blockchain.GetUtxo(System.String)
   - EF.Blockchain.Domain.Blockchain.IsValid
+  - EF.Blockchain.Domain.Blockchain.MAX_DIFFICULTY
+  - EF.Blockchain.Domain.Blockchain.Mempool
   - EF.Blockchain.Domain.Blockchain.NextIndex
+  - EF.Blockchain.Domain.Blockchain.TX_PER_BLOCK
   langs:
   - csharp
   - vb
@@ -21,7 +35,7 @@ items:
   type: Class
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: Blockchain
@@ -30,7 +44,7 @@ items:
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
-  summary: Blockchain class
+  summary: Represents the core blockchain logic, managing blocks, transactions, mining, and validation.
   example: []
   syntax:
     content: public class Blockchain
@@ -58,15 +72,17 @@ items:
   type: Property
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: Blocks
     path: ../src/EF.Blockchain.Domain/Blockchain.cs
-    startLine: 7
+    startLine: 10
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: All confirmed blocks in the blockchain.
+  example: []
   syntax:
     content: public List<Block> Blocks { get; }
     parameters: []
@@ -74,6 +90,37 @@ items:
       type: System.Collections.Generic.List{EF.Blockchain.Domain.Block}
     content.vb: Public Property Blocks As List(Of Block)
   overload: EF.Blockchain.Domain.Blockchain.Blocks*
+- uid: EF.Blockchain.Domain.Blockchain.Mempool
+  commentId: P:EF.Blockchain.Domain.Blockchain.Mempool
+  id: Mempool
+  parent: EF.Blockchain.Domain.Blockchain
+  langs:
+  - csharp
+  - vb
+  name: Mempool
+  nameWithType: Blockchain.Mempool
+  fullName: EF.Blockchain.Domain.Blockchain.Mempool
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: Mempool
+    path: ../src/EF.Blockchain.Domain/Blockchain.cs
+    startLine: 15
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Pool of pending transactions waiting to be mined.
+  example: []
+  syntax:
+    content: public List<Transaction> Mempool { get; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{EF.Blockchain.Domain.Transaction}
+    content.vb: Public Property Mempool As List(Of Transaction)
+  overload: EF.Blockchain.Domain.Blockchain.Mempool*
 - uid: EF.Blockchain.Domain.Blockchain.NextIndex
   commentId: P:EF.Blockchain.Domain.Blockchain.NextIndex
   id: NextIndex
@@ -87,15 +134,17 @@ items:
   type: Property
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: NextIndex
     path: ../src/EF.Blockchain.Domain/Blockchain.cs
-    startLine: 8
+    startLine: 20
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: Index to be used for the next block.
+  example: []
   syntax:
     content: public int NextIndex { get; }
     parameters: []
@@ -103,37 +152,128 @@ items:
       type: System.Int32
     content.vb: Public Property NextIndex As Integer
   overload: EF.Blockchain.Domain.Blockchain.NextIndex*
-- uid: EF.Blockchain.Domain.Blockchain.#ctor
-  commentId: M:EF.Blockchain.Domain.Blockchain.#ctor
-  id: '#ctor'
+- uid: EF.Blockchain.Domain.Blockchain.DIFFICULTY_FACTOR
+  commentId: F:EF.Blockchain.Domain.Blockchain.DIFFICULTY_FACTOR
+  id: DIFFICULTY_FACTOR
   parent: EF.Blockchain.Domain.Blockchain
   langs:
   - csharp
   - vb
-  name: Blockchain()
-  nameWithType: Blockchain.Blockchain()
-  fullName: EF.Blockchain.Domain.Blockchain.Blockchain()
+  name: DIFFICULTY_FACTOR
+  nameWithType: Blockchain.DIFFICULTY_FACTOR
+  fullName: EF.Blockchain.Domain.Blockchain.DIFFICULTY_FACTOR
+  type: Field
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: DIFFICULTY_FACTOR
+    path: ../src/EF.Blockchain.Domain/Blockchain.cs
+    startLine: 25
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Number of blocks required to increase mining difficulty.
+  example: []
+  syntax:
+    content: public static readonly int DIFFICULTY_FACTOR
+    return:
+      type: System.Int32
+    content.vb: Public Shared ReadOnly DIFFICULTY_FACTOR As Integer
+- uid: EF.Blockchain.Domain.Blockchain.TX_PER_BLOCK
+  commentId: F:EF.Blockchain.Domain.Blockchain.TX_PER_BLOCK
+  id: TX_PER_BLOCK
+  parent: EF.Blockchain.Domain.Blockchain
+  langs:
+  - csharp
+  - vb
+  name: TX_PER_BLOCK
+  nameWithType: Blockchain.TX_PER_BLOCK
+  fullName: EF.Blockchain.Domain.Blockchain.TX_PER_BLOCK
+  type: Field
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: TX_PER_BLOCK
+    path: ../src/EF.Blockchain.Domain/Blockchain.cs
+    startLine: 30
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Maximum number of transactions per block.
+  example: []
+  syntax:
+    content: public static readonly int TX_PER_BLOCK
+    return:
+      type: System.Int32
+    content.vb: Public Shared ReadOnly TX_PER_BLOCK As Integer
+- uid: EF.Blockchain.Domain.Blockchain.MAX_DIFFICULTY
+  commentId: F:EF.Blockchain.Domain.Blockchain.MAX_DIFFICULTY
+  id: MAX_DIFFICULTY
+  parent: EF.Blockchain.Domain.Blockchain
+  langs:
+  - csharp
+  - vb
+  name: MAX_DIFFICULTY
+  nameWithType: Blockchain.MAX_DIFFICULTY
+  fullName: EF.Blockchain.Domain.Blockchain.MAX_DIFFICULTY
+  type: Field
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: MAX_DIFFICULTY
+    path: ../src/EF.Blockchain.Domain/Blockchain.cs
+    startLine: 35
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Maximum mining difficulty.
+  example: []
+  syntax:
+    content: public static readonly int MAX_DIFFICULTY
+    return:
+      type: System.Int32
+    content.vb: Public Shared ReadOnly MAX_DIFFICULTY As Integer
+- uid: EF.Blockchain.Domain.Blockchain.#ctor(System.String)
+  commentId: M:EF.Blockchain.Domain.Blockchain.#ctor(System.String)
+  id: '#ctor(System.String)'
+  parent: EF.Blockchain.Domain.Blockchain
+  langs:
+  - csharp
+  - vb
+  name: Blockchain(string)
+  nameWithType: Blockchain.Blockchain(string)
+  fullName: EF.Blockchain.Domain.Blockchain.Blockchain(string)
   type: Constructor
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: .ctor
     path: ../src/EF.Blockchain.Domain/Blockchain.cs
-    startLine: 13
+    startLine: 41
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
-  summary: Creates a new blockchain
+  summary: Initializes a new blockchain with a genesis block mined by the given miner.
   example: []
   syntax:
-    content: public Blockchain()
-    content.vb: Public Sub New()
+    content: public Blockchain(string miner)
+    parameters:
+    - id: miner
+      type: System.String
+      description: The public key (wallet address) of the genesis miner.
+    content.vb: Public Sub New(miner As String)
   overload: EF.Blockchain.Domain.Blockchain.#ctor*
-  nameWithType.vb: Blockchain.New()
-  fullName.vb: EF.Blockchain.Domain.Blockchain.New()
-  name.vb: New()
+  nameWithType.vb: Blockchain.New(String)
+  fullName.vb: EF.Blockchain.Domain.Blockchain.New(String)
+  name.vb: New(String)
 - uid: EF.Blockchain.Domain.Blockchain.GetLastBlock
   commentId: M:EF.Blockchain.Domain.Blockchain.GetLastBlock
   id: GetLastBlock
@@ -147,21 +287,86 @@ items:
   type: Method
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: GetLastBlock
     path: ../src/EF.Blockchain.Domain/Blockchain.cs
-    startLine: 20
+    startLine: 73
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: Returns the last confirmed block.
+  example: []
   syntax:
     content: public Block GetLastBlock()
     return:
       type: EF.Blockchain.Domain.Block
     content.vb: Public Function GetLastBlock() As Block
   overload: EF.Blockchain.Domain.Blockchain.GetLastBlock*
+- uid: EF.Blockchain.Domain.Blockchain.GetDifficulty
+  commentId: M:EF.Blockchain.Domain.Blockchain.GetDifficulty
+  id: GetDifficulty
+  parent: EF.Blockchain.Domain.Blockchain
+  langs:
+  - csharp
+  - vb
+  name: GetDifficulty()
+  nameWithType: Blockchain.GetDifficulty()
+  fullName: EF.Blockchain.Domain.Blockchain.GetDifficulty()
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: GetDifficulty
+    path: ../src/EF.Blockchain.Domain/Blockchain.cs
+    startLine: 81
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Calculates the current mining difficulty based on the number of blocks.
+  example: []
+  syntax:
+    content: public int GetDifficulty()
+    return:
+      type: System.Int32
+    content.vb: Public Function GetDifficulty() As Integer
+  overload: EF.Blockchain.Domain.Blockchain.GetDifficulty*
+- uid: EF.Blockchain.Domain.Blockchain.AddTransaction(EF.Blockchain.Domain.Transaction)
+  commentId: M:EF.Blockchain.Domain.Blockchain.AddTransaction(EF.Blockchain.Domain.Transaction)
+  id: AddTransaction(EF.Blockchain.Domain.Transaction)
+  parent: EF.Blockchain.Domain.Blockchain
+  langs:
+  - csharp
+  - vb
+  name: AddTransaction(Transaction)
+  nameWithType: Blockchain.AddTransaction(Transaction)
+  fullName: EF.Blockchain.Domain.Blockchain.AddTransaction(EF.Blockchain.Domain.Transaction)
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: AddTransaction
+    path: ../src/EF.Blockchain.Domain/Blockchain.cs
+    startLine: 89
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Attempts to add a transaction to the mempool after validating it.
+  example: []
+  syntax:
+    content: public Validation AddTransaction(Transaction transaction)
+    parameters:
+    - id: transaction
+      type: EF.Blockchain.Domain.Transaction
+    return:
+      type: EF.Blockchain.Domain.Validation
+    content.vb: Public Function AddTransaction(transaction As Transaction) As Validation
+  overload: EF.Blockchain.Domain.Blockchain.AddTransaction*
 - uid: EF.Blockchain.Domain.Blockchain.AddBlock(EF.Blockchain.Domain.Block)
   commentId: M:EF.Blockchain.Domain.Blockchain.AddBlock(EF.Blockchain.Domain.Block)
   id: AddBlock(EF.Blockchain.Domain.Block)
@@ -175,15 +380,17 @@ items:
   type: Method
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: AddBlock
     path: ../src/EF.Blockchain.Domain/Blockchain.cs
-    startLine: 25
+    startLine: 130
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: Attempts to add a new mined block to the blockchain after validation.
+  example: []
   syntax:
     content: public Validation AddBlock(Block block)
     parameters:
@@ -206,15 +413,17 @@ items:
   type: Method
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: GetBlock
     path: ../src/EF.Blockchain.Domain/Blockchain.cs
-    startLine: 39
+    startLine: 168
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: Finds a block by its hash.
+  example: []
   syntax:
     content: public Block? GetBlock(string hash)
     parameters:
@@ -227,6 +436,42 @@ items:
   nameWithType.vb: Blockchain.GetBlock(String)
   fullName.vb: EF.Blockchain.Domain.Blockchain.GetBlock(String)
   name.vb: GetBlock(String)
+- uid: EF.Blockchain.Domain.Blockchain.GetTransaction(System.String)
+  commentId: M:EF.Blockchain.Domain.Blockchain.GetTransaction(System.String)
+  id: GetTransaction(System.String)
+  parent: EF.Blockchain.Domain.Blockchain
+  langs:
+  - csharp
+  - vb
+  name: GetTransaction(string)
+  nameWithType: Blockchain.GetTransaction(string)
+  fullName: EF.Blockchain.Domain.Blockchain.GetTransaction(string)
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: GetTransaction
+    path: ../src/EF.Blockchain.Domain/Blockchain.cs
+    startLine: 176
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Finds a transaction by hash in the mempool or blockchain.
+  example: []
+  syntax:
+    content: public TransactionSearch GetTransaction(string hash)
+    parameters:
+    - id: hash
+      type: System.String
+    return:
+      type: EF.Blockchain.Domain.TransactionSearch
+    content.vb: Public Function GetTransaction(hash As String) As TransactionSearch
+  overload: EF.Blockchain.Domain.Blockchain.GetTransaction*
+  nameWithType.vb: Blockchain.GetTransaction(String)
+  fullName.vb: EF.Blockchain.Domain.Blockchain.GetTransaction(String)
+  name.vb: GetTransaction(String)
 - uid: EF.Blockchain.Domain.Blockchain.IsValid
   commentId: M:EF.Blockchain.Domain.Blockchain.IsValid
   id: IsValid
@@ -240,21 +485,263 @@ items:
   type: Method
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: IsValid
     path: ../src/EF.Blockchain.Domain/Blockchain.cs
-    startLine: 44
+    startLine: 209
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: Validates the integrity of the entire blockchain from the latest block to the genesis.
+  example: []
   syntax:
     content: public Validation IsValid()
     return:
       type: EF.Blockchain.Domain.Validation
     content.vb: Public Function IsValid() As Validation
   overload: EF.Blockchain.Domain.Blockchain.IsValid*
+- uid: EF.Blockchain.Domain.Blockchain.GetFeePerTx
+  commentId: M:EF.Blockchain.Domain.Blockchain.GetFeePerTx
+  id: GetFeePerTx
+  parent: EF.Blockchain.Domain.Blockchain
+  langs:
+  - csharp
+  - vb
+  name: GetFeePerTx()
+  nameWithType: Blockchain.GetFeePerTx()
+  fullName: EF.Blockchain.Domain.Blockchain.GetFeePerTx()
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: GetFeePerTx
+    path: ../src/EF.Blockchain.Domain/Blockchain.cs
+    startLine: 231
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Returns the current fixed fee per transaction.
+  example: []
+  syntax:
+    content: public int GetFeePerTx()
+    return:
+      type: System.Int32
+    content.vb: Public Function GetFeePerTx() As Integer
+  overload: EF.Blockchain.Domain.Blockchain.GetFeePerTx*
+- uid: EF.Blockchain.Domain.Blockchain.GetNextBlock
+  commentId: M:EF.Blockchain.Domain.Blockchain.GetNextBlock
+  id: GetNextBlock
+  parent: EF.Blockchain.Domain.Blockchain
+  langs:
+  - csharp
+  - vb
+  name: GetNextBlock()
+  nameWithType: Blockchain.GetNextBlock()
+  fullName: EF.Blockchain.Domain.Blockchain.GetNextBlock()
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: GetNextBlock
+    path: ../src/EF.Blockchain.Domain/Blockchain.cs
+    startLine: 239
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Builds a <xref href="EF.Blockchain.Domain.BlockInfo" data-throw-if-not-resolved="false"></xref> object with data needed to mine the next block.
+  example: []
+  syntax:
+    content: public BlockInfo? GetNextBlock()
+    return:
+      type: EF.Blockchain.Domain.BlockInfo
+    content.vb: Public Function GetNextBlock() As BlockInfo
+  overload: EF.Blockchain.Domain.Blockchain.GetNextBlock*
+- uid: EF.Blockchain.Domain.Blockchain.GetTxInputs(System.String)
+  commentId: M:EF.Blockchain.Domain.Blockchain.GetTxInputs(System.String)
+  id: GetTxInputs(System.String)
+  parent: EF.Blockchain.Domain.Blockchain
+  langs:
+  - csharp
+  - vb
+  name: GetTxInputs(string)
+  nameWithType: Blockchain.GetTxInputs(string)
+  fullName: EF.Blockchain.Domain.Blockchain.GetTxInputs(string)
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: GetTxInputs
+    path: ../src/EF.Blockchain.Domain/Blockchain.cs
+    startLine: 265
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Returns all transaction inputs for a specific wallet.
+  example: []
+  syntax:
+    content: public List<TransactionInput> GetTxInputs(string wallet)
+    parameters:
+    - id: wallet
+      type: System.String
+    return:
+      type: System.Collections.Generic.List{EF.Blockchain.Domain.TransactionInput}
+    content.vb: Public Function GetTxInputs(wallet As String) As List(Of TransactionInput)
+  overload: EF.Blockchain.Domain.Blockchain.GetTxInputs*
+  nameWithType.vb: Blockchain.GetTxInputs(String)
+  fullName.vb: EF.Blockchain.Domain.Blockchain.GetTxInputs(String)
+  name.vb: GetTxInputs(String)
+- uid: EF.Blockchain.Domain.Blockchain.GetTxOutputs(System.String)
+  commentId: M:EF.Blockchain.Domain.Blockchain.GetTxOutputs(System.String)
+  id: GetTxOutputs(System.String)
+  parent: EF.Blockchain.Domain.Blockchain
+  langs:
+  - csharp
+  - vb
+  name: GetTxOutputs(string)
+  nameWithType: Blockchain.GetTxOutputs(string)
+  fullName: EF.Blockchain.Domain.Blockchain.GetTxOutputs(string)
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: GetTxOutputs
+    path: ../src/EF.Blockchain.Domain/Blockchain.cs
+    startLine: 278
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Returns all transaction outputs for a specific wallet.
+  example: []
+  syntax:
+    content: public List<TransactionOutput> GetTxOutputs(string wallet)
+    parameters:
+    - id: wallet
+      type: System.String
+    return:
+      type: System.Collections.Generic.List{EF.Blockchain.Domain.TransactionOutput}
+    content.vb: Public Function GetTxOutputs(wallet As String) As List(Of TransactionOutput)
+  overload: EF.Blockchain.Domain.Blockchain.GetTxOutputs*
+  nameWithType.vb: Blockchain.GetTxOutputs(String)
+  fullName.vb: EF.Blockchain.Domain.Blockchain.GetTxOutputs(String)
+  name.vb: GetTxOutputs(String)
+- uid: EF.Blockchain.Domain.Blockchain.GetUtxo(System.String)
+  commentId: M:EF.Blockchain.Domain.Blockchain.GetUtxo(System.String)
+  id: GetUtxo(System.String)
+  parent: EF.Blockchain.Domain.Blockchain
+  langs:
+  - csharp
+  - vb
+  name: GetUtxo(string)
+  nameWithType: Blockchain.GetUtxo(string)
+  fullName: EF.Blockchain.Domain.Blockchain.GetUtxo(string)
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: GetUtxo
+    path: ../src/EF.Blockchain.Domain/Blockchain.cs
+    startLine: 291
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Returns the list of unspent transaction outputs (UTXOs) for a wallet.
+  example: []
+  syntax:
+    content: public List<TransactionOutput> GetUtxo(string wallet)
+    parameters:
+    - id: wallet
+      type: System.String
+    return:
+      type: System.Collections.Generic.List{EF.Blockchain.Domain.TransactionOutput}
+    content.vb: Public Function GetUtxo(wallet As String) As List(Of TransactionOutput)
+  overload: EF.Blockchain.Domain.Blockchain.GetUtxo*
+  nameWithType.vb: Blockchain.GetUtxo(String)
+  fullName.vb: EF.Blockchain.Domain.Blockchain.GetUtxo(String)
+  name.vb: GetUtxo(String)
+- uid: EF.Blockchain.Domain.Blockchain.GetBalance(System.String)
+  commentId: M:EF.Blockchain.Domain.Blockchain.GetBalance(System.String)
+  id: GetBalance(System.String)
+  parent: EF.Blockchain.Domain.Blockchain
+  langs:
+  - csharp
+  - vb
+  name: GetBalance(string)
+  nameWithType: Blockchain.GetBalance(string)
+  fullName: EF.Blockchain.Domain.Blockchain.GetBalance(string)
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: GetBalance
+    path: ../src/EF.Blockchain.Domain/Blockchain.cs
+    startLine: 313
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Returns the total balance of a wallet based on UTXOs.
+  example: []
+  syntax:
+    content: public int GetBalance(string wallet)
+    parameters:
+    - id: wallet
+      type: System.String
+    return:
+      type: System.Int32
+    content.vb: Public Function GetBalance(wallet As String) As Integer
+  overload: EF.Blockchain.Domain.Blockchain.GetBalance*
+  nameWithType.vb: Blockchain.GetBalance(String)
+  fullName.vb: EF.Blockchain.Domain.Blockchain.GetBalance(String)
+  name.vb: GetBalance(String)
+- uid: EF.Blockchain.Domain.Blockchain.GetRewardAmount(System.Int32)
+  commentId: M:EF.Blockchain.Domain.Blockchain.GetRewardAmount(System.Int32)
+  id: GetRewardAmount(System.Int32)
+  parent: EF.Blockchain.Domain.Blockchain
+  langs:
+  - csharp
+  - vb
+  name: GetRewardAmount(int)
+  nameWithType: Blockchain.GetRewardAmount(int)
+  fullName: EF.Blockchain.Domain.Blockchain.GetRewardAmount(int)
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Blockchain.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: GetRewardAmount
+    path: ../src/EF.Blockchain.Domain/Blockchain.cs
+    startLine: 322
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Calculates the mining reward based on the current difficulty.
+  example: []
+  syntax:
+    content: public static int GetRewardAmount(int difficulty)
+    parameters:
+    - id: difficulty
+      type: System.Int32
+    return:
+      type: System.Int32
+    content.vb: Public Shared Function GetRewardAmount(difficulty As Integer) As Integer
+  overload: EF.Blockchain.Domain.Blockchain.GetRewardAmount*
+  nameWithType.vb: Blockchain.GetRewardAmount(Integer)
+  fullName.vb: EF.Blockchain.Domain.Blockchain.GetRewardAmount(Integer)
+  name.vb: GetRewardAmount(Integer)
 references:
 - uid: EF.Blockchain.Domain
   commentId: N:EF.Blockchain.Domain
@@ -627,6 +1114,45 @@ references:
     name: Generic
     isExternal: true
     href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: EF.Blockchain.Domain.Blockchain.Mempool*
+  commentId: Overload:EF.Blockchain.Domain.Blockchain.Mempool
+  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_Mempool
+  name: Mempool
+  nameWithType: Blockchain.Mempool
+  fullName: EF.Blockchain.Domain.Blockchain.Mempool
+- uid: System.Collections.Generic.List{EF.Blockchain.Domain.Transaction}
+  commentId: T:System.Collections.Generic.List{EF.Blockchain.Domain.Transaction}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<Transaction>
+  nameWithType: List<Transaction>
+  fullName: System.Collections.Generic.List<EF.Blockchain.Domain.Transaction>
+  nameWithType.vb: List(Of Transaction)
+  fullName.vb: System.Collections.Generic.List(Of EF.Blockchain.Domain.Transaction)
+  name.vb: List(Of Transaction)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: EF.Blockchain.Domain.Transaction
+    name: Transaction
+    href: EF.Blockchain.Domain.Transaction.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: EF.Blockchain.Domain.Transaction
+    name: Transaction
+    href: EF.Blockchain.Domain.Transaction.html
+  - name: )
 - uid: EF.Blockchain.Domain.Blockchain.NextIndex*
   commentId: Overload:EF.Blockchain.Domain.Blockchain.NextIndex
   href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_NextIndex
@@ -646,13 +1172,24 @@ references:
   name.vb: Integer
 - uid: EF.Blockchain.Domain.Blockchain.#ctor*
   commentId: Overload:EF.Blockchain.Domain.Blockchain.#ctor
-  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain__ctor
+  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain__ctor_System_String_
   name: Blockchain
   nameWithType: Blockchain.Blockchain
   fullName: EF.Blockchain.Domain.Blockchain.Blockchain
   nameWithType.vb: Blockchain.New
   fullName.vb: EF.Blockchain.Domain.Blockchain.New
   name.vb: New
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
 - uid: EF.Blockchain.Domain.Blockchain.GetLastBlock*
   commentId: Overload:EF.Blockchain.Domain.Blockchain.GetLastBlock
   href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_GetLastBlock
@@ -666,12 +1203,25 @@ references:
   name: Block
   nameWithType: Block
   fullName: EF.Blockchain.Domain.Block
-- uid: EF.Blockchain.Domain.Blockchain.AddBlock*
-  commentId: Overload:EF.Blockchain.Domain.Blockchain.AddBlock
-  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_AddBlock_EF_Blockchain_Domain_Block_
-  name: AddBlock
-  nameWithType: Blockchain.AddBlock
-  fullName: EF.Blockchain.Domain.Blockchain.AddBlock
+- uid: EF.Blockchain.Domain.Blockchain.GetDifficulty*
+  commentId: Overload:EF.Blockchain.Domain.Blockchain.GetDifficulty
+  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_GetDifficulty
+  name: GetDifficulty
+  nameWithType: Blockchain.GetDifficulty
+  fullName: EF.Blockchain.Domain.Blockchain.GetDifficulty
+- uid: EF.Blockchain.Domain.Blockchain.AddTransaction*
+  commentId: Overload:EF.Blockchain.Domain.Blockchain.AddTransaction
+  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_AddTransaction_EF_Blockchain_Domain_Transaction_
+  name: AddTransaction
+  nameWithType: Blockchain.AddTransaction
+  fullName: EF.Blockchain.Domain.Blockchain.AddTransaction
+- uid: EF.Blockchain.Domain.Transaction
+  commentId: T:EF.Blockchain.Domain.Transaction
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.Transaction.html
+  name: Transaction
+  nameWithType: Transaction
+  fullName: EF.Blockchain.Domain.Transaction
 - uid: EF.Blockchain.Domain.Validation
   commentId: T:EF.Blockchain.Domain.Validation
   parent: EF.Blockchain.Domain
@@ -679,26 +1229,149 @@ references:
   name: Validation
   nameWithType: Validation
   fullName: EF.Blockchain.Domain.Validation
+- uid: EF.Blockchain.Domain.Blockchain.AddBlock*
+  commentId: Overload:EF.Blockchain.Domain.Blockchain.AddBlock
+  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_AddBlock_EF_Blockchain_Domain_Block_
+  name: AddBlock
+  nameWithType: Blockchain.AddBlock
+  fullName: EF.Blockchain.Domain.Blockchain.AddBlock
 - uid: EF.Blockchain.Domain.Blockchain.GetBlock*
   commentId: Overload:EF.Blockchain.Domain.Blockchain.GetBlock
   href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_GetBlock_System_String_
   name: GetBlock
   nameWithType: Blockchain.GetBlock
   fullName: EF.Blockchain.Domain.Blockchain.GetBlock
-- uid: System.String
-  commentId: T:System.String
-  parent: System
-  isExternal: true
-  href: https://learn.microsoft.com/dotnet/api/system.string
-  name: string
-  nameWithType: string
-  fullName: string
-  nameWithType.vb: String
-  fullName.vb: String
-  name.vb: String
+- uid: EF.Blockchain.Domain.Blockchain.GetTransaction*
+  commentId: Overload:EF.Blockchain.Domain.Blockchain.GetTransaction
+  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_GetTransaction_System_String_
+  name: GetTransaction
+  nameWithType: Blockchain.GetTransaction
+  fullName: EF.Blockchain.Domain.Blockchain.GetTransaction
+- uid: EF.Blockchain.Domain.TransactionSearch
+  commentId: T:EF.Blockchain.Domain.TransactionSearch
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.TransactionSearch.html
+  name: TransactionSearch
+  nameWithType: TransactionSearch
+  fullName: EF.Blockchain.Domain.TransactionSearch
 - uid: EF.Blockchain.Domain.Blockchain.IsValid*
   commentId: Overload:EF.Blockchain.Domain.Blockchain.IsValid
   href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_IsValid
   name: IsValid
   nameWithType: Blockchain.IsValid
   fullName: EF.Blockchain.Domain.Blockchain.IsValid
+- uid: EF.Blockchain.Domain.Blockchain.GetFeePerTx*
+  commentId: Overload:EF.Blockchain.Domain.Blockchain.GetFeePerTx
+  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_GetFeePerTx
+  name: GetFeePerTx
+  nameWithType: Blockchain.GetFeePerTx
+  fullName: EF.Blockchain.Domain.Blockchain.GetFeePerTx
+- uid: EF.Blockchain.Domain.BlockInfo
+  commentId: T:EF.Blockchain.Domain.BlockInfo
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.BlockInfo.html
+  name: BlockInfo
+  nameWithType: BlockInfo
+  fullName: EF.Blockchain.Domain.BlockInfo
+- uid: EF.Blockchain.Domain.Blockchain.GetNextBlock*
+  commentId: Overload:EF.Blockchain.Domain.Blockchain.GetNextBlock
+  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_GetNextBlock
+  name: GetNextBlock
+  nameWithType: Blockchain.GetNextBlock
+  fullName: EF.Blockchain.Domain.Blockchain.GetNextBlock
+- uid: EF.Blockchain.Domain.Blockchain.GetTxInputs*
+  commentId: Overload:EF.Blockchain.Domain.Blockchain.GetTxInputs
+  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_GetTxInputs_System_String_
+  name: GetTxInputs
+  nameWithType: Blockchain.GetTxInputs
+  fullName: EF.Blockchain.Domain.Blockchain.GetTxInputs
+- uid: System.Collections.Generic.List{EF.Blockchain.Domain.TransactionInput}
+  commentId: T:System.Collections.Generic.List{EF.Blockchain.Domain.TransactionInput}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<TransactionInput>
+  nameWithType: List<TransactionInput>
+  fullName: System.Collections.Generic.List<EF.Blockchain.Domain.TransactionInput>
+  nameWithType.vb: List(Of TransactionInput)
+  fullName.vb: System.Collections.Generic.List(Of EF.Blockchain.Domain.TransactionInput)
+  name.vb: List(Of TransactionInput)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: EF.Blockchain.Domain.TransactionInput
+    name: TransactionInput
+    href: EF.Blockchain.Domain.TransactionInput.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: EF.Blockchain.Domain.TransactionInput
+    name: TransactionInput
+    href: EF.Blockchain.Domain.TransactionInput.html
+  - name: )
+- uid: EF.Blockchain.Domain.Blockchain.GetTxOutputs*
+  commentId: Overload:EF.Blockchain.Domain.Blockchain.GetTxOutputs
+  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_GetTxOutputs_System_String_
+  name: GetTxOutputs
+  nameWithType: Blockchain.GetTxOutputs
+  fullName: EF.Blockchain.Domain.Blockchain.GetTxOutputs
+- uid: System.Collections.Generic.List{EF.Blockchain.Domain.TransactionOutput}
+  commentId: T:System.Collections.Generic.List{EF.Blockchain.Domain.TransactionOutput}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<TransactionOutput>
+  nameWithType: List<TransactionOutput>
+  fullName: System.Collections.Generic.List<EF.Blockchain.Domain.TransactionOutput>
+  nameWithType.vb: List(Of TransactionOutput)
+  fullName.vb: System.Collections.Generic.List(Of EF.Blockchain.Domain.TransactionOutput)
+  name.vb: List(Of TransactionOutput)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: EF.Blockchain.Domain.TransactionOutput
+    name: TransactionOutput
+    href: EF.Blockchain.Domain.TransactionOutput.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: EF.Blockchain.Domain.TransactionOutput
+    name: TransactionOutput
+    href: EF.Blockchain.Domain.TransactionOutput.html
+  - name: )
+- uid: EF.Blockchain.Domain.Blockchain.GetUtxo*
+  commentId: Overload:EF.Blockchain.Domain.Blockchain.GetUtxo
+  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_GetUtxo_System_String_
+  name: GetUtxo
+  nameWithType: Blockchain.GetUtxo
+  fullName: EF.Blockchain.Domain.Blockchain.GetUtxo
+- uid: EF.Blockchain.Domain.Blockchain.GetBalance*
+  commentId: Overload:EF.Blockchain.Domain.Blockchain.GetBalance
+  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_GetBalance_System_String_
+  name: GetBalance
+  nameWithType: Blockchain.GetBalance
+  fullName: EF.Blockchain.Domain.Blockchain.GetBalance
+- uid: EF.Blockchain.Domain.Blockchain.GetRewardAmount*
+  commentId: Overload:EF.Blockchain.Domain.Blockchain.GetRewardAmount
+  href: EF.Blockchain.Domain.Blockchain.html#EF_Blockchain_Domain_Blockchain_GetRewardAmount_System_Int32_
+  name: GetRewardAmount
+  nameWithType: Blockchain.GetRewardAmount
+  fullName: EF.Blockchain.Domain.Blockchain.GetRewardAmount

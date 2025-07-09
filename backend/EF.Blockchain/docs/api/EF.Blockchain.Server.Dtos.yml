@@ -1,0 +1,117 @@
+### YamlMime:ManagedReference
+items:
+- uid: EF.Blockchain.Server.Dtos
+  commentId: N:EF.Blockchain.Server.Dtos
+  id: EF.Blockchain.Server.Dtos
+  children:
+  - EF.Blockchain.Server.Dtos.BlockDto
+  - EF.Blockchain.Server.Dtos.BlockInfoDto
+  - EF.Blockchain.Server.Dtos.StatusDto
+  - EF.Blockchain.Server.Dtos.TransactionDto
+  - EF.Blockchain.Server.Dtos.TransactionInputDto
+  - EF.Blockchain.Server.Dtos.TransactionOutputDto
+  - EF.Blockchain.Server.Dtos.TransactionSearchDto
+  - EF.Blockchain.Server.Dtos.WalletDto
+  langs:
+  - csharp
+  - vb
+  name: EF.Blockchain.Server.Dtos
+  nameWithType: EF.Blockchain.Server.Dtos
+  fullName: EF.Blockchain.Server.Dtos
+  type: Namespace
+  assemblies:
+  - EF.Blockchain.Server
+references:
+- uid: EF.Blockchain.Server.Dtos.BlockDto
+  commentId: T:EF.Blockchain.Server.Dtos.BlockDto
+  parent: EF.Blockchain.Server.Dtos
+  href: EF.Blockchain.Server.Dtos.BlockDto.html
+  name: BlockDto
+  nameWithType: BlockDto
+  fullName: EF.Blockchain.Server.Dtos.BlockDto
+- uid: EF.Blockchain.Server.Dtos.BlockInfoDto
+  commentId: T:EF.Blockchain.Server.Dtos.BlockInfoDto
+  parent: EF.Blockchain.Server.Dtos
+  href: EF.Blockchain.Server.Dtos.BlockInfoDto.html
+  name: BlockInfoDto
+  nameWithType: BlockInfoDto
+  fullName: EF.Blockchain.Server.Dtos.BlockInfoDto
+- uid: EF.Blockchain.Server.Dtos.StatusDto
+  commentId: T:EF.Blockchain.Server.Dtos.StatusDto
+  href: EF.Blockchain.Server.Dtos.StatusDto.html
+  name: StatusDto
+  nameWithType: StatusDto
+  fullName: EF.Blockchain.Server.Dtos.StatusDto
+- uid: EF.Blockchain.Server.Dtos.TransactionDto
+  commentId: T:EF.Blockchain.Server.Dtos.TransactionDto
+  parent: EF.Blockchain.Server.Dtos
+  href: EF.Blockchain.Server.Dtos.TransactionDto.html
+  name: TransactionDto
+  nameWithType: TransactionDto
+  fullName: EF.Blockchain.Server.Dtos.TransactionDto
+- uid: EF.Blockchain.Server.Dtos.TransactionInputDto
+  commentId: T:EF.Blockchain.Server.Dtos.TransactionInputDto
+  parent: EF.Blockchain.Server.Dtos
+  href: EF.Blockchain.Server.Dtos.TransactionInputDto.html
+  name: TransactionInputDto
+  nameWithType: TransactionInputDto
+  fullName: EF.Blockchain.Server.Dtos.TransactionInputDto
+- uid: EF.Blockchain.Server.Dtos.TransactionOutputDto
+  commentId: T:EF.Blockchain.Server.Dtos.TransactionOutputDto
+  parent: EF.Blockchain.Server.Dtos
+  href: EF.Blockchain.Server.Dtos.TransactionOutputDto.html
+  name: TransactionOutputDto
+  nameWithType: TransactionOutputDto
+  fullName: EF.Blockchain.Server.Dtos.TransactionOutputDto
+- uid: EF.Blockchain.Server.Dtos.TransactionSearchDto
+  commentId: T:EF.Blockchain.Server.Dtos.TransactionSearchDto
+  parent: EF.Blockchain.Server.Dtos
+  href: EF.Blockchain.Server.Dtos.TransactionSearchDto.html
+  name: TransactionSearchDto
+  nameWithType: TransactionSearchDto
+  fullName: EF.Blockchain.Server.Dtos.TransactionSearchDto
+- uid: EF.Blockchain.Server.Dtos.WalletDto
+  commentId: T:EF.Blockchain.Server.Dtos.WalletDto
+  parent: EF.Blockchain.Server.Dtos
+  href: EF.Blockchain.Server.Dtos.WalletDto.html
+  name: WalletDto
+  nameWithType: WalletDto
+  fullName: EF.Blockchain.Server.Dtos.WalletDto
+- uid: EF.Blockchain.Server.Dtos
+  commentId: N:EF.Blockchain.Server.Dtos
+  href: EF.html
+  name: EF.Blockchain.Server.Dtos
+  nameWithType: EF.Blockchain.Server.Dtos
+  fullName: EF.Blockchain.Server.Dtos
+  spec.csharp:
+  - uid: EF
+    name: EF
+    href: EF.html
+  - name: .
+  - uid: EF.Blockchain
+    name: Blockchain
+    href: EF.Blockchain.html
+  - name: .
+  - uid: EF.Blockchain.Server
+    name: Server
+    href: EF.Blockchain.Server.html
+  - name: .
+  - uid: EF.Blockchain.Server.Dtos
+    name: Dtos
+    href: EF.Blockchain.Server.Dtos.html
+  spec.vb:
+  - uid: EF
+    name: EF
+    href: EF.html
+  - name: .
+  - uid: EF.Blockchain
+    name: Blockchain
+    href: EF.Blockchain.html
+  - name: .
+  - uid: EF.Blockchain.Server
+    name: Server
+    href: EF.Blockchain.Server.html
+  - name: .
+  - uid: EF.Blockchain.Server.Dtos
+    name: Dtos
+    href: EF.Blockchain.Server.Dtos.html

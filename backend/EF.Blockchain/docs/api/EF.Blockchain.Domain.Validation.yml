@@ -17,7 +17,7 @@ items:
   type: Class
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Validation.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Validation.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: Validation
@@ -26,7 +26,7 @@ items:
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
-  summary: Validation class
+  summary: Represents the result of a validation process, indicating success or failure with an optional message.
   example: []
   syntax:
     content: public class Validation
@@ -54,15 +54,17 @@ items:
   type: Property
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Validation.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Validation.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: Success
     path: ../src/EF.Blockchain.Domain/Validation.cs
-    startLine: 7
+    startLine: 10
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: Indicates whether the validation was successful.
+  example: []
   syntax:
     content: public bool Success { get; }
     parameters: []
@@ -83,15 +85,17 @@ items:
   type: Property
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Validation.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Validation.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: Message
     path: ../src/EF.Blockchain.Domain/Validation.cs
-    startLine: 8
+    startLine: 15
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
+  summary: Message describing the validation result, usually used in case of failure.
+  example: []
   syntax:
     content: public string Message { get; }
     parameters: []
@@ -112,26 +116,26 @@ items:
   type: Constructor
   source:
     remote:
-      path: dotnet-version/EF.Blockchain/src/EF.Blockchain.Domain/Validation.cs
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/Validation.cs
       branch: main
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: .ctor
     path: ../src/EF.Blockchain.Domain/Validation.cs
-    startLine: 15
+    startLine: 22
   assemblies:
   - EF.Blockchain.Domain
   namespace: EF.Blockchain.Domain
-  summary: Creates a new validation object
+  summary: Initializes a new instance of the <xref href="EF.Blockchain.Domain.Validation" data-throw-if-not-resolved="false"></xref> class.
   example: []
   syntax:
     content: public Validation(bool success = true, string message = "")
     parameters:
     - id: success
       type: System.Boolean
-      description: If the validation was successful
+      description: 'Indicates if the validation passed (default: true).'
     - id: message
       type: System.String
-      description: The validation message
+      description: Optional message explaining the validation result.
     content.vb: Public Sub New(success As Boolean = True, message As String = "")
   overload: EF.Blockchain.Domain.Validation.#ctor*
   nameWithType.vb: Validation.New(Boolean, String)
@@ -439,6 +443,13 @@ references:
   nameWithType.vb: String
   fullName.vb: String
   name.vb: String
+- uid: EF.Blockchain.Domain.Validation
+  commentId: T:EF.Blockchain.Domain.Validation
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.Validation.html
+  name: Validation
+  nameWithType: Validation
+  fullName: EF.Blockchain.Domain.Validation
 - uid: EF.Blockchain.Domain.Validation.#ctor*
   commentId: Overload:EF.Blockchain.Domain.Validation.#ctor
   href: EF.Blockchain.Domain.Validation.html#EF_Blockchain_Domain_Validation__ctor_System_Boolean_System_String_

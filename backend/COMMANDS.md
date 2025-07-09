@@ -7,7 +7,7 @@ dotnet tool install --global dotnet-reportgenerator-globaltool
 ```
 
 ```cmd
-cd ./dotnet-version/EF.Blockchain
+cd ./backend/EF.Blockchain
 
 dotnet test --collect:"XPlat Code Coverage"
 
@@ -19,12 +19,17 @@ dotnet test --collect:"XPlat Code Coverage" && reportgenerator -reports:**/cover
 ```
 
 ```cmd
+<!-- install -->
 dotnet tool update -g docfx
 
+<!-- start -->
+cd ./backend/EF.Blockchain
 mkdir docs
 cd docs
 docfx init
-cd ..
+
+<!-- update -->
+cd ./backend/EF.Blockchain
 docfx docs/docfx.json
 docfx serve docs/_site
 ```

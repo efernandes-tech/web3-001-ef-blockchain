@@ -1,0 +1,815 @@
+### YamlMime:ManagedReference
+items:
+- uid: EF.Blockchain.Domain.TransactionInput
+  commentId: T:EF.Blockchain.Domain.TransactionInput
+  id: TransactionInput
+  parent: EF.Blockchain.Domain
+  children:
+  - EF.Blockchain.Domain.TransactionInput.#ctor(System.String,System.Int32,System.String,System.String)
+  - EF.Blockchain.Domain.TransactionInput.#ctor(System.String,System.Nullable{System.Int32},System.String,System.String)
+  - EF.Blockchain.Domain.TransactionInput.Amount
+  - EF.Blockchain.Domain.TransactionInput.FromAddress
+  - EF.Blockchain.Domain.TransactionInput.FromTxo(EF.Blockchain.Domain.TransactionOutput)
+  - EF.Blockchain.Domain.TransactionInput.GetHash
+  - EF.Blockchain.Domain.TransactionInput.IsValid
+  - EF.Blockchain.Domain.TransactionInput.PreviousTx
+  - EF.Blockchain.Domain.TransactionInput.Sign(System.String)
+  - EF.Blockchain.Domain.TransactionInput.Signature
+  langs:
+  - csharp
+  - vb
+  name: TransactionInput
+  nameWithType: TransactionInput
+  fullName: EF.Blockchain.Domain.TransactionInput
+  type: Class
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/TransactionInput.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: TransactionInput
+    path: ../src/EF.Blockchain.Domain/TransactionInput.cs
+    startLine: 11
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Represents an input in a blockchain transaction, including signature validation and ownership of funds.
+  example: []
+  syntax:
+    content: public class TransactionInput
+    content.vb: Public Class TransactionInput
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: EF.Blockchain.Domain.TransactionInput.FromAddress
+  commentId: P:EF.Blockchain.Domain.TransactionInput.FromAddress
+  id: FromAddress
+  parent: EF.Blockchain.Domain.TransactionInput
+  langs:
+  - csharp
+  - vb
+  name: FromAddress
+  nameWithType: TransactionInput.FromAddress
+  fullName: EF.Blockchain.Domain.TransactionInput.FromAddress
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/TransactionInput.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: FromAddress
+    path: ../src/EF.Blockchain.Domain/TransactionInput.cs
+    startLine: 16
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Public key (hex) of the sender.
+  example: []
+  syntax:
+    content: public string FromAddress { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property FromAddress As String
+  overload: EF.Blockchain.Domain.TransactionInput.FromAddress*
+- uid: EF.Blockchain.Domain.TransactionInput.Amount
+  commentId: P:EF.Blockchain.Domain.TransactionInput.Amount
+  id: Amount
+  parent: EF.Blockchain.Domain.TransactionInput
+  langs:
+  - csharp
+  - vb
+  name: Amount
+  nameWithType: TransactionInput.Amount
+  fullName: EF.Blockchain.Domain.TransactionInput.Amount
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/TransactionInput.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: Amount
+    path: ../src/EF.Blockchain.Domain/TransactionInput.cs
+    startLine: 21
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Amount of coins being transferred from this input.
+  example: []
+  syntax:
+    content: public int Amount { get; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property Amount As Integer
+  overload: EF.Blockchain.Domain.TransactionInput.Amount*
+- uid: EF.Blockchain.Domain.TransactionInput.Signature
+  commentId: P:EF.Blockchain.Domain.TransactionInput.Signature
+  id: Signature
+  parent: EF.Blockchain.Domain.TransactionInput
+  langs:
+  - csharp
+  - vb
+  name: Signature
+  nameWithType: TransactionInput.Signature
+  fullName: EF.Blockchain.Domain.TransactionInput.Signature
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/TransactionInput.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: Signature
+    path: ../src/EF.Blockchain.Domain/TransactionInput.cs
+    startLine: 26
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Signature proving ownership of the referenced output.
+  example: []
+  syntax:
+    content: public string Signature { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Signature As String
+  overload: EF.Blockchain.Domain.TransactionInput.Signature*
+- uid: EF.Blockchain.Domain.TransactionInput.PreviousTx
+  commentId: P:EF.Blockchain.Domain.TransactionInput.PreviousTx
+  id: PreviousTx
+  parent: EF.Blockchain.Domain.TransactionInput
+  langs:
+  - csharp
+  - vb
+  name: PreviousTx
+  nameWithType: TransactionInput.PreviousTx
+  fullName: EF.Blockchain.Domain.TransactionInput.PreviousTx
+  type: Property
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/TransactionInput.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: PreviousTx
+    path: ../src/EF.Blockchain.Domain/TransactionInput.cs
+    startLine: 31
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: The hash of the previous transaction output being referenced.
+  example: []
+  syntax:
+    content: public string PreviousTx { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property PreviousTx As String
+  overload: EF.Blockchain.Domain.TransactionInput.PreviousTx*
+- uid: EF.Blockchain.Domain.TransactionInput.#ctor(System.String,System.Int32,System.String,System.String)
+  commentId: M:EF.Blockchain.Domain.TransactionInput.#ctor(System.String,System.Int32,System.String,System.String)
+  id: '#ctor(System.String,System.Int32,System.String,System.String)'
+  parent: EF.Blockchain.Domain.TransactionInput
+  langs:
+  - csharp
+  - vb
+  name: TransactionInput(string, int, string, string)
+  nameWithType: TransactionInput.TransactionInput(string, int, string, string)
+  fullName: EF.Blockchain.Domain.TransactionInput.TransactionInput(string, int, string, string)
+  type: Constructor
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/TransactionInput.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: .ctor
+    path: ../src/EF.Blockchain.Domain/TransactionInput.cs
+    startLine: 36
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Constructor used for deserialization.
+  example: []
+  syntax:
+    content: >-
+      [JsonConstructor]
+
+      public TransactionInput(string fromAddress, int amount, string signature, string previousTx)
+    parameters:
+    - id: fromAddress
+      type: System.String
+    - id: amount
+      type: System.Int32
+    - id: signature
+      type: System.String
+    - id: previousTx
+      type: System.String
+    content.vb: >-
+      <JsonConstructor>
+
+      Public Sub New(fromAddress As String, amount As Integer, signature As String, previousTx As String)
+  overload: EF.Blockchain.Domain.TransactionInput.#ctor*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonConstructorAttribute
+    ctor: System.Text.Json.Serialization.JsonConstructorAttribute.#ctor
+    arguments: []
+  nameWithType.vb: TransactionInput.New(String, Integer, String, String)
+  fullName.vb: EF.Blockchain.Domain.TransactionInput.New(String, Integer, String, String)
+  name.vb: New(String, Integer, String, String)
+- uid: EF.Blockchain.Domain.TransactionInput.#ctor(System.String,System.Nullable{System.Int32},System.String,System.String)
+  commentId: M:EF.Blockchain.Domain.TransactionInput.#ctor(System.String,System.Nullable{System.Int32},System.String,System.String)
+  id: '#ctor(System.String,System.Nullable{System.Int32},System.String,System.String)'
+  parent: EF.Blockchain.Domain.TransactionInput
+  langs:
+  - csharp
+  - vb
+  name: TransactionInput(string?, int?, string?, string?)
+  nameWithType: TransactionInput.TransactionInput(string?, int?, string?, string?)
+  fullName: EF.Blockchain.Domain.TransactionInput.TransactionInput(string?, int?, string?, string?)
+  type: Constructor
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/TransactionInput.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: .ctor
+    path: ../src/EF.Blockchain.Domain/TransactionInput.cs
+    startLine: 48
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Creates a new transaction input with optional values.
+  example: []
+  syntax:
+    content: public TransactionInput(string? fromAddress = null, int? amount = null, string? signature = null, string? previousTx = null)
+    parameters:
+    - id: fromAddress
+      type: System.String
+    - id: amount
+      type: System.Nullable{System.Int32}
+    - id: signature
+      type: System.String
+    - id: previousTx
+      type: System.String
+    content.vb: Public Sub New(fromAddress As String = Nothing, amount As Integer? = Nothing, signature As String = Nothing, previousTx As String = Nothing)
+  overload: EF.Blockchain.Domain.TransactionInput.#ctor*
+  nameWithType.vb: TransactionInput.New(String, Integer?, String, String)
+  fullName.vb: EF.Blockchain.Domain.TransactionInput.New(String, Integer?, String, String)
+  name.vb: New(String, Integer?, String, String)
+- uid: EF.Blockchain.Domain.TransactionInput.GetHash
+  commentId: M:EF.Blockchain.Domain.TransactionInput.GetHash
+  id: GetHash
+  parent: EF.Blockchain.Domain.TransactionInput
+  langs:
+  - csharp
+  - vb
+  name: GetHash()
+  nameWithType: TransactionInput.GetHash()
+  fullName: EF.Blockchain.Domain.TransactionInput.GetHash()
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/TransactionInput.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: GetHash
+    path: ../src/EF.Blockchain.Domain/TransactionInput.cs
+    startLine: 60
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Computes a SHA-256 hash of this transaction input.
+  example: []
+  syntax:
+    content: public string GetHash()
+    return:
+      type: System.String
+      description: The lowercase hex hash string.
+    content.vb: Public Function GetHash() As String
+  overload: EF.Blockchain.Domain.TransactionInput.GetHash*
+- uid: EF.Blockchain.Domain.TransactionInput.Sign(System.String)
+  commentId: M:EF.Blockchain.Domain.TransactionInput.Sign(System.String)
+  id: Sign(System.String)
+  parent: EF.Blockchain.Domain.TransactionInput
+  langs:
+  - csharp
+  - vb
+  name: Sign(string)
+  nameWithType: TransactionInput.Sign(string)
+  fullName: EF.Blockchain.Domain.TransactionInput.Sign(string)
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/TransactionInput.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: Sign
+    path: ../src/EF.Blockchain.Domain/TransactionInput.cs
+    startLine: 73
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Signs this transaction input using the sender's private key.
+  example: []
+  syntax:
+    content: public void Sign(string privateKeyHex)
+    parameters:
+    - id: privateKeyHex
+      type: System.String
+      description: The sender's private key in hex format.
+    content.vb: Public Sub Sign(privateKeyHex As String)
+  overload: EF.Blockchain.Domain.TransactionInput.Sign*
+  nameWithType.vb: TransactionInput.Sign(String)
+  fullName.vb: EF.Blockchain.Domain.TransactionInput.Sign(String)
+  name.vb: Sign(String)
+- uid: EF.Blockchain.Domain.TransactionInput.IsValid
+  commentId: M:EF.Blockchain.Domain.TransactionInput.IsValid
+  id: IsValid
+  parent: EF.Blockchain.Domain.TransactionInput
+  langs:
+  - csharp
+  - vb
+  name: IsValid()
+  nameWithType: TransactionInput.IsValid()
+  fullName: EF.Blockchain.Domain.TransactionInput.IsValid()
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/TransactionInput.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: IsValid
+    path: ../src/EF.Blockchain.Domain/TransactionInput.cs
+    startLine: 89
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Validates the transaction input by checking the digital signature.
+  example: []
+  syntax:
+    content: public Validation IsValid()
+    return:
+      type: EF.Blockchain.Domain.Validation
+      description: A <xref href="EF.Blockchain.Domain.Validation" data-throw-if-not-resolved="false"></xref> result indicating success or failure.
+    content.vb: Public Function IsValid() As Validation
+  overload: EF.Blockchain.Domain.TransactionInput.IsValid*
+- uid: EF.Blockchain.Domain.TransactionInput.FromTxo(EF.Blockchain.Domain.TransactionOutput)
+  commentId: M:EF.Blockchain.Domain.TransactionInput.FromTxo(EF.Blockchain.Domain.TransactionOutput)
+  id: FromTxo(EF.Blockchain.Domain.TransactionOutput)
+  parent: EF.Blockchain.Domain.TransactionInput
+  langs:
+  - csharp
+  - vb
+  name: FromTxo(TransactionOutput)
+  nameWithType: TransactionInput.FromTxo(TransactionOutput)
+  fullName: EF.Blockchain.Domain.TransactionInput.FromTxo(EF.Blockchain.Domain.TransactionOutput)
+  type: Method
+  source:
+    remote:
+      path: backend/EF.Blockchain/src/EF.Blockchain.Domain/TransactionInput.cs
+      branch: main
+      repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
+    id: FromTxo
+    path: ../src/EF.Blockchain.Domain/TransactionInput.cs
+    startLine: 121
+  assemblies:
+  - EF.Blockchain.Domain
+  namespace: EF.Blockchain.Domain
+  summary: Creates a new <xref href="EF.Blockchain.Domain.TransactionInput" data-throw-if-not-resolved="false"></xref> from a given <xref href="EF.Blockchain.Domain.TransactionOutput" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public static TransactionInput FromTxo(TransactionOutput txo)
+    parameters:
+    - id: txo
+      type: EF.Blockchain.Domain.TransactionOutput
+      description: The transaction output to reference.
+    return:
+      type: EF.Blockchain.Domain.TransactionInput
+      description: A new input referencing the output.
+    content.vb: Public Shared Function FromTxo(txo As TransactionOutput) As TransactionInput
+  overload: EF.Blockchain.Domain.TransactionInput.FromTxo*
+references:
+- uid: EF.Blockchain.Domain
+  commentId: N:EF.Blockchain.Domain
+  href: EF.html
+  name: EF.Blockchain.Domain
+  nameWithType: EF.Blockchain.Domain
+  fullName: EF.Blockchain.Domain
+  spec.csharp:
+  - uid: EF
+    name: EF
+    href: EF.html
+  - name: .
+  - uid: EF.Blockchain
+    name: Blockchain
+    href: EF.Blockchain.html
+  - name: .
+  - uid: EF.Blockchain.Domain
+    name: Domain
+    href: EF.Blockchain.Domain.html
+  spec.vb:
+  - uid: EF
+    name: EF
+    href: EF.html
+  - name: .
+  - uid: EF.Blockchain
+    name: Blockchain
+    href: EF.Blockchain.html
+  - name: .
+  - uid: EF.Blockchain.Domain
+    name: Domain
+    href: EF.Blockchain.Domain.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: EF.Blockchain.Domain.TransactionInput.FromAddress*
+  commentId: Overload:EF.Blockchain.Domain.TransactionInput.FromAddress
+  href: EF.Blockchain.Domain.TransactionInput.html#EF_Blockchain_Domain_TransactionInput_FromAddress
+  name: FromAddress
+  nameWithType: TransactionInput.FromAddress
+  fullName: EF.Blockchain.Domain.TransactionInput.FromAddress
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: EF.Blockchain.Domain.TransactionInput.Amount*
+  commentId: Overload:EF.Blockchain.Domain.TransactionInput.Amount
+  href: EF.Blockchain.Domain.TransactionInput.html#EF_Blockchain_Domain_TransactionInput_Amount
+  name: Amount
+  nameWithType: TransactionInput.Amount
+  fullName: EF.Blockchain.Domain.TransactionInput.Amount
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: EF.Blockchain.Domain.TransactionInput.Signature*
+  commentId: Overload:EF.Blockchain.Domain.TransactionInput.Signature
+  href: EF.Blockchain.Domain.TransactionInput.html#EF_Blockchain_Domain_TransactionInput_Signature
+  name: Signature
+  nameWithType: TransactionInput.Signature
+  fullName: EF.Blockchain.Domain.TransactionInput.Signature
+- uid: EF.Blockchain.Domain.TransactionInput.PreviousTx*
+  commentId: Overload:EF.Blockchain.Domain.TransactionInput.PreviousTx
+  href: EF.Blockchain.Domain.TransactionInput.html#EF_Blockchain_Domain_TransactionInput_PreviousTx
+  name: PreviousTx
+  nameWithType: TransactionInput.PreviousTx
+  fullName: EF.Blockchain.Domain.TransactionInput.PreviousTx
+- uid: EF.Blockchain.Domain.TransactionInput.#ctor*
+  commentId: Overload:EF.Blockchain.Domain.TransactionInput.#ctor
+  href: EF.Blockchain.Domain.TransactionInput.html#EF_Blockchain_Domain_TransactionInput__ctor_System_String_System_Int32_System_String_System_String_
+  name: TransactionInput
+  nameWithType: TransactionInput.TransactionInput
+  fullName: EF.Blockchain.Domain.TransactionInput.TransactionInput
+  nameWithType.vb: TransactionInput.New
+  fullName.vb: EF.Blockchain.Domain.TransactionInput.New
+  name.vb: New
+- uid: System.Nullable{System.Int32}
+  commentId: T:System.Nullable{System.Int32}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int?
+  nameWithType: int?
+  fullName: int?
+  nameWithType.vb: Integer?
+  fullName.vb: Integer?
+  name.vb: Integer?
+  spec.csharp:
+  - uid: System.Int32
+    name: int
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '?'
+  spec.vb:
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: EF.Blockchain.Domain.TransactionInput.GetHash*
+  commentId: Overload:EF.Blockchain.Domain.TransactionInput.GetHash
+  href: EF.Blockchain.Domain.TransactionInput.html#EF_Blockchain_Domain_TransactionInput_GetHash
+  name: GetHash
+  nameWithType: TransactionInput.GetHash
+  fullName: EF.Blockchain.Domain.TransactionInput.GetHash
+- uid: EF.Blockchain.Domain.TransactionInput.Sign*
+  commentId: Overload:EF.Blockchain.Domain.TransactionInput.Sign
+  href: EF.Blockchain.Domain.TransactionInput.html#EF_Blockchain_Domain_TransactionInput_Sign_System_String_
+  name: Sign
+  nameWithType: TransactionInput.Sign
+  fullName: EF.Blockchain.Domain.TransactionInput.Sign
+- uid: EF.Blockchain.Domain.Validation
+  commentId: T:EF.Blockchain.Domain.Validation
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.Validation.html
+  name: Validation
+  nameWithType: Validation
+  fullName: EF.Blockchain.Domain.Validation
+- uid: EF.Blockchain.Domain.TransactionInput.IsValid*
+  commentId: Overload:EF.Blockchain.Domain.TransactionInput.IsValid
+  href: EF.Blockchain.Domain.TransactionInput.html#EF_Blockchain_Domain_TransactionInput_IsValid
+  name: IsValid
+  nameWithType: TransactionInput.IsValid
+  fullName: EF.Blockchain.Domain.TransactionInput.IsValid
+- uid: EF.Blockchain.Domain.TransactionInput
+  commentId: T:EF.Blockchain.Domain.TransactionInput
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.TransactionInput.html
+  name: TransactionInput
+  nameWithType: TransactionInput
+  fullName: EF.Blockchain.Domain.TransactionInput
+- uid: EF.Blockchain.Domain.TransactionOutput
+  commentId: T:EF.Blockchain.Domain.TransactionOutput
+  parent: EF.Blockchain.Domain
+  href: EF.Blockchain.Domain.TransactionOutput.html
+  name: TransactionOutput
+  nameWithType: TransactionOutput
+  fullName: EF.Blockchain.Domain.TransactionOutput
+- uid: EF.Blockchain.Domain.TransactionInput.FromTxo*
+  commentId: Overload:EF.Blockchain.Domain.TransactionInput.FromTxo
+  href: EF.Blockchain.Domain.TransactionInput.html#EF_Blockchain_Domain_TransactionInput_FromTxo_EF_Blockchain_Domain_TransactionOutput_
+  name: FromTxo
+  nameWithType: TransactionInput.FromTxo
+  fullName: EF.Blockchain.Domain.TransactionInput.FromTxo
