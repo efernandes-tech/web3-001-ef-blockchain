@@ -7,9 +7,12 @@ public static class BlockInfoMapper
 {
     public static BlockInfoDto ToDto(BlockInfo domain)
     {
-        var transactions = domain.Transactions
+        if (domain == null)
+            return null;
+
+        var transactions = domain.Transactions?
             .Select(TransactionMapper.ToDto)
-            .ToList();
+            .ToList() ?? new List<TransactionDto>();
 
         return new BlockInfoDto
         {

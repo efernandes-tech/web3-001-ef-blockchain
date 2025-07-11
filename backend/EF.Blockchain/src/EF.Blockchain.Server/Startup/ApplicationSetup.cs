@@ -1,8 +1,8 @@
+using System.Reflection;
 using EF.Blockchain.Domain;
 using EF.Blockchain.Server.Middleware;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
 
 namespace EF.Blockchain.Server.Startup;
 
@@ -54,11 +54,8 @@ public static class ApplicationSetup
 
     public static WebApplication UseAppMiddleware(this WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.UseHttpsRedirection();
         app.UseMiddleware<RequestLoggingMiddleware>();

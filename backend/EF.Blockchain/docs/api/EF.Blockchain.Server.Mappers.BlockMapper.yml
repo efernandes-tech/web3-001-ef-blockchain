@@ -87,7 +87,7 @@ items:
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: ToDto
     path: ../src/EF.Blockchain.Server/Mappers/BlockMapper.cs
-    startLine: 24
+    startLine: 27
   assemblies:
   - EF.Blockchain.Server
   namespace: EF.Blockchain.Server.Mappers

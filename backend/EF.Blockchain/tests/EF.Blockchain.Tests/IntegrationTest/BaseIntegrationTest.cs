@@ -10,14 +10,15 @@ public abstract class BaseIntegrationTest
     protected readonly IFlurlClient _flurl;
     protected readonly Wallet _loki;
     protected Domain.Blockchain _blockchain;
+    protected readonly CustomWebApplicationFactory _factory;
 
     protected BaseIntegrationTest()
     {
-        var factory = new CustomWebApplicationFactory();
-        var client = factory.CreateClient();
+        _factory = new CustomWebApplicationFactory();
+        var client = _factory.CreateClient();
         _flurl = new FlurlClient(client);
         _loki = new Wallet();
-        _blockchain = factory._mockBlockchain;
+        _blockchain = _factory._mockBlockchain;
     }
 
     protected IFlurlClient CreateFlurlClientWithBlockHash(string hash, Transaction? transaction = null)
@@ -46,5 +47,12 @@ public abstract class BaseIntegrationTest
         var factory = new CustomWebApplicationFactory(_blockchain);
 
         return new FlurlClient(factory.CreateClient());
+    }
+
+    public virtual void Dispose()
+    {
+        _flurl?.Dispose();
+        _factory?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

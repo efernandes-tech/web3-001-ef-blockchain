@@ -7,6 +7,9 @@ public static class TransactionOutputMapper
 {
     public static TransactionOutput ToDomain(TransactionOutputDto dto)
     {
+        if (dto == null)
+            return null;
+
         return new TransactionOutput(
             toAddress: dto.ToAddress ?? string.Empty,
             amount: dto.Amount ?? 0,
@@ -16,6 +19,9 @@ public static class TransactionOutputMapper
 
     public static TransactionOutputDto ToDto(TransactionOutput domain)
     {
+        if (domain == null)
+            return null;
+
         return new TransactionOutputDto
         {
             ToAddress = domain.ToAddress,

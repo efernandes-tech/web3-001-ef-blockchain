@@ -7,6 +7,9 @@ public static class TransactionSearchMapper
 {
     public static TransactionSearchDto ToDto(TransactionSearch domain)
     {
+        if (domain == null)
+            return null;
+
         var transaction = TransactionMapper.ToDto(domain.Transaction);
 
         return new TransactionSearchDto

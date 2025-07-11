@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend/EF.Blockchain
+      dockerfile: Dockerfile
+    container_name: ef-blockchain-server
+    ports:
+      - "5115:5000"
+    env_file:
+      - ./backend/EF.Blockchain/.env
+    restart: unless-stopped
+
+networks:
+  ef-blockchain-network:

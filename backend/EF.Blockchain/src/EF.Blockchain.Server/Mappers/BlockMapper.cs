@@ -7,14 +7,17 @@ public static class BlockMapper
 {
     public static Block ToDomain(BlockDto dto)
     {
-        var transactions = dto.Transactions
+        if (dto == null)
+            return null;
+
+        var transactions = dto.Transactions?
             .Select(TransactionMapper.ToDomain)
-            .ToList();
+            .ToList() ?? new List<Transaction>();
 
         return new Block(
             index: dto.Index,
             previousHash: dto.PreviousHash,
-            transactions,
+            transactions: transactions,
             timestamp: dto.Timestamp,
             hash: dto.Hash,
             nonce: dto.Nonce,
@@ -24,9 +27,12 @@ public static class BlockMapper
 
     public static BlockDto ToDto(Block domain)
     {
-        var transactions = domain.Transactions
+        if (domain == null)
+            return null;
+
+        var transactions = domain.Transactions?
             .Select(TransactionMapper.ToDto)
-            .ToList();
+            .ToList() ?? new List<TransactionDto>();
 
         return new BlockDto
         {

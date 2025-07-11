@@ -21,7 +21,7 @@ items:
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: ApplicationSetup
     path: ../src/EF.Blockchain.Server/Startup/ApplicationSetup.cs
-    startLine: 8
+    startLine: 9
   assemblies:
   - EF.Blockchain.Server
   namespace: EF.Blockchain.Server.Startup
@@ -57,7 +57,7 @@ items:
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: AddAppServices
     path: ../src/EF.Blockchain.Server/Startup/ApplicationSetup.cs
-    startLine: 10
+    startLine: 11
   assemblies:
   - EF.Blockchain.Server
   namespace: EF.Blockchain.Server.Startup
@@ -91,7 +91,7 @@ items:
       repo: https://github.com/efernandes-tech/web3-001-ef-blockchain.git
     id: UseAppMiddleware
     path: ../src/EF.Blockchain.Server/Startup/ApplicationSetup.cs
-    startLine: 54
+    startLine: 55
   assemblies:
   - EF.Blockchain.Server
   namespace: EF.Blockchain.Server.Startup
