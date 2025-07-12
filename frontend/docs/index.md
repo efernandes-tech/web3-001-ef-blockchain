@@ -7,6 +7,7 @@ Welcome to the EF Blockchain Web3 project documentation.
 -   [Introduction](articles/intro.md) - Learn about the project
 -   [Getting Started](articles/getting-started.md) - Setup guide
 -   [Project Structure](articles/project-structure.md) - Understand the codebase
+-   [Test Coverage](articles/test-coverage.md) - Test coverage
 
 ## About This Project
 

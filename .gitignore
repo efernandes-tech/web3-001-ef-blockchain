@@ -3,6 +3,7 @@
 **/coveragereport/
 **/docs/_site
 **/docs/api/*
+**/docs/coverage/*
 !**/docs/api/index.md
 **build**.tar
 

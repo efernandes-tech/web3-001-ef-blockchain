@@ -4,3 +4,5 @@
   href: getting-started.md
 - name: Project Structure
   href: project-structure.md
+- name: Test Coverage
+  href: test-coverage.md

@@ -10,7 +10,6 @@
           "exclude": [
             "**/bin/**",
             "**/obj/**",
-            "**/wwwroot/**",
             "**/*Test*/**",
             "**/*test*/**"
           ],
@@ -18,7 +17,7 @@
         }
       ],
       "dest": "api",
-      "includePrivateMembers": false,
+      "includePrivateMembers": true,
       "disableGitFeatures": false,
       "disableDefaultFilter": false,
       "noRestore": false,
@@ -44,19 +43,17 @@
           "articles/**.md",
           "articles/**/toc.yml",
           "toc.yml",
-          "*.md",
-          "changelog.md"
+          "*.md"
         ]
       }
     ],
     "resource": [
       {
         "files": [
-          "images/**",
-          "files/**",
           "favicon.ico",
           "ef-blockchain.png",
-          "ef-blockchain.svg"
+          "ef-blockchain.svg",
+          "coverage/**"
         ]
       }
     ],

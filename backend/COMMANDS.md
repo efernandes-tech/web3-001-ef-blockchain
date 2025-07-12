@@ -10,10 +10,10 @@ dotnet tool install --global dotnet-reportgenerator-globaltool
 cd ./backend/EF.Blockchain
 
 dotnet test --collect:"XPlat Code Coverage"
-
 reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coveragereport
-
 start coveragereport/index.html
+
+<!-- OR -->
 
 dotnet test --collect:"XPlat Code Coverage" && reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coveragereport && start coveragereport/index.html
 ```
