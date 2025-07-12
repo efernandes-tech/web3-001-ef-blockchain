@@ -40,7 +40,8 @@ public static class StatusEndpoints
             IsValid = blockchain.IsValid().Success,
             LastBlock = lastBlock is null
                 ? null
-                : BlockMapper.ToDto(lastBlock)
+                : BlockMapper.ToDto(lastBlock),
+            Difficulty = blockchain.GetDifficulty()
         };
     }
 }

@@ -1,0 +1,8 @@
+# docs/toc.yml - Fixed version
+- name: Home
+  href: index.md
+- name: Articles
+  href: articles/
+  homepage: articles/intro.md
+- name: API Documentation
+  href: api/

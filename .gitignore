@@ -2,6 +2,8 @@
 
 **/coveragereport/
 **/docs/_site
+**/docs/api/*
+!**/docs/api/index.md
 **build**.tar
 
 ############################### VisualStudioCode ###############################

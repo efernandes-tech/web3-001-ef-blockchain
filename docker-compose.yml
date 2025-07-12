@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: ef-blockchain-server
     ports:
-      - "5115:5000"
+      - "5242:5000"
     env_file:
       - ./backend/EF.Blockchain/.env
     restart: unless-stopped

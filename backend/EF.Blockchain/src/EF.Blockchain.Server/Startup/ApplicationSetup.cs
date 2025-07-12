@@ -21,6 +21,17 @@ public static class ApplicationSetup
 
         services.AddEndpointsApiExplorer();
 
+        // Add CORS
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
+        });
+
         services.AddSwaggerGen();
         services.AddSwaggerGen(options =>
         {
@@ -54,6 +65,9 @@ public static class ApplicationSetup
 
     public static WebApplication UseAppMiddleware(this WebApplication app)
     {
+        // Enable CORS (must be first)
+        app.UseCors("AllowAll");
+
         app.UseSwagger();
         app.UseSwaggerUI();
 

@@ -6,4 +6,5 @@ public class StatusDto
     public int Blocks { get; set; }
     public bool IsValid { get; set; }
     public BlockDto? LastBlock { get; set; }
+    public int Difficulty { get; set; }
 }

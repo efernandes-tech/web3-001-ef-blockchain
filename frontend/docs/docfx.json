@@ -1,0 +1,139 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+            "**/*.csproj",
+            "**/*.cs"
+          ],
+          "exclude": [
+            "**/bin/**",
+            "**/obj/**",
+            "**/wwwroot/**",
+            "**/*Test*/**",
+            "**/*test*/**"
+          ],
+          "src": "../../backend/EF.Blockchain/src"
+        }
+      ],
+      "dest": "api",
+      "includePrivateMembers": false,
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false,
+      "noRestore": false,
+      "namespaceLayout": "nested",
+      "memberLayout": "separatePages",
+      "allowCompilationErrors": true,
+      "properties": {
+        "TargetFramework": "net8.0"
+      },
+      "filter": "filterConfig.yml"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "api/**.yml",
+          "api/index.md"
+        ]
+      },
+      {
+        "files": [
+          "articles/**.md",
+          "articles/**/toc.yml",
+          "toc.yml",
+          "*.md",
+          "changelog.md"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**",
+          "files/**",
+          "favicon.ico",
+          "ef-blockchain.png",
+          "ef-blockchain.svg"
+        ]
+      }
+    ],
+    "output": "_site",
+    "globalMetadataFiles": [],
+    "fileMetadataFiles": [],
+    "template": [
+      "default",
+      "modern"
+    ],
+    "postProcessors": [
+      "ExtractSearchIndex"
+    ],
+    "markdownEngineName": "markdig",
+    "markdownEngineProperties": {
+      "markdigExtensions": [
+        "abbreviations",
+        "autoidentifiers",
+        "citations",
+        "customcontainers",
+        "definitionlists",
+        "emphasisextras",
+        "figures",
+        "footers",
+        "footnotes",
+        "gridtables",
+        "mathematics",
+        "medialinks",
+        "pipetables",
+        "listextras",
+        "tasklists",
+        "diagrams",
+        "autolinks",
+        "attributes"
+      ]
+    },
+    "keepFileLink": false,
+    "disableGitFeatures": false,
+    "cleanupCacheHistory": false,
+    "sitemap": {
+      "baseUrl": "http://ef-blockchain.caprover.edersonfernandes.tec.br",
+      "priority": 1.0,
+      "changefreq": "daily",
+      "fileOptions": {
+        "api/*": {
+          "priority": 0.8,
+          "changefreq": "weekly"
+        },
+        "articles/*": {
+          "priority": 0.9,
+          "changefreq": "monthly"
+        }
+      }
+    },
+    "globalMetadata": {
+      "_appTitle": "EF Blockchain Web3 API Documentation",
+      "_appName": "EF Blockchain",
+      "_appFooter": "© 2025 Ederson Fernandes. Built with DocFX.",
+      "_appLogoPath": "ef-blockchain.png",
+      "_appFaviconPath": "favicon.ico",
+      "_enableSearch": true,
+      "_enableNewTab": true,
+      "_disableContribution": false,
+      "_gitContribute": {
+        "repo": "https://github.com/efernandes-tech/web3-001-ef-blockchain",
+        "branch": "main",
+        "path": ""
+      },
+      "_gitUrlPattern": "github"
+    },
+    "fileMetadata": {
+      "_appTitle": {
+        "api/*": "API Reference - EF Blockchain Web3"
+      },
+      "_description": {
+        "api/*": "Complete API reference for EF Blockchain Web3 project"
+      }
+    }
+  }
+}

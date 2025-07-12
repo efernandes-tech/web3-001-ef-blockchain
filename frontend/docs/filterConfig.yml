@@ -1,0 +1,27 @@
+apiRules:
+    - exclude:
+          uidRegex: ^System\.
+          type: Namespace
+    - exclude:
+          uidRegex: ^Microsoft\.
+          type: Namespace
+    - exclude:
+          uidRegex: \.Tests?\.
+          type: Namespace
+    - exclude:
+          uidRegex: \.Test\.
+          type: Namespace
+    - exclude:
+          hasAttribute:
+              uid: System.ObsoleteAttribute
+          type: Type
+    - exclude:
+          hasAttribute:
+              uid: System.ComponentModel.EditorBrowsableAttribute
+          type: Type
+    - exclude:
+          uidRegex: \.Internal\.
+          type: Namespace
+    - include:
+          uidRegex: ^EF\.Blockchain\.
+          type: Namespace
