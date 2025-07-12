@@ -33,11 +33,11 @@ interface ApiResponse<T> {
 }
 
 const colors = {
-    primary: '#2754BA',
-    secondary: '#123962',
-    light: '#B1D4E5',
-    medium: '#799EB2',
-    accent: '#03AEE6',
+    primary: '#FF6E20',
+    secondary: '#0E3A3B',
+    light: '#F2F2F2',
+    medium: '#055B5C',
+    accent: '#3CB7B8',
 };
 
 const BlockchainDashboard: React.FC = () => {
