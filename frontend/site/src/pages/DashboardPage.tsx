@@ -7,24 +7,16 @@ import {
     Server,
     Wallet,
 } from 'lucide-react';
-import React, { useEffect, useState, type CSSProperties } from 'react';
+import React, { useEffect, useState } from 'react';
+import BlockchainIcon from '../components/BlockchainIcon';
+import { colors } from '../config/consts';
 import type {
     ApiError,
     BlockchainStatus,
     BlockInfo,
 } from '../types/blockchain';
 
-const BlockchainIcon: React.FC<{
-    className?: string;
-    style?: CSSProperties;
-}> = ({ className = 'w-8 h-8', style }) => (
-    <img
-        src="/ef-blockchain.svg"
-        alt="EF Blockchain"
-        className={className}
-        style={style}
-    />
-);
+const API_BASE = import.meta.env.VITE_API_URL;
 
 interface ApiResponse<T> {
     data: T | null;
@@ -32,15 +24,7 @@ interface ApiResponse<T> {
     error: ApiError | null;
 }
 
-const colors = {
-    primary: '#FF6E20',
-    secondary: '#0E3A3B',
-    light: '#F2F2F2',
-    medium: '#055B5C',
-    accent: '#3CB7B8',
-};
-
-const BlockchainDashboard: React.FC = () => {
+const DashboardPage: React.FC = () => {
     const [status, setStatus] = useState<ApiResponse<BlockchainStatus>>({
         data: null,
         loading: false,
@@ -52,10 +36,6 @@ const BlockchainDashboard: React.FC = () => {
         loading: false,
         error: null,
     });
-
-    const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5242';
-    const PROD_BASE =
-        'https://server-ef-blockchain.caprover.edersonfernandes.tec.br';
 
     const fetchData = async <T,>(
         endpoint: string,
@@ -408,24 +388,90 @@ const BlockchainDashboard: React.FC = () => {
                             />
                             API Documentation
                         </h3>
-                        <p className="text-gray-600 mb-4">
-                            Interactive Swagger documentation
-                        </p>
 
-                        <a
-                            href={`${API_BASE}/swagger`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full text-white font-medium py-2 px-4 rounded-lg
+                        <div>
+                            <p className="text-gray-600 mb-4">
+                                Interactive Swagger documentation
+                            </p>
+
+                            <a
+                                href={`${API_BASE}/swagger`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full text-white font-medium py-2 px-4 rounded-lg
                                 inline-flex items-center justify-center transition-colors"
-                            style={{
-                                backgroundColor: colors.medium,
-                                textDecoration: 'none',
-                            }}
-                        >
-                            Open Swagger UI
-                            <ExternalLink className="w-4 h-4 ml-2" />
-                        </a>
+                                style={{
+                                    backgroundColor: colors.medium,
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                Open Swagger UI
+                                <ExternalLink className="w-4 h-4 ml-2" />
+                            </a>
+                        </div>
+
+                        <div className="mt-5">
+                            <p className="text-gray-600 mb-4">
+                                Documentation built with DocFX
+                            </p>
+
+                            <a
+                                href="https://docs-ef-blockchain.caprover.edersonfernandes.tec.br"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full text-white font-medium py-2 px-4 rounded-lg
+                                inline-flex items-center justify-center transition-colors"
+                                style={{
+                                    backgroundColor: colors.medium,
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                DocFX
+                                <ExternalLink className="w-4 h-4 ml-2" />
+                            </a>
+                        </div>
+
+                        <div className="mt-5">
+                            <p className="text-gray-600 mb-4">
+                                Coverage report by tests
+                            </p>
+
+                            <a
+                                href="https://docs-ef-blockchain.caprover.edersonfernandes.tec.br/coverage/index.html"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full text-white font-medium py-2 px-4 rounded-lg
+                                inline-flex items-center justify-center transition-colors"
+                                style={{
+                                    backgroundColor: colors.medium,
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                Tests Coverage
+                                <ExternalLink className="w-4 h-4 ml-2" />
+                            </a>
+                        </div>
+
+                        <div className="mt-5">
+                            <p className="text-gray-600 mb-4">
+                                Show me the code
+                            </p>
+
+                            <a
+                                href="https://github.com/efernandes-tech/web3-001-ef-blockchain"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full text-white font-medium py-2 px-4 rounded-lg
+                                inline-flex items-center justify-center transition-colors"
+                                style={{
+                                    backgroundColor: colors.medium,
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                Repo GitHub
+                                <ExternalLink className="w-4 h-4 ml-2" />
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -434,36 +480,18 @@ const BlockchainDashboard: React.FC = () => {
                         Environment Links
                     </h2>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <h3 className="font-semibold text-gray-900 flex items-center">
+                        <div
+                            className="w-3 h-3 rounded-full mr-2"
+                            style={{ backgroundColor: colors.primary }}
+                        ></div>
+                        {import.meta.env.PROD
+                            ? 'Production (CapRover)'
+                            : 'Local (Docker)'}
+                    </h3>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-3">
                         <div className="space-y-3">
-                            <h3 className="font-semibold text-gray-900 flex items-center">
-                                <div
-                                    className="w-3 h-3 rounded-full mr-2"
-                                    style={{ backgroundColor: colors.accent }}
-                                ></div>
-                                Local Development
-                            </h3>
-
-                            <a
-                                href={`${API_BASE}/swagger`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block p-4 rounded-lg border transition-colors"
-                                style={{
-                                    backgroundColor: colors.light,
-                                    borderColor: colors.primary,
-                                    color: colors.secondary,
-                                    textDecoration: 'none',
-                                }}
-                            >
-                                <div className="font-medium text-blue-900">
-                                    Swagger UI
-                                </div>
-                                <div className="text-blue-600 text-sm font-mono">
-                                    {API_BASE}/swagger
-                                </div>
-                            </a>
-
                             <a
                                 href={`${API_BASE}/status`}
                                 target="_blank"
@@ -484,56 +512,6 @@ const BlockchainDashboard: React.FC = () => {
                                 </div>
                             </a>
                         </div>
-
-                        <div className="space-y-3">
-                            <h3 className="font-semibold text-gray-900 flex items-center">
-                                <div
-                                    className="w-3 h-3 rounded-full mr-2"
-                                    style={{ backgroundColor: colors.primary }}
-                                ></div>
-                                Production (CapRover)
-                            </h3>
-
-                            <a
-                                href={`${PROD_BASE}/swagger`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block p-4 rounded-lg border transition-colors"
-                                style={{
-                                    backgroundColor: colors.light,
-                                    borderColor: colors.primary,
-                                    color: colors.secondary,
-                                    textDecoration: 'none',
-                                }}
-                            >
-                                <div className="font-medium text-indigo-900">
-                                    Live API Documentation
-                                </div>
-                                <div className="text-indigo-600 text-sm font-mono break-all">
-                                    {PROD_BASE}/swagger
-                                </div>
-                            </a>
-
-                            <a
-                                href={`${PROD_BASE}/status`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block p-4 rounded-lg border transition-colors"
-                                style={{
-                                    backgroundColor: colors.light,
-                                    borderColor: colors.medium,
-                                    color: colors.secondary,
-                                    textDecoration: 'none',
-                                }}
-                            >
-                                <div className="font-medium text-orange-900">
-                                    Live Status Check
-                                </div>
-                                <div className="text-orange-600 text-sm font-mono break-all">
-                                    {PROD_BASE}/status
-                                </div>
-                            </a>
-                        </div>
                     </div>
                 </div>
 
@@ -545,4 +523,4 @@ const BlockchainDashboard: React.FC = () => {
     );
 };
 
-export default BlockchainDashboard;
+export default DashboardPage;

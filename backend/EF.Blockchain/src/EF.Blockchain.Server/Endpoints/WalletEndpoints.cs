@@ -22,6 +22,27 @@ public static class WalletEndpoints
            .WithDescription("Returns balance, transaction fee, and unspent transaction outputs (UTXOs) for a wallet.")
            .Produces<WalletDto>(StatusCodes.Status200OK)
            .WithOpenApi();
+
+        app.MapPost("/wallets", CreateWallet)
+           .WithName("CreateWallet")
+           .WithTags("Wallet")
+           .WithSummary("Create a new wallet")
+           .WithDescription("Generates a new wallet with public key, private key, and mnemonic phrase.")
+           .Accepts<WalletDto>("application/json")
+           .Produces<WalletDto>(StatusCodes.Status201Created)
+           .ProducesValidationProblem()
+           .WithOpenApi();
+
+        app.MapPost("/wallets/recover", RecoverWallet)
+           .WithName("RecoverWallet")
+           .WithTags("Wallet")
+           .WithSummary("Recover an existing wallet")
+           .WithDescription("Recovers a wallet using private key or mnemonic phrase.")
+           .Accepts<WalletDto>("application/json")
+           .Produces<WalletDto>(StatusCodes.Status200OK)
+           .Produces(StatusCodes.Status400BadRequest)
+           .ProducesValidationProblem()
+           .WithOpenApi();
     }
 
     /// <summary>
@@ -40,5 +61,61 @@ public static class WalletEndpoints
         var utxo = blockchain.GetUtxo(walletAddress);
 
         return WalletMapper.ToDto(balance, fee, utxo);
+    }
+
+    /// <summary>
+    /// Handles the POST /wallets endpoint.
+    /// </summary>
+    private static IResult CreateWallet([FromBody] WalletDto walletDto)
+    {
+        try
+        {
+            var wallet = new Domain.Wallet();
+
+            walletDto.PublicKey = wallet.PublicKey;
+            walletDto.PrivateKey = wallet.PrivateKey;
+
+            return Results.Created($"/wallets/{walletDto.PublicKey}", walletDto);
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(
+                title: "Wallet Creation Failed",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status500InternalServerError
+            );
+        }
+    }
+
+    /// <summary>
+    /// Handles the POST /wallets/recover endpoint.
+    /// </summary>
+    /// <param name="walletDto">The wallet recovery request.</param>
+    /// <param name="blockchain">Injected blockchain instance.</param>
+    /// <returns>The recovered wallet information.</returns>
+    private static IResult RecoverWallet(
+        [FromBody] WalletDto walletDto,
+        [FromServices] Domain.Blockchain blockchain)
+    {
+        try
+        {
+            Domain.Wallet recoveredWallet = new Domain.Wallet(walletDto.PrivateKey);
+
+            int balance = blockchain.GetBalance(recoveredWallet.PublicKey);
+
+            walletDto.PublicKey = recoveredWallet.PublicKey;
+            walletDto.PrivateKey = recoveredWallet.PrivateKey;
+            walletDto.Balance = balance;
+
+            return Results.Ok(walletDto);
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(
+                title: "Wallet Recovery Failed",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status500InternalServerError
+            );
+        }
     }
 }

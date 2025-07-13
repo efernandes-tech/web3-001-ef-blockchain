@@ -9,4 +9,8 @@ public class TransactionDto
     public string? Hash { get; set; } = string.Empty;
     public List<TransactionInputDto>? TxInputs { get; set; } = null;
     public List<TransactionOutputDto> TxOutputs { get; set; } = new();
+    public string? FromWalletAddress { get; set; } = string.Empty;
+    public int Amount { get; set; }
+    public string? FromWalletPrivateKey { get; set; } = string.Empty;
+    public string? ToWalletAddress { get; set; } = string.Empty;
 }

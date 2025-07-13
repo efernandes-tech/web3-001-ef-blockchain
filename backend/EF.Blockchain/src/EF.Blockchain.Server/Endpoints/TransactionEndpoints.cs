@@ -16,6 +16,15 @@ public static class TransactionEndpoints
     /// <param name="app">The endpoint route builder.</param>
     public static void MapTransactionEndpoints(this IEndpointRouteBuilder app)
     {
+        app.MapPost("/transactions/prepare", PrepareTransaction)
+           .WithName("PrepareTransaction")
+           .WithTags("Transaction")
+           .WithSummary("Prepare a transaction with proper signing and hash generation")
+           .WithDescription("Builds a complete transaction with signed inputs, proper outputs, and generates the transaction hash.")
+           .Produces<TransactionDto>(StatusCodes.Status200OK)
+           .Produces(StatusCodes.Status400BadRequest)
+           .WithOpenApi();
+
         app.MapGet("/transactions/{hash?}", GetTransaction)
             .WithName("GetTransaction")
             .WithTags("Transaction")
@@ -74,5 +83,72 @@ public static class TransactionEndpoints
         return validation.Success
             ? Results.Created($"/transactions/{tx.Hash}", TransactionMapper.ToDto(tx))
             : Results.BadRequest(validation);
+    }
+
+    /// <summary>
+    /// Handles the POST /transactions/prepare endpoint.
+    /// </summary>
+    private static IResult PrepareTransaction(
+        [FromBody] TransactionDto TransactionDto,
+        [FromServices] Domain.Blockchain blockchain)
+    {
+        try
+        {
+            var fromWalletBalance = blockchain.GetBalance(TransactionDto.FromWalletAddress ?? "");
+            var fee = blockchain.GetFeePerTx();
+            var utxos = blockchain.GetUtxo(TransactionDto.FromWalletAddress ?? "");
+
+            if (fromWalletBalance < TransactionDto.Amount + fee)
+            {
+                return Results.BadRequest(new Validation(false, "Insufficient balance"));
+            }
+
+            if (!utxos.Any())
+            {
+                return Results.BadRequest(new Validation(false, "No unspent transaction outputs available"));
+            }
+
+            var txInputs = utxos
+                .Select(TransactionInput.FromTxo)
+                .ToList();
+
+            txInputs.ForEach(input => input.Sign(TransactionDto.FromWalletPrivateKey ?? ""));
+
+            var txOutputs = new List<TransactionOutput>
+            {
+                new TransactionOutput(
+                    toAddress: TransactionDto.ToWalletAddress ?? "",
+                    amount: TransactionDto.Amount
+                )
+            };
+
+            var remaining = fromWalletBalance - TransactionDto.Amount - fee;
+            if (remaining > 0)
+            {
+                txOutputs.Add(new TransactionOutput(
+                    toAddress: TransactionDto.FromWalletAddress ?? "",
+                    amount: remaining
+                ));
+            }
+
+            var transaction = new Transaction(
+                type: TransactionType.REGULAR,
+                timestamp: DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                txInputs: txInputs,
+                txOutputs: txOutputs
+            );
+
+            var transactionPrepare = TransactionMapper.ToDto(transaction);
+
+            return Results.Ok(transactionPrepare);
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(
+                title: "Transaction preparation failed",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status500InternalServerError
+            );
+        }
     }
 }
