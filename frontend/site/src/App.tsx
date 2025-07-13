@@ -7,6 +7,7 @@ import {
     Routes,
     useLocation,
 } from 'react-router-dom';
+import BlockchainIcon from './components/BlockchainIcon';
 import { colors } from './config/consts';
 import './index.css';
 import DashboardPage from './pages/DashboardPage';
@@ -33,6 +34,17 @@ const Navigation: React.FC = () => {
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
+                    <div className="flex items-center">
+                        <Link to="/" className="flex items-center space-x-2">
+                            <BlockchainIcon
+                                className="w-10 h-10"
+                                style={{ color: colors.primary }}
+                            />
+                            <span className="text-xl text-white font-bold hidden sm:block">
+                                EF Blockchain
+                            </span>
+                        </Link>
+                    </div>
                     <div className="hidden md:flex items-center space-x-8">
                         {navItems.map(item => (
                             <Link

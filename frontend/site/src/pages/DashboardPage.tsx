@@ -14,7 +14,7 @@ import type {
     ApiError,
     BlockchainStatus,
     BlockInfo,
-} from '../types/blockchain';
+} from '../types/dashboard-types';
 
 const API_BASE = import.meta.env.VITE_API_URL;
 
@@ -122,7 +122,7 @@ const DashboardPage: React.FC = () => {
         >
             <div className="max-w-6xl mx-auto">
                 <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex flex-col md:flex-row items-center justify-between mb-4">
                         <div className="flex items-center space-x-4">
                             <div
                                 className="p-3 rounded-lg"
@@ -146,7 +146,7 @@ const DashboardPage: React.FC = () => {
                         <button
                             onClick={handleRefresh}
                             disabled={status.loading}
-                            className="flex items-center space-x-2 text-white px-4
+                            className="flex items-center space-x-2 text-white px-4 my-4
                                 py-2 rounded-lg disabled:opacity-50 transition-colors"
                             style={{
                                 backgroundColor: colors.primary,

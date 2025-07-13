@@ -10,27 +10,9 @@ import {
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { colors } from '../config/consts';
+import type { WalletData, WalletState } from '../types/wallet-types';
 
 const BLOCKCHAIN_SERVER = import.meta.env.VITE_API_URL;
-
-interface WalletData {
-    balance: number;
-    fee: number;
-    utxo: TransactionOutput[];
-}
-
-interface TransactionOutput {
-    toAddress: string;
-    amount: number;
-    txHash: string;
-}
-
-interface WalletState {
-    publicKey: string | null;
-    privateKey: string | null;
-    balance: number;
-    isLoading: boolean;
-}
 
 const WalletPage: React.FC = () => {
     const [wallet, setWallet] = useState<WalletState>({
@@ -275,7 +257,7 @@ const WalletPage: React.FC = () => {
                         <div className="flex items-center gap-3">
                             <Wallet
                                 className="w-8 h-8"
-                                style={{ color: colors.accent }}
+                                style={{ color: colors.primary }}
                             />
                             <h1
                                 className="text-2xl font-bold"
@@ -353,7 +335,7 @@ const WalletPage: React.FC = () => {
                                             Private Key:
                                         </span>
                                         <code
-                                            className="text-sm font-mono flex-1"
+                                            className="text-sm font-mono flex-1 truncate"
                                             style={{ color: colors.secondary }}
                                         >
                                             {showPrivateKey

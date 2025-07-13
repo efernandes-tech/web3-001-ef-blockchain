@@ -1,5 +1,3 @@
-// Blockchain API Types
-
 export interface BlockchainStatus {
     blocks: number;
     height: number;
