@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using EF.Blockchain.Domain;
 using EF.Blockchain.Server.Dtos;
 using EF.Blockchain.Server.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -66,14 +68,62 @@ public static class WalletEndpoints
     /// <summary>
     /// Handles the POST /wallets endpoint.
     /// </summary>
-    private static IResult CreateWallet([FromBody] WalletDto walletDto)
+    private static async Task<IResult> CreateWallet([FromBody] WalletDto walletDto,
+        IConfiguration config,
+        [FromServices] Domain.Blockchain blockchain)
     {
         try
         {
-            var wallet = new Domain.Wallet();
+            var newWallet = new Wallet();
+            var amountFaucet = 10;
 
-            walletDto.PublicKey = wallet.PublicKey;
-            walletDto.PrivateKey = wallet.PrivateKey;
+            var miner = config["Blockchain:MinerWallet:PrivateKey"]
+                ?? Environment.GetEnvironmentVariable("BLOCKCHAIN_MINER")
+                ?? "default-miner";
+
+            var minerWallet = new Wallet(miner);
+
+            var fromWalletBalance = blockchain.GetBalance(minerWallet.PublicKey ?? "");
+            var fee = blockchain.GetFeePerTx();
+            var utxos = blockchain.GetUtxo(minerWallet.PublicKey ?? "");
+
+            var txInputs = utxos
+                .Select(TransactionInput.FromTxo)
+                .ToList();
+
+            txInputs.ForEach(input => input.Sign(minerWallet.PrivateKey ?? ""));
+
+            var txOutputs = new List<TransactionOutput>
+            {
+                new TransactionOutput(
+                    toAddress: newWallet.PublicKey ?? "",
+                    amount: amountFaucet
+                )
+            };
+
+            var remaining = fromWalletBalance - amountFaucet - fee;
+            if (remaining > 0)
+            {
+                txOutputs.Add(new TransactionOutput(
+                    toAddress: minerWallet.PublicKey ?? "",
+                    amount: remaining
+                ));
+            }
+
+            var faucetTransaction = new Transaction(
+                type: TransactionType.REGULAR,
+                timestamp: DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                txInputs: txInputs,
+                txOutputs: txOutputs
+            );
+
+            blockchain.AddTransaction(faucetTransaction);
+
+            await Task.Delay(2000);
+
+            walletDto.PublicKey = newWallet.PublicKey;
+            walletDto.PrivateKey = newWallet.PrivateKey;
+            walletDto.Balance = amountFaucet;
 
             return Results.Created($"/wallets/{walletDto.PublicKey}", walletDto);
         }

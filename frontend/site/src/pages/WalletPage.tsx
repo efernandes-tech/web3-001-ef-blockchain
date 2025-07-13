@@ -54,7 +54,7 @@ const WalletPage: React.FC = () => {
             setWallet({
                 publicKey: newWallet.publicKey,
                 privateKey: newWallet.privateKey,
-                balance: 0,
+                balance: newWallet.balance,
                 isLoading: false,
             });
 
