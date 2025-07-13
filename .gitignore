@@ -6,6 +6,8 @@
 **/docs/coverage/*
 !**/docs/api/index.md
 **build**.tar
+**/.env.production
+**/miner-logs.txt
 
 ############################### VisualStudioCode ###############################
 

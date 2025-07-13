@@ -1,4 +1,4 @@
-import { Home, Menu, Wallet, X } from 'lucide-react';
+import { Activity, Home, Menu, Wallet, X } from 'lucide-react';
 import React from 'react';
 import {
     BrowserRouter,
@@ -11,6 +11,7 @@ import BlockchainIcon from './components/BlockchainIcon';
 import { colors } from './config/consts';
 import './index.css';
 import DashboardPage from './pages/DashboardPage';
+import MinerLogsPage from './pages/MinerLogsPage';
 import WalletPage from './pages/WalletPage';
 
 const Navigation: React.FC = () => {
@@ -20,6 +21,7 @@ const Navigation: React.FC = () => {
     const navItems = [
         { path: '/', label: 'Dashboard', icon: Home },
         { path: '/wallet', label: 'Wallet', icon: Wallet },
+        { path: '/miner-logs', label: 'Miner Logs', icon: Activity },
     ];
 
     const isActive = (path: string) => location.pathname === path;
@@ -143,6 +145,7 @@ const App: React.FC = () => {
                     <Routes>
                         <Route path="/" element={<DashboardPage />} />
                         <Route path="/wallet" element={<WalletPage />} />
+                        <Route path="/miner-logs" element={<MinerLogsPage />} />
                         <Route
                             path="*"
                             element={

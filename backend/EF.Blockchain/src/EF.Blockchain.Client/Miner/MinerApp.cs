@@ -8,23 +8,26 @@ public class MinerApp
     private readonly string _blockchainServer;
     private readonly Domain.Wallet _minerWallet;
     private int _totalMined = 0;
+    private readonly string _logFilePath;
+    private readonly long _maxLogSizeBytes = 2 * 1024 * 1024; // 2MB
 
     public MinerApp(string blockchainServer, string privateKey)
     {
         _blockchainServer = blockchainServer;
         _minerWallet = new Domain.Wallet(privateKey);
+        _logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "miner-logs.txt");
     }
 
     public async Task RunAsync()
     {
-        Console.WriteLine("Starting miner...");
-        Console.WriteLine("Logged as " + _minerWallet.PublicKey);
+        LogMessage("Starting miner...");
+        LogMessage("Logged as " + _minerWallet.PublicKey);
 
         while (true)
         {
             try
             {
-                Console.WriteLine("Getting next block info...");
+                LogMessage("Getting next block info...");
 
                 // Uses Flurl.Http to send an HTTP GET request
                 var blockInfo = await $"{_blockchainServer}/blocks/next"
@@ -32,7 +35,7 @@ public class MinerApp
 
                 if (blockInfo == null)
                 {
-                    Console.WriteLine("No tx found. Waiting...");
+                    LogMessage("No tx found. Waiting...");
                     await Task.Delay(5000);
                     continue;
                 }
@@ -48,18 +51,18 @@ public class MinerApp
 
                 newBlock.Transactions.Add(rewardTx);
 
-                Console.WriteLine($"Start mining block #{blockInfo.Index}...");
+                LogMessage($"Start mining block #{blockInfo.Index}...");
 
                 newBlock.Mine(blockInfo.Difficulty, _minerWallet.PublicKey);
 
-                Console.WriteLine("Block mined! Sending to blockchain...");
+                LogMessage("Block mined! Sending to blockchain...");
 
                 await $"{_blockchainServer}/blocks/"
                     .PostJsonAsync(newBlock);
 
-                Console.WriteLine("Block sent and accepted!");
+                LogMessage("Block sent and accepted!");
                 _totalMined++;
-                Console.WriteLine($"Total mined blocks: {_totalMined}");
+                LogMessage($"Total mined blocks: {_totalMined}");
             }
             catch (FlurlHttpException ex)
             {
@@ -67,7 +70,7 @@ public class MinerApp
                     ? await ex.GetResponseStringAsync()
                     : ex.Message;
 
-                Console.WriteLine("Error: " + message);
+                LogMessage("Error: " + message);
             }
 
             await Task.Delay(1000);
@@ -86,7 +89,7 @@ public class MinerApp
 
         if (fees < feeCheck)
         {
-            Console.WriteLine("Low fees. Awaiting next block.");
+            LogMessage("Low fees. Awaiting next block.");
             return null;
         }
 
@@ -98,5 +101,59 @@ public class MinerApp
         );
 
         return Transaction.FromReward(rewardOutput);
+    }
+
+    private void LogMessage(string message)
+    {
+        var logEntry = $"[{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}] {message}";
+
+        // Write to console
+        Console.WriteLine(message);
+
+        // Write to file
+        try
+        {
+            // Check file size and rotate if necessary
+            if (File.Exists(_logFilePath))
+            {
+                var fileInfo = new FileInfo(_logFilePath);
+                if (fileInfo.Length > _maxLogSizeBytes)
+                {
+                    RotateLogFile();
+                }
+            }
+
+            // Prepend to file (add to top)
+            var existingContent = File.Exists(_logFilePath) ? File.ReadAllText(_logFilePath) : "";
+            File.WriteAllText(_logFilePath, logEntry + Environment.NewLine + existingContent);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to write to log file: {ex.Message}");
+        }
+    }
+
+    private void RotateLogFile()
+    {
+        try
+        {
+            var backupPath = _logFilePath.Replace(".txt", $"_{DateTime.UtcNow:yyyyMMdd_HHmmss}.txt");
+            File.Move(_logFilePath, backupPath);
+
+            // Keep only last 5 backup files
+            var logDirectory = Path.GetDirectoryName(_logFilePath);
+            var backupFiles = Directory.GetFiles(logDirectory, "miner-logs_*.txt")
+                .OrderByDescending(f => f)
+                .Skip(5);
+
+            foreach (var oldFile in backupFiles)
+            {
+                File.Delete(oldFile);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to rotate log file: {ex.Message}");
+        }
     }
 }

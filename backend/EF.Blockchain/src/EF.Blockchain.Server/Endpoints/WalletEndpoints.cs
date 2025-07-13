@@ -30,9 +30,7 @@ public static class WalletEndpoints
            .WithTags("Wallet")
            .WithSummary("Create a new wallet")
            .WithDescription("Generates a new wallet with public key, private key, and mnemonic phrase.")
-           .Accepts<WalletDto>("application/json")
            .Produces<WalletDto>(StatusCodes.Status201Created)
-           .ProducesValidationProblem()
            .WithOpenApi();
 
         app.MapPost("/wallets/recover", RecoverWallet)
@@ -40,10 +38,8 @@ public static class WalletEndpoints
            .WithTags("Wallet")
            .WithSummary("Recover an existing wallet")
            .WithDescription("Recovers a wallet using private key or mnemonic phrase.")
-           .Accepts<WalletDto>("application/json")
            .Produces<WalletDto>(StatusCodes.Status200OK)
            .Produces(StatusCodes.Status400BadRequest)
-           .ProducesValidationProblem()
            .WithOpenApi();
     }
 

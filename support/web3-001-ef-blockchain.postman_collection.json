@@ -8,159 +8,259 @@
 	},
 	"item": [
 		{
-			"name": "/status",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{BLOCKCHAIN_SERVER_URL}}/status",
-					"host": [
-						"{{BLOCKCHAIN_SERVER_URL}}"
-					],
-					"path": [
-						"status"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/blocks/next",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{BLOCKCHAIN_SERVER_URL}}/blocks/next",
-					"host": [
-						"{{BLOCKCHAIN_SERVER_URL}}"
-					],
-					"path": [
-						"blocks",
-						"next"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/blocks/:indexOrHash",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{BLOCKCHAIN_SERVER_URL}}/blocks/4",
-					"host": [
-						"{{BLOCKCHAIN_SERVER_URL}}"
-					],
-					"path": [
-						"blocks",
-						"4"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/blocks",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"hash\": \"\",\r\n    \"index\": 2,\r\n    \"data\": \"Block 3\",\r\n    \"previousHash\": \"A487A78FB9F9251C7E83E99FDE97818813C87D8C48AB58B424DE9D9BE59B9C25\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Status",
+			"item": [
+				{
+					"name": "/status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BLOCKCHAIN_SERVER_URL}}/status",
+							"host": [
+								"{{BLOCKCHAIN_SERVER_URL}}"
+							],
+							"path": [
+								"status"
+							]
 						}
-					}
-				},
-				"url": {
-					"raw": "{{BLOCKCHAIN_SERVER_URL}}/blocks",
-					"host": [
-						"{{BLOCKCHAIN_SERVER_URL}}"
-					],
-					"path": [
-						"blocks"
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "/transactions/{hash?}",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"hash\": \" \",\r\n    \"data\": \"tx1\"\r\n}"
-				},
-				"url": {
-					"raw": "{{BLOCKCHAIN_SERVER_URL}}/transactions/",
-					"host": [
-						"{{BLOCKCHAIN_SERVER_URL}}"
-					],
-					"path": [
-						"transactions",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/transactions",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"hash\": \" \",\r\n    \"data\": \"tx7\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Wallet",
+			"item": [
+				{
+					"name": "/wallets/{walletAddress}",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hash\": \" \",\r\n    \"data\": \"tx1\"\r\n}"
+						},
+						"url": {
+							"raw": "{{BLOCKCHAIN_SERVER_URL}}/wallets/02e11761fee94d9577794f9ae4ce4060af61ec0025871953ca4d249131f888b216",
+							"host": [
+								"{{BLOCKCHAIN_SERVER_URL}}"
+							],
+							"path": [
+								"wallets",
+								"02e11761fee94d9577794f9ae4ce4060af61ec0025871953ca4d249131f888b216"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{BLOCKCHAIN_SERVER_URL}}/transactions",
-					"host": [
-						"{{BLOCKCHAIN_SERVER_URL}}"
-					],
-					"path": [
-						"transactions"
-					]
+				{
+					"name": "/wallets",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"New Wallet\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BLOCKCHAIN_SERVER_URL}}/wallets",
+							"host": [
+								"{{BLOCKCHAIN_SERVER_URL}}"
+							],
+							"path": [
+								"wallets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/wallets/recover",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"privateKey\": \"5976f176c2632c8406c8c614630d6c9f209bb8d04fd2d4499e37d45c676e8aa1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BLOCKCHAIN_SERVER_URL}}/wallets/recover",
+							"host": [
+								"{{BLOCKCHAIN_SERVER_URL}}"
+							],
+							"path": [
+								"wallets",
+								"recover"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "/wallets/{walletAddress}",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"hash\": \" \",\r\n    \"data\": \"tx1\"\r\n}"
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "/transactions/prepare",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fromWalletAddress\": \"02e11761fee94d9577794f9ae4ce4060af61ec0025871953ca4d249131f888b216\",\r\n    \"toWalletAddress\": \"02e11761fee94d9577794f9ae4ce4060af61ec0025871953ca4d249131f888b216\",\r\n    \"fromWalletPrivateKey\": \"5976f176c2632c8406c8c614630d6c9f209bb8d04fd2d4499e37d45c676e8aa1\",\r\n    \"amount\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BLOCKCHAIN_SERVER_URL}}/transactions/prepare",
+							"host": [
+								"{{BLOCKCHAIN_SERVER_URL}}"
+							],
+							"path": [
+								"transactions",
+								"prepare"
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{BLOCKCHAIN_SERVER_URL}}/wallets/02e11761fee94d9577794f9ae4ce4060af61ec0025871953ca4d249131f888b216",
-					"host": [
-						"{{BLOCKCHAIN_SERVER_URL}}"
-					],
-					"path": [
-						"wallets",
-						"02e11761fee94d9577794f9ae4ce4060af61ec0025871953ca4d249131f888b216"
-					]
+				{
+					"name": "/transactions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": 1,\r\n    \"timestamp\": 1752371424489,\r\n    \"hash\": \"string\",\r\n    \"txInputs\": [\r\n        {\r\n            \"toAddress\": \"02e11761fee94d9577794f9ae4ce4060af61ec0025871953ca4d249131f888b216\",\r\n            \"amount\": 630,\r\n            \"tx\": \"7393542dffe6a3ae65f9cef89656d4f00b2e9f4e404726c80a87c9a301b5e1a3\",\r\n            \"signature\": \"signed\"\r\n        }\r\n    ],\r\n    \"txOutputs\": [\r\n        {\r\n            \"toAddress\": \"02e11761fee94d9577794f9ae4ce4060af61ec0025871953ca4d249131f888b216\",\r\n            \"amount\": 10\r\n        },\r\n        {\r\n            \"toAddress\": \"02e11761fee94d9577794f9ae4ce4060af61ec0025871953ca4d249131f888b216\",\r\n            \"amount\": 619\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BLOCKCHAIN_SERVER_URL}}/transactions",
+							"host": [
+								"{{BLOCKCHAIN_SERVER_URL}}"
+							],
+							"path": [
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/transactions/{hash?}",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hash\": \" \",\r\n    \"data\": \"tx1\"\r\n}"
+						},
+						"url": {
+							"raw": "{{BLOCKCHAIN_SERVER_URL}}/transactions/5bedabe1d466fd4ce62bfe5d5acf4291c03d67a2eca9d44a714b43769ec156d6",
+							"host": [
+								"{{BLOCKCHAIN_SERVER_URL}}"
+							],
+							"path": [
+								"transactions",
+								"5bedabe1d466fd4ce62bfe5d5acf4291c03d67a2eca9d44a714b43769ec156d6"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "Block",
+			"item": [
+				{
+					"name": "/blocks/next",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BLOCKCHAIN_SERVER_URL}}/blocks/next",
+							"host": [
+								"{{BLOCKCHAIN_SERVER_URL}}"
+							],
+							"path": [
+								"blocks",
+								"next"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/blocks/:indexOrHash",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BLOCKCHAIN_SERVER_URL}}/blocks/0",
+							"host": [
+								"{{BLOCKCHAIN_SERVER_URL}}"
+							],
+							"path": [
+								"blocks",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/blocks",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hash\": \"5bedabe1d466fd4ce62bfe5d5acf4291c03d67a2eca9d44a714b43769ec156d6\",\r\n    \"index\": 2,\r\n    \"data\": \"\",\r\n    \"previousHash\": \"A487A78FB9F9251C7E83E99FDE97818813C87D8C48AB58B424DE9D9BE59B9C25\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BLOCKCHAIN_SERVER_URL}}/blocks",
+							"host": [
+								"{{BLOCKCHAIN_SERVER_URL}}"
+							],
+							"path": [
+								"blocks"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
