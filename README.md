@@ -66,4 +66,4 @@ Each component has its own Dockerfile for CapRover deployment.
 ## Author
 
 **Ederson Fernandes**
-🌐 [Website](https://edersonfernandes.com.br) | 💼 [LinkedIn](https://www.linkedin.com/in/edersonfernandesdev)
+🌐 [Website](https://edersonfernandes.com.br) | 💼 [LinkedIn](https://www.linkedin.com/in/efernandes-tech)
