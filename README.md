@@ -11,11 +11,11 @@ A blockchain application with mining, wallet, and web interface.
 
 ## Features
 
--   ✅ Blockchain mining with rewards
--   ✅ Wallet management
--   ✅ Real-time miner logs
--   ✅ Web dashboard
--   ✅ Docker deployment
+-   Blockchain mining with rewards
+-   Wallet management
+-   Real-time miner logs
+-   Web dashboard
+-   Docker deployment
 
 ## Tech Stack
 
@@ -66,4 +66,4 @@ Each component has its own Dockerfile for CapRover deployment.
 ## Author
 
 **Ederson Fernandes**
-🌐 [Website](https://edersonfernandes.com.br) | 💼 [LinkedIn](https://www.linkedin.com/in/efernandes-tech)
+[Website](https://edersonfernandes.com.br) | [LinkedIn](https://www.linkedin.com/in/efernandes-tech)
