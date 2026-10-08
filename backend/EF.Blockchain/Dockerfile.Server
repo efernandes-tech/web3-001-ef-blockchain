@@ -32,5 +32,12 @@ ENV ASPNETCORE_URLS=http://+:5000
 
 EXPOSE 5000
 
+# curl is not included in the aspnet image
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+
+# Let the orchestrator replace the container when the app stops answering
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+    CMD curl -fsS http://127.0.0.1:5000/health || exit 1
+
 # Start the app
 ENTRYPOINT ["dotnet", "EF.Blockchain.Server.dll"]

@@ -27,7 +27,7 @@ WORKDIR /app
 COPY --from=build /app/out .
 
 # Install nginx
-RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends nginx curl && rm -rf /var/lib/apt/lists/*
 
 # Create simple nginx config
 RUN echo 'server { \
@@ -51,13 +51,21 @@ RUN echo 'server { \
     }' > /etc/nginx/sites-available/default
 
 # Create start script
+# Exit when either process dies so the orchestrator restarts the container
 RUN echo '#!/bin/bash\n\
-    nginx &\n\
-    dotnet EF.Blockchain.Client.dll miner\n\
+    trap "kill 0" TERM\n\
+    nginx -g "daemon off;" &\n\
+    dotnet EF.Blockchain.Client.dll miner &\n\
+    wait -n\n\
+    exit 1\n\
     ' > /app/start.sh && chmod +x /app/start.sh
 
 # Expose port 3000 for CapRover
 EXPOSE 3000
+
+# Let the orchestrator replace the container when nginx stops answering
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+    CMD curl -fsS http://127.0.0.1:3000/ || exit 1
 
 # Start both services
 CMD ["/app/start.sh"]

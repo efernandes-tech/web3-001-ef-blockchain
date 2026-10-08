@@ -22,6 +22,14 @@ public static class StatusEndpoints
             .WithDescription("Returns mempool size, block count, validation status, and latest block.")
             .Produces<StatusDto>(statusCode: StatusCodes.Status200OK)
             .WithOpenApi();
+
+        app.MapGet("/health", () => Results.Ok(new { status = "healthy" }))
+            .WithName("GetHealth")
+            .WithTags("Status")
+            .WithSummary("Liveness probe")
+            .WithDescription("Lightweight endpoint used by container health checks.")
+            .Produces(statusCode: StatusCodes.Status200OK)
+            .WithOpenApi();
     }
 
     /// <summary>

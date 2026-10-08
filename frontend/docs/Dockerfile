@@ -28,5 +28,9 @@ RUN echo 'server { listen 3000; root /usr/share/nginx/html; index index.html; lo
 # Expose port 3000 for CapRover
 EXPOSE 3000
 
+# Let the orchestrator replace the container when nginx stops answering
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD wget -q --spider http://127.0.0.1:3000/ || exit 1
+
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]
