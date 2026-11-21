@@ -1,5 +1,21 @@
 # web3-001-ef-blockchain
 
+## Deploy
+
+Preferred: image flow via `scripts/deploy.sh` (see [DEPLOY.md](../DEPLOY.md)):
+
+```cmd
+./scripts/deploy.sh site
+./scripts/deploy.sh docs
+```
+
+Legacy tarball fallback (same commands, now behind `--tarball`):
+
+```cmd
+./scripts/deploy.sh site --tarball
+./scripts/deploy.sh docs --tarball
+```
+
 ## Commands:
 
 ```cmd
