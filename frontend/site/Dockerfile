@@ -13,7 +13,12 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build the app (Vite will automatically use .env.production)
+# API URL baked into the Vite build (passed via --build-arg by scripts/deploy.sh).
+# Actual environment variables take precedence over .env files in Vite.
+ARG VITE_API_URL=http://localhost:5242
+ENV VITE_API_URL=$VITE_API_URL
+
+# Build the app
 RUN npm run build
 
 # Install serve to serve static files
